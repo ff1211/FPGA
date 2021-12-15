@@ -2,48 +2,48 @@
 
 module top (
     input  logic        clk,
-    input  logic        rst_n,
+    input  logic        rst_n
 
-    input  logic [31:0] ins_i,
-    input  logic        ins_vld,
+    // input  logic [31:0] ins_i,
+    // input  logic        ins_vld,
 
-    input  logic [31:0] data_i,
-    input  logic [31:0] data_addr_i,
-    input  logic        data_vld
+    // input  logic [31:0] data_i,
+    // input  logic [31:0] data_addr_i,
+    // input  logic        data_vld
 );   
 
-logic   [31:0]      data_wr;
-logic               data_wr_en;
-logic   [31:0]      data_addr;
-logic   [31:0]      ins_addr;
+// logic   [31:0]      data_wr;
+// logic               data_wr_en;
+// logic   [31:0]      data_addr;
+// logic   [31:0]      ins_addr;
 
-logic   [31:0]      ins_rd_core;
-logic   [31:0]      ins_addr_core;
-logic   [31:0]      data_rd_core;
-logic   [31:0]      data_wr_core;
-logic   [31:0]      data_addr_core;
-logic               data_wr_en_core;
-logic               core_rst_n;
+// logic   [31:0]      ins_rd_core;
+// logic   [31:0]      ins_addr_core;
+// logic   [31:0]      data_rd_core;
+// logic   [31:0]      data_wr_core;
+// logic   [31:0]      data_addr_core;
+// logic               data_wr_en_core;
+// logic               core_rst_n;
 
-logic   [31:0]      ins_wr_pro;
-logic   [31:0]      ins_addr_pro;
-logic               ins_wr_en_pro;
-logic   [31:0]      data_wr_pro;
-logic   [31:0]      data_addr_pro;
-logic               data_wr_en_pro;
-logic               programing;
+// logic   [31:0]      ins_wr_pro;
+// logic   [31:0]      ins_addr_pro;
+// logic               ins_wr_en_pro;
+// logic   [31:0]      data_wr_pro;
+// logic   [31:0]      data_addr_pro;
+// logic               data_wr_en_pro;
+// logic               programing;
 
+axi_lite #(.DATA_WIDTH( 32 ))   data_core_if();
+axi_lite #(.DATA_WIDTH( 32 ))   ins_core_if();
+axi_lite #(.DATA_WIDTH( 32 ))   pro_ctrl_if();
+axi_lite #(.DATA_WIDTH( 32 ))   data_pro_if();
+axi_lite #(.DATA_WIDTH( 32 ))   ins_pro_if();
 
 mips_core mips_core_inst(
     .clk            (   clk         ),
     .rst_n          (   core_rst_n  ),
-    .ins_rd         (   ins_rd_core     ),
-    .ins_addr       (   ins_addr_core   ),
-
-    .data_rd        (   data_rd_core    ),
-    .data_wr        (   data_wr_core    ),
-    .data_wr_en     (   data_wr_en_core ),
-    .data_addr      (   data_addr_core  )
+    .ins_if         (   ins_core_if     ),
+    .data_if        (   data_core_if    )
 );
 
 program_ctrl program_ctrl_inst(
@@ -75,6 +75,8 @@ assign data_wr_en   = programing? data_wr_en_pro : data_wr_en_core;
 assign data_addr    = programing? data_addr_pro  : data_addr_core;
 
 assign core_rst_n   = rst_n & (~programing);
+
+
 
 ram_single #(
     .DATA_WIDTH   ( 32  ),

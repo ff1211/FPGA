@@ -21,6 +21,7 @@ logic [1:0]                 bresp  ;
 logic                       arready;
 logic                       arvalid;
 logic [DATA_WIDTH-1:0]      araddr ;
+logic [2:0]                 arprot ;
 
 logic                       rready ;
 logic                       rvalid ;
@@ -45,6 +46,7 @@ modport master (
     input   arready,
     output  arvalid,
     output  araddr,
+    output  arprot,
 
     output  rready,
     input   rvalid, 
@@ -70,6 +72,7 @@ modport slave (
     output  arready,
     input   arvalid,
     input   araddr,
+    input   arprot,
 
     input   rready,
     output  rvalid, 
@@ -98,27 +101,27 @@ logic [DEST_WIDTH-1:0]      tdest;
 logic [USER_WIDTH-1:0]      tuser;
 
 modport master (
-    output  tvalid;
-    input   tready;
-    output  tdata;
-    output  tstrb;
-    output  tkeep;
-    output  tlast;
-    output  tid;
-    output  tdest;
-    output  tuser;
+    output  tvalid,
+    input   tready,
+    output  tdata,
+    output  tstrb,
+    output  tkeep,
+    output  tlast,
+    output  tid,
+    output  tdest,
+    output  tuser
 );
 
 modport slave (
-    input   tvalid;
-    output  tready;
-    input   tdata;
-    input   tstrb;
-    input   tkeep;
-    input   tlast;
-    input   tid;
-    input   tdest;
-    input   tuser;
+    input   tvalid,
+    output  tready,
+    input   tdata,
+    input   tstrb,
+    input   tkeep,
+    input   tlast,
+    input   tid,
+    input   tdest,
+    input   tuser
 );
-    
+
 endinterface //axi_stream
