@@ -23,14 +23,15 @@
     
 // endmodule
 
-module ram_single #(
+module single_ram #(
     parameter DATA_WIDTH    = 32,
     parameter ADDR_WIDTH    = 6,
     parameter READ_LATENCY  = 1
 ) (
     input  logic                    clk,
-    input  logic                    rst_n,
-    input  logic                    wr_en,
+    input  logic                    rst,
+    input  logic [DATA_WIDTH/8-1:0] wr_en,
+    input  logic                    ena,
 
     input  logic [DATA_WIDTH-1:0]   din,
     input  logic [ADDR_WIDTH-1:0]   addr,
@@ -75,7 +76,7 @@ xpm_memory_spram_inst (
     .addra(addr),               // ADDR_WIDTH_A-bit input: Address for port A write and read operations.
     .clka(clk),                 // 1-bit input: Clock signal for port A.
     .dina(din),                 // WRITE_DATA_WIDTH_A-bit input: Data input for port A write operations.
-    .ena(wr_en),                // 1-bit input: Memory enable signal for port A. Must be high on clock
+    .ena(ena),                  // 1-bit input: Memory enable signal for port A. Must be high on clock
                                 // cycles when read or write operations are initiated. Pipelined
                                 // internally.
 
@@ -90,12 +91,12 @@ xpm_memory_spram_inst (
     .regcea(),                  // 1-bit input: Clock Enable for the last register stage on the output
                                 // data path.
 
-    .rsta(~rst_n),              // 1-bit input: Reset signal for the final port A output register stage.
+    .rsta(rst),                 // 1-bit input: Reset signal for the final port A output register stage.
                                 // Synchronously resets output port douta to the value specified by
                                 // parameter READ_RESET_VALUE_A.
 
     .sleep(),                   // 1-bit input: sleep signal to enable the dynamic power saving feature.
-    .wea()                      // WRITE_DATA_WIDTH_A/BYTE_WRITE_WIDTH_A-bit input: Write enable vector
+    .wea(wr_en)                 // WRITE_DATA_WIDTH_A/BYTE_WRITE_WIDTH_A-bit input: Write enable vector
                                 // for port A input data port dina. 1 bit wide when word-wide writes are
                                 // used. In byte-wide write configurations, each bit controls the
                                 // writing one byte of dina to address addra. For example, to

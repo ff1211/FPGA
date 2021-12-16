@@ -1,7 +1,5 @@
 `timescale 1ns/1ps
 
-`include "axi_if.sv"
-
 module mips_core (
     input  logic        clk,
     input  logic        rst_n,
@@ -90,29 +88,6 @@ always_ff @( posedge clk ) begin
     else
         current_state <= next_state;
 end
-
-// awready,
-// awvalid,
-// awaddr,
-// awprot,
-
-// wready, 
-// wvalid, 
-// wdata,
-// wstrb,
-
-// bready, 
-// bvalid,
-// bresp,
-
-// arready,
-// arvalid,
-// araddr,
-
-// rready,
-// rvalid, 
-// rdata,  
-// rresp
 
 //ins write addr channel
 assign ins_if.awvalid   = 0;

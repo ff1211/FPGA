@@ -1,6 +1,6 @@
 `timescale 1ns/1ps
 
-module fifo_sync #(
+module sync_fifo #(
     parameter   FIFO_WRITE_DEPTH    = 512,
     parameter   PROG_EMPTY_THRESH   = 10,
     parameter   PROG_FULL_THRESH    = 10,
