@@ -64,21 +64,12 @@ always_comb begin
             next_state = (ins_if.rready & ins_if.rvalid)? S_ID : S_IF;
         S_ID: 
             next_state = S_EX;
-        S_EX: begin
-            if(Jump)
-                next_state = S_IF;
-            else if(MemtoReg)
-                next_state = S_MEM;
-            else
-                next_state = S_WB;
-        end
+        S_EX: 
+            next_state = Jump? S_IF : (MemtoReg? S_MEM : S_WB);
         S_MEM: 
             next_state = (data_if.rready & data_if.rvalid)? S_WB : S_MEM;
         S_WB: 
-            if(RegWrite)
-                next_state = S_IF;
-            else
-                next_state = (data_if.wready & data_if.wvalid)? S_WB : S_MEM;
+            next_state = RegWrite? S_IF : ((data_if.wready & data_if.wvalid)? S_WB : S_MEM);
     endcase
 end
 
