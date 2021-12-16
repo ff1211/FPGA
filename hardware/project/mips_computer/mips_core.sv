@@ -165,15 +165,15 @@ reg_file reg_file_inst(
 ins_decoder ins_decoder_inst(
     .clk        (   clk         ),
     .rst_n      (   rst_n       ),
-    .ins        (   ins_if.rdata),
-    .RegDst     (   RegDst      ),
-    .Jump       (   Jump        ),
-    .Branch     (   Branch      ),
-    .MemtoReg   (   MemtoReg    ),
-    .alu_control(   alu_control ),
-    .MemWrite   (   MemWrite    ),
-    .ALUSrc     (   ALUSrc      ),
-    .RegWrite   (   RegWrite    )
+    .ins        (   ins_if.rdata    ),
+    .RegDst     (   RegDst          ),
+    .Jump       (   Jump            ),
+    .Branch     (   Branch          ),
+    .MemtoReg   (   MemtoReg        ),
+    .alu_control(   alu_control     ),
+    .MemWrite   (   MemWrite        ),
+    .ALUSrc     (   ALUSrc          ),
+    .RegWrite   (   RegWrite        )
 );
 
 alu_signed alu_signed_inst(
