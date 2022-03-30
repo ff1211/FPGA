@@ -1,28 +1,5 @@
 `timescale 1ns/1ps
 
-// module ram_single #(
-//     parameter WIDTH = 32,
-//     parameter DEPTH = 32
-// ) (
-//     input  logic                clk,
-//     input  logic                wr_en,
-
-//     input  logic [WIDTH-1:0]    din,
-//     input  logic [DEPTH-1:0]    addr,
-
-//     output logic [WIDTH-1:0]    dout
-// );
-
-// logic [DEPTH-1:0][WIDTH-1:0]    mem;
-
-// always_ff @( posedge clk ) begin
-//     if(wr_en)
-//         mem[addr] <= din;
-//     dout <= mem[addr];
-// end
-    
-// endmodule
-
 module ram_single #(
     parameter DATA_WIDTH    = 32,
     parameter ADDR_WIDTH    = 6,
