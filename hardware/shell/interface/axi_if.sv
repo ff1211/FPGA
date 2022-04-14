@@ -14,31 +14,32 @@
 `timescale 1ns/1ps
 
 interface axi_lite #(
-    parameter DATA_WIDTH = 32
+    parameter DATA_WIDTH = 32,
+    parameter CHANNEL = 1
 ) (
 );
-logic                       awready;
-logic                       awvalid;
-logic [DATA_WIDTH-1:0]      awaddr ;
-logic [1:0]                 awprot ;
+logic [CHANNEL-1:0]                 awready;
+logic [CHANNEL-1:0]                 awvalid;
+logic [CHANNEL*DATA_WIDTH-1:0]      awaddr ;
+logic [2*CHANNEL-1:0]               awprot ;
 
-logic                       wready ;
-logic                       wvalid ;
-logic [DATA_WIDTH-1:0]      wdata  ;
-logic [DATA_WIDTH/8-1:0]    wstrb  ;
+logic [CHANNEL-1:0]                 wready ;
+logic [CHANNEL-1:0]                 wvalid ;
+logic [CHANNEL*DATA_WIDTH-1:0]      wdata  ;
+logic [CHANNEL*DATA_WIDTH/8-1:0]    wstrb  ;
 
-logic                       bready ;
-logic                       bvalid ;
-logic [1:0]                 bresp  ;
+logic [CHANNEL-1:0]                 bready ;
+logic [CHANNEL-1:0]                 bvalid ;
+logic [2*CHANNEL:0]                 bresp  ;
 
-logic                       arready;
-logic                       arvalid;
-logic [DATA_WIDTH-1:0]      araddr ;
+logic [CHANNEL-1:0]                 arready;
+logic [CHANNEL-1:0]                 arvalid;
+logic [CHANNEL*DATA_WIDTH-1:0]      araddr ;
 
-logic                       rready ;
-logic                       rvalid ;
-logic [DATA_WIDTH-1:0]      rdata  ;
-logic [1:0]                 rresp  ;
+logic [CHANNEL-1:0]                 rready ;
+logic [CHANNEL-1:0]                 rvalid ;
+logic [CHANNEL*DATA_WIDTH-1:0]      rdata  ;
+logic [2*CHANNEL:0]                 rresp  ;
 
 modport master (
     input   awready,
@@ -66,10 +67,10 @@ modport master (
 );
 
 modport slave (
-    output awready,
-    input  awvalid,
-    input  awaddr,
-    input  awprot,
+    output  awready,
+    input   awvalid,
+    input   awaddr,
+    input   awprot,
 
     output  wready, 
     input   wvalid, 
@@ -94,44 +95,45 @@ endinterface //axi_lite
 
 //axi-stream
 interface axis #(
+    parameter CHANNEL       = 1,
     parameter DATA_WIDTH    = 32,
     parameter ID_WIDTH      = 1,
     parameter DEST_WIDTH    = 1,
     parameter USER_WIDTH    = 1
 ) (
 );
-logic                       tvalid;
-logic                       tready;
-logic [DATA_WIDTH-1:0]      tdata;
-logic [DATA_WIDTH/8-1:0]    tstrb;
-logic [DATA_WIDTH/8-1:0]    tkeep;
-logic                       tlast;
-logic [ID_WIDTH-1:0]        tid;
-logic [DEST_WIDTH-1:0]      tdest;
-logic [USER_WIDTH-1:0]      tuser;
+logic [CHANNEL-1:0]                 tvalid;
+logic [CHANNEL-1:0]                 tready;
+logic [CHANNEL*DATA_WIDTH-1:0]      tdata;
+logic [CHANNEL*DATA_WIDTH/8-1:0]    tstrb;
+logic [CHANNEL*DATA_WIDTH/8-1:0]    tkeep;
+logic [CHANNEL-1:0]                 tlast;
+logic [CHANNEL*ID_WIDTH-1:0]        tid;
+logic [CHANNEL*DEST_WIDTH-1:0]      tdest;
+logic [CHANNEL*USER_WIDTH-1:0]      tuser;
 
 modport master (
-    output  tvalid;
-    input   tready;
-    output  tdata;
-    output  tstrb;
-    output  tkeep;
-    output  tlast;
-    output  tid;
-    output  tdest;
-    output  tuser;
+    output  tvalid,
+    input   tready,
+    output  tdata,
+    output  tstrb,
+    output  tkeep,
+    output  tlast,
+    output  tid,
+    output  tdest,
+    output  tuser
 );
 
 modport slave (
-    input   tvalid;
-    output  tready;
-    input   tdata;
-    input   tstrb;
-    input   tkeep;
-    input   tlast;
-    input   tid;
-    input   tdest;
-    input   tuser;
+    input   tvalid,
+    output  tready,
+    input   tdata,
+    input   tstrb,
+    input   tkeep,
+    input   tlast,
+    input   tid,
+    input   tdest,
+    input   tuser
 );
     
 endinterface //axi_stream
