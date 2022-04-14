@@ -1,21 +1,34 @@
+//****************************************************************
+// Copyright 2022 Tianjin University 305 Lab. All Rights Reserved.
+//
+// File:
+// ram_singl.sv
+// 
+// Description:
+// Single port ram.
+// 
+// Revision history:
+// Version  Date        Author      Changes      
+// 1.0      2022.03.18  Fanfei      Initial version
+//****************************************************************
+
 `timescale 1ns/1ps
 
 module ram_single #(
-    parameter DATA_WIDTH    = 32,
-    parameter ADDR_WIDTH    = 6,
-    parameter READ_LATENCY  = 1
+    parameter DATA_WIDTH        = 32,
+    parameter BYTE_WRITE_WIDTH  = 32,
+    parameter ADDR_WIDTH        = 6,
+    parameter READ_LATENCY      = 2,
+    parameter WRITE_MODE        = "write_first"
 ) (
-    input  logic                    clk,
-    input  logic                    rst_n,
-    input  logic                    wr_en,
-
-    input  logic [DATA_WIDTH-1:0]   din,
-    input  logic [ADDR_WIDTH-1:0]   addr,
-
-    output logic [DATA_WIDTH-1:0]   dout
+    input   clk,
+    input   rst_n,
+    input   enable,
+    input  [DATA_WIDTH/BYTE_WRITE_WIDTH-1:0]    wr_en,
+    input  [DATA_WIDTH-1:0]                     din,
+    input  [ADDR_WIDTH-1:0]                     addr,
+    output [DATA_WIDTH-1:0]                     dout
 );
-// xpm_memory_spram: Single Port RAM
-// Xilinx Parameterized Macro, version 2021.2
 
 xpm_memory_spram #(
     .ADDR_WIDTH_A           (   ADDR_WIDTH  ),
@@ -38,7 +51,7 @@ xpm_memory_spram #(
     .USE_MEM_INIT_MMI       (   0           ),
     .WAKEUP_TIME            (   "disable_sleep" ),
     .WRITE_DATA_WIDTH_A     (   DATA_WIDTH  ),
-    .WRITE_MODE_A           (   "write_first"   ),
+    .WRITE_MODE_A           (   WRITE_MODE      ),
     .WRITE_PROTECT          (   1               ) 
 )
 xpm_memory_spram_inst (
@@ -52,27 +65,27 @@ xpm_memory_spram_inst (
     .addra(addr),               // ADDR_WIDTH_A-bit input: Address for port A write and read operations.
     .clka(clk),                 // 1-bit input: Clock signal for port A.
     .dina(din),                 // WRITE_DATA_WIDTH_A-bit input: Data input for port A write operations.
-    .ena(wr_en),                // 1-bit input: Memory enable signal for port A. Must be high on clock
+    .ena(enables),              // 1-bit input: Memory enable signal for port A. Must be high on clock
                                 // cycles when read or write operations are initiated. Pipelined
                                 // internally.
 
-    .injectdbiterra(),          // 1-bit input: Controls double bit error injection on input data when
+    .injectdbiterra(1'b0),      // 1-bit input: Controls double bit error injection on input data when
                                 // ECC enabled (Error injection capability is not available in
                                 // "decode_only" mode).
 
-    .injectsbiterra(),          // 1-bit input: Controls single bit error injection on input data when
+    .injectsbiterra(1'b0),      // 1-bit input: Controls single bit error injection on input data when
                                 // ECC enabled (Error injection capability is not available in
                                 // "decode_only" mode).
 
-    .regcea(),                  // 1-bit input: Clock Enable for the last register stage on the output
+    .regcea(1'b1),              // 1-bit input: Clock Enable for the last register stage on the output
                                 // data path.
 
     .rsta(~rst_n),              // 1-bit input: Reset signal for the final port A output register stage.
                                 // Synchronously resets output port douta to the value specified by
                                 // parameter READ_RESET_VALUE_A.
 
-    .sleep(),                   // 1-bit input: sleep signal to enable the dynamic power saving feature.
-    .wea()                      // WRITE_DATA_WIDTH_A/BYTE_WRITE_WIDTH_A-bit input: Write enable vector
+    .sleep(1'b0),               // 1-bit input: sleep signal to enable the dynamic power saving feature.
+    .wea(wr_en)                 // WRITE_DATA_WIDTH_A/BYTE_WRITE_WIDTH_A-bit input: Write enable vector
                                 // for port A input data port dina. 1 bit wide when word-wide writes are
                                 // used. In byte-wide write configurations, each bit controls the
                                 // writing one byte of dina to address addra. For example, to

@@ -1,11 +1,24 @@
+//****************************************************************
+// Copyright 2022 Tianjin University 305 Lab. All Rights Reserved.
+//
+// File:
+// fifo_sync.sv
+// 
+// Description:
+// Sync fifo.
+// 
+// Revision history:
+// Version  Date        Author      Changes      
+// 1.0      2022.03.18  Fanfei      Initial version
+//****************************************************************
+
 `timescale 1ns/1ps
 
 module fifo_sync #(
     parameter   FIFO_WRITE_DEPTH    = 512,
     parameter   PROG_EMPTY_THRESH   = 10,
     parameter   PROG_FULL_THRESH    = 10,
-    parameter   READ_DATA_WIDTH     = 32,
-    parameter   WRITE_DATA_WIDTH    = 32,
+    parameter   DATA_WIDTH          = 32,
     parameter   READ_MODE           = "fwft"
 ) (
     input       clk,
@@ -38,12 +51,12 @@ xpm_fifo_sync #(
     .PROG_EMPTY_THRESH      (   PROG_EMPTY_THRESH   ),  // DECIMAL
     .PROG_FULL_THRESH       (   PROG_FULL_THRESH    ),  // DECIMAL
     .RD_DATA_COUNT_WIDTH    (   1               ),      // DECIMAL
-    .READ_DATA_WIDTH        (   READ_DATA_WIDTH ),      // DECIMAL
+    .READ_DATA_WIDTH        (   DATA_WIDTH  ),      // DECIMAL
     .READ_MODE              (   READ_MODE   ),          // String
     .SIM_ASSERT_CHK         (   0           ),          // DECIMAL; 0=disable simulation messages, 1=enable simulation messages
     .USE_ADV_FEATURES       (   "0707"      ),          // String
     .WAKEUP_TIME            (   0           ),          // DECIMAL
-    .WRITE_DATA_WIDTH       (   WRITE_DATA_WIDTH),      // DECIMAL
+    .WRITE_DATA_WIDTH       (   DATA_WIDTH  ),          // DECIMAL
     .WR_DATA_COUNT_WIDTH    (   1           )           // DECIMAL
 )
 xpm_fifo_sync_inst (
