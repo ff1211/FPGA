@@ -62,7 +62,7 @@ if [[ -d $PROJECT_DIR/$project_name ]]; then
     while [[ -d $PROJECT_DIR/$project_name/${project_name}_$i && $i -lt 50 ]]; do
         i=`expr $i + 1`
     done
-    if $i -eq 49; then
+    if [ $i -eq 49 ]; then
         echo "Too much project! Create project fail!"
         exit 1
     fi
@@ -70,6 +70,8 @@ else
     mkdir "$PROJECT_DIR/$project_name"
 fi
 mkdir "$PROJECT_DIR/$project_name/${project_name}_$i"
+
+export project_dir="$PROJECT_DIR/$project_name"
 export current_project_dir="$PROJECT_DIR/$project_name/${project_name}_$i"
 
 # Generate project.tcl for creating project in vivado.
