@@ -13,20 +13,17 @@
 # 1.0      2022.04.14  Fanfei      Initial version
 #****************************************************************
 
-# Current directory.
-export CURRENT_DIR=$(pwd)/../..
-# Project directory.
-export PROJECT_DIR=$(pwd)
+# Template directory.
+export TEMPLATE_DIR=$(pwd)
+# Hardware directory.
+cd ../../
+export HARDWARE_DIR=$(pwd)
+cd $TEMPLATE_DIR
 # Script directory.
-export SCRIPT_DIR=$CURRENT_DIR/script
+export SCRIPT_DIR=$HARDWARE_DIR/script
 # Board file directory.
-<<<<<<< HEAD
-export BOARDS_DIR=$CURRENT_DIR/boards
-# Common modules directory.
-=======
-export BOARDS_DIR=$CURRENT_DIR/board
+export BOARDS_DIR=$HARDWARE_DIR/board
 # Shell common modules directory.
->>>>>>> 76049bb95216565402e5f8ac80133cf71867ddc3
-export COMMON_DIR=$CURRENT_DIR/shell/common
+export COMMON_DIR=$HARDWARE_DIR/shell/common
 # Interface directory.
-export INTERFACE_DIR=$CURRENT_DIR/shell/interface
+export INTERFACE_DIR=$HARDWARE_DIR/shell/interface

@@ -13,10 +13,14 @@
 # 1.0      2022.04.14  Fanfei      Initial version
 #****************************************************************
 
+# Vivado settings.
+#****************************************************************
 # Vivado path.
 export VIVADO="vivado"
+# If use gui.
+export GUI_MODE=0
 # Board name.
 export board_name="zedboard"
 # Project name.
-export project_name="template"
+export project_name="zynq_test"
 

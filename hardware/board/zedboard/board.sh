@@ -14,8 +14,14 @@
 # 1.0      2022.04.14  Fanfei      Initial version
 #****************************************************************
 
-
+# Board basic informations.
+#****************************************************************
+# Board name.
 export board="zedboard"
+# Chip name.
 export chip="xc7z020"
-export package="CSG484"
+# Package.
+export package="clg484"
+# Speed grade.
 export speed_grade="-1"
+#****************************************************************
