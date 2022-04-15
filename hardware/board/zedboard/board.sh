@@ -1,3 +1,4 @@
+#!/bin/bash
 #****************************************************************
 # Copyright 2022 Tianjin University 305 Lab. All Rights Reserved.
 #
@@ -12,6 +13,7 @@
 # Version  Date        Author      Changes      
 # 1.0      2022.04.14  Fanfei      Initial version
 #****************************************************************
+
 
 export board="zedboard"
 export chip="xc7z020"
