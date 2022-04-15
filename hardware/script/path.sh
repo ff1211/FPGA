@@ -16,7 +16,7 @@
 export CURRENT_DIR=$(pwd)/../..
 # Board file directory.
 export BOARDS_DIR=$CURRENT_DIR/boards
-# Module directory.
-export COMMON_DIR=$CURRENT_DIR/shell/module
+# Common modules directory.
+export COMMON_DIR=$CURRENT_DIR/shell/common
 # Interface directory.
 export COMMON_DIR=$CURRENT_DIR/shell/interface

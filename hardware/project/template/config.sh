@@ -15,6 +15,8 @@
 # Path define.
 # Vivado path.
 export VIVADO="vivado"
-
+# Board name.
 export board_name="zedboard"
+# Project name.
+export project_name="template"
 
