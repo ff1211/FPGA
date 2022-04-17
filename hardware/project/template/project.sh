@@ -36,6 +36,7 @@ for boards in "$BOARDS_DIR"/*; do
     fi
 done
 
+# If can not find board, print boards supported.
 if [ $no_board -eq 1 ]; then
     echo "Haven't find this board!"
     echo "We only support:"
@@ -56,6 +57,7 @@ fi
 #****************************************************************
 echo "Creating new project..."
 source $BOARDS_DIR/$board_name/board.sh
+
 # Creat Project folder.
 i=0
 if [[ -d $TEMPLATE_DIR/$project_name ]]; then
@@ -75,6 +77,16 @@ mkdir "$TEMPLATE_DIR/$project_name/${project_name}_$i"
 project_set_dir="$TEMPLATE_DIR/$project_name"
 cur_project_dir="$TEMPLATE_DIR/$project_name/${project_name}_$i"
 cur_project_name="${project_name}_$i"
+
+# Generate config.vh for configure project.
+
+touch $cur_project_dir/config.vh
+cat > $cur_project_dir/config.vh << EOF
+#****************************************************************
+# This is a auto-generated file. Do not change it!
+#****************************************************************
+
+EOF
 
 # Set project mode.
 vivado_mode="tcl"

@@ -1,0 +1,22 @@
+#-----------------------------------------------------------
+# Vivado v2021.2 (64-bit)
+# SW Build 3367213 on Tue Oct 19 02:47:39 MDT 2021
+# IP Build 3369179 on Thu Oct 21 08:25:16 MDT 2021
+# Start of session at: Fri Apr 15 05:06:42 2022
+# Process ID: 32215
+# Current directory: /home/ff/git/FPGA/hardware/project/template/zynq_test/zynq_test_0
+# Command line: vivado -mode tcl -source /home/ff/git/FPGA/hardware/project/template/zynq_test/project.tcl
+# Log file: /home/ff/git/FPGA/hardware/project/template/zynq_test/zynq_test_0/vivado.log
+# Journal file: /home/ff/git/FPGA/hardware/project/template/zynq_test/zynq_test_0/vivado.jou
+# Running On: localhost.localdomain, OS: Linux, CPU Frequency: 3357.971 MHz, CPU Physical cores: 4, Host memory: 16619 MB
+#-----------------------------------------------------------
+source /home/ff/git/FPGA/hardware/project/template/zynq_test/project.tcl
+start_gui
+update_compile_order -fileset sources_1
+update_compile_order -fileset sources_1
+# Disabling source management mode.  This is to allow the top design properties to be set without GUI intervention.
+set_property source_mgmt_mode None [current_project]
+set_property top shell_top [current_fileset]
+# Re-enabling previously disabled source management mode.
+set_property source_mgmt_mode All [current_project]
+update_compile_order -fileset sources_1
