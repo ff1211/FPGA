@@ -15,39 +15,28 @@
 #****************************************************************
 
 # Generate add_ip.tcl for add ips.
-i=0
-touch $cur_project_dir/add_ip.tcl
-cat > $cur_project_dir/add_ip.tcl << EOF
-//****************************************************************
-// This is a auto-generated file. Do not change it!
-//****************************************************************
+touch $cur_pj_script_dir/add_ip.tcl
+add_ip_tcl_path=$cur_pj_script_dir/add_ip.tcl
+cat > $cur_pj_script_dir/add_ip.tcl << EOF
+#****************************************************************
+# This is a auto-generated file. Do not change it!
+#****************************************************************
 EOF
 
-# Add dma.
-while [[ i -ne $axi_dma_num ]]; do
-    echo "create_ip -name axi_dma -vendor xilinx.com -library ip -version 7.1 -module_name axi_dma_$i" >> add_ip.tcl
-    if [[ ${axi_dma_mode[i]} -eq "block" ]]; then
-        echo "set_property -dict [list CONFIG.c_include_sg {0} CONFIG.c_sg_include_stscntrl_strm {0}] [get_ips axi_dma_$i]" >> add_ip.tcl
-    else
-        echo "Error! We haven't support sg mode now!"
-        exit 1
-    fi
-    if [[ ${axi_dma_s_dw[i]} -gt ${axi_dma_mm_dw[i]} ]]; then
-        echo "Error! AXI DMA axi-stream data width must less or equal than memory map data width!"
-        exit 1
-    else
-        # Disable channels according to config.
-        mm2s=1
-        s2mm=1
-        [[ ${axi_dma_dir[i]} -eq "write" ]] && mm2s=0
-        [[ ${axi_dma_dir[i]} -eq "read" ]] && s2mm=0
-        echo "set_property -dict [list CONFIG.c_include_mm2s {$mm2s} CONFIG.c_include_s2mm {$s2mm}] [get_ips axi_dma_$i]" >> add_ip.tcl
-        # Set channel's data and address width and burst width.
-        mm2s_burst_size=2
-        s2mm_burst_size=2
-        [[ ${axi_dma_mm_dw[i]} -lt 256 ]] && mm2s=`expr 512 / ${axi_dma_mm_dw[i]}`
-        [[ ${axi_dma_mm_dw[i]} -lt 256 ]] && s2mm=`expr 512 / ${axi_dma_mm_dw[i]}`
-        echo "set_property -dict [list CONFIG.c_m_axi_mm2s_data_width {${axi_dma_mm_dw[i]}} CONFIG.c_m_axis_mm2s_tdata_width {${axi_dma_s_dw[i]}} CONFIG.c_mm2s_burst_size {$mm2s_burst_size}] [get_ips axi_dma_$i]" >> add_ip.tcl
-        echo "set_property -dict [list CONFIG.c_m_axi_s2mm_data_width {${axi_dma_mm_dw[i]}} CONFIG.c_s_axis_s2mm_tdata_width {${axi_dma_s_dw[i]}} CONFIG.c_s2mm_burst_size {$s2mm_burst_size}] [get_ips axi_dma_$i]" >> add_ip.tcl
-    fixw
-done
+# Zynq processing system config.
+#****************************************************************
+# Zynq AXI general purpose slave port config.
+export axi_gp_port_num=0            # AXI general purpose slave port number, range[0, 2].
+# Zynq AXI high performance slave port config.
+export axi_hp_port_num=0            # AXI high performance slave port number, range[0, 4].
+export axi_hp_port_dw=(32 32 32 32) # AXI high performance slave port data width, 32 or 64.
+i=0
+define_synx="\`define"
+
+export ip_wrapper_files=""
+
+# Add AXI DMA.
+[[ $use_axi_dma -ne 0 ]] && source "$SCRIPT_DIR/ip/axi_dma.sh"
+
+# Add IP wrapper files.
+[[ ip_wrapper_files != "" ]] && echo "add_files $ip_wrapper_files" >> $add_ip_tcl_path

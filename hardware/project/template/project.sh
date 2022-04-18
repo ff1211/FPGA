@@ -31,7 +31,7 @@ fi
 # Check if have selected board.
 no_board=1
 for boards in "$BOARDS_DIR"/*; do
-    if [ "$(basename "$boards")" -eq $board_name ]; then
+    if [ "$(basename "$boards")" == $board_name ]; then
         no_board=0
     fi
 done
@@ -66,7 +66,7 @@ if [[ -d $TEMPLATE_DIR/$project_name ]]; then
         i=`expr $i + 1`
     done
     if [ $i -eq 49 ]; then
-        echo "Too much project! Create project fail!"
+        echo "Too much project existed! Create project fail!"
         exit 1
     fi
 else
@@ -74,35 +74,28 @@ else
 fi
 mkdir "$TEMPLATE_DIR/$project_name/${project_name}_$i"
 
-project_set_dir="$TEMPLATE_DIR/$project_name"
-cur_project_dir="$TEMPLATE_DIR/$project_name/${project_name}_$i"
-cur_project_name="${project_name}_$i"
+pj_set_dir="$TEMPLATE_DIR/$project_name"
+cur_pj_dir="$TEMPLATE_DIR/$project_name/${project_name}_$i"
+cur_pj_name="${project_name}_$i"
+
+mkdir "$cur_pj_dir/src"
+mkdir "$cur_pj_dir/script"
+cur_pj_src_dir="$cur_pj_dir/src"
+cur_pj_script_dir="$cur_pj_dir/script"
 
 # Source add_ip.sh to generate add_ip.tcl.
 source $SCRIPT_DIR/add_ip.sh
 
-# Generate config.vh for configure project.
-define_synx="\`define"
-touch $cur_project_dir/config.vh
-cat > $cur_project_dir/config.vh << EOF
-//****************************************************************
-// This is a auto-generated file. Do not change it!
-//****************************************************************
-`[[ ${axi_gp_port_num} -ne 0 ]] && echo $define_synx USE_AXI_GP_PORT`
-`[[ ${axi_gp_port_num} -ne 0 ]] && echo $define_synx AXI_GP_PORT_NUM = $axi_gp_port_num`
-
-`[[ ${axi_hp_port_num} -ne 0 ]] && echo $define_synx USE_AXI_HP_PORT`
-`[[ ${axi_hp_port_num} -ne 0 ]] && echo $define_synx AXI_HP_PORT_NUM = $axi_hp_port_num`
-`[[ ${axi_hp_port_num} -ne 0 ]] && echo $define_synx AXI_HP_PORT_DW = $axi_hp_port_dw`
-EOF
+# Source add_ip.sh to generate pre_proc.vh.
+source $SCRIPT_DIR/pre_proc.sh
 
 # Set project mode.
 vivado_mode="tcl"
 [[ $GUI_MODE -eq 1 ]] && vivado_mode="gui"
 
 # Generate project.tcl for creating project in vivado.
-touch $project_set_dir/project.tcl
-cat > $project_set_dir/project.tcl << EOF
+touch $cur_pj_dir/project.tcl
+cat > $cur_pj_dir/project.tcl << EOF
 #****************************************************************
 # This is a auto-generated file. Do not change it!
 #****************************************************************
@@ -118,21 +111,23 @@ set INTERFACE_DIR $INTERFACE_DIR
 
 # Creat project.
 #****************************************************************
-create_project -part ${chip}${package}${speed_grade} ${cur_project_name} ${cur_project_dir}
+create_project -part ${chip}${package}${speed_grade} ${cur_pj_name} ${cur_pj_dir}
 
 # Add common files.
-#****************************************************************
 source ${HARDWARE_DIR}/script/add_files.tcl
+
+# Add ips.
+source ${cur_pj_script_dir}/add_ip.tcl
 
 # Add board and project specific files.
 #****************************************************************
 add_files \\
     $BOARDS_DIR/$board_name/src/shell_top.sv \\
     $TEMPLATE_DIR/role.sv \\
-    $cur_project_dir/config.vh \\
+    $cur_pj_src_dir/pre_proc.vh \\
     $BOARDS_DIR/$board_name/src/ps.sv
 EOF
 
 # Move to project directory and launch vivado.
-cd $cur_project_dir
-#$VIVADO -mode ${vivado_mode} -source $project_set_dir/project.tcl
+cd $cur_pj_dir
+$VIVADO -mode ${vivado_mode} -source $cur_pj_dir/project.tcl

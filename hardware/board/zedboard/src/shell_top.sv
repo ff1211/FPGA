@@ -12,7 +12,7 @@
 // 1.0      2022.04.14  Fanfei      Initial version
 //****************************************************************
 
-`include "config.vh"
+`include "pre_proc.vh"
 `include "interconnect.vh"
 
 module shell_top (

@@ -24,6 +24,8 @@ export chip="xc7z020"
 export package="clg484"
 # Speed grade.
 export speed_grade="-1"
+# Prcessing system address width. 32 for Zynq-7000, 64 for Zynq-UltraScale.
+export ps_addrw=32
 
 # Board resource informations.
 #****************************************************************

@@ -11,14 +11,14 @@
 // Version  Date        Author      Changes      
 // 1.0      2022.04.14  Fanfei      Initial version
 //****************************************************************
-
-`include "config.vh"
+`timescale 1ns/1ps
+`include "pre_proc.vh"
 
 module role #(
     
 ) (
     input role_clk,
-    input role_rstn,
+    input role_rst_n
     
 );
     
