@@ -17,7 +17,7 @@
 # Board basic informations.
 #****************************************************************
 # Board name.
-export board="zedboard"
+export board="ZedBoard"
 # Chip name.
 export chip="xc7z020"
 # Package.

@@ -86,6 +86,46 @@ ps #(
     .ddr_we_n           (   ddr_we_n            )
 );
 
+proc_sys_reset_0 proc_sys_reset_inst (
+    .slowest_sync_clk       (   slowest_sync_clk),        
+    .ext_reset_in           (   ext_reset_in),                
+    .aux_reset_in           (   aux_reset_in),                
+    .mb_debug_sys_rst       (   mb_debug_sys_rst),        
+    .dcm_locked             (   dcm_locked),                    
+    .mb_reset               (   mb_reset),                        
+    .bus_struct_reset       (   bus_struct_reset),        
+    .peripheral_reset       (   peripheral_reset),        
+    .interconnect_aresetn   (   interconnect_aresetn),
+    .peripheral_aresetn     (   peripheral_aresetn)     
+);
+
+// AXI DMA inst.
+`ifdef USE_AXI_DMA
+axi4 #(.CHANNEL(1), .DATA_WIDTH(AXI_DMA_MM_DW), .ADDR_WIDTH(AXI_DMA_AW), .ID_WIDTH(6)) adma_axi();
+axi_lite #(.CHANNEL(1), .DATA_WIDTH(AXI_DMA_MM_DW)) adma_axil();
+`ifdef USE_AXI_DMA_WRITE
+axis #(.CHANNEL(1), .DATA_WIDTH(AAXI_DMA_S_DW), .ID_WIDTH(6)) adma_axis_s2mm();
+`endif
+`ifdef USE_AXI_DMA_READ
+axis #(.CHANNEL(1), .DATA_WIDTH(AXI_DMA_S_DW), .ID_WIDTH(6)) adma_axis_mm2s();
+`endif
+axi_dma axi_dma_inst(
+    .m_axi_clk      (   adma_axi_clk    ),
+    .m_axil_clk     (   adma_axil_clk   ),
+    .axi_rst_n      (   adma_rst_n      ),
+    `ifdef USE_AXI_DMA_WRITE
+    .s_axis_s2mm    (   adma_axis_s2mm.slave    ),
+    .mm2s_introut   (   adma_mm2s_intr          ),
+    `endif
+    `ifdef USE_AXI_DMA_READ
+    .m_axis_mm2s    (   adma_axis_mm2s.master   ),
+    .mm2s_introut   (   adma_mm2s_intr          ),
+    `endif
+    .s_axil         (   adma_axil.slave         ),
+    .m_axi          (   adma_axi.master         )
+);
+`endif
+
 // Role.
 role #(
 

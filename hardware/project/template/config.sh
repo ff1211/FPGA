@@ -20,7 +20,7 @@ export VIVADO="vivado"
 # If use gui.
 export GUI_MODE=0
 # Board name.
-export board_name="zedboard"
+export board_name="ZedBoard"
 # Project name.
 export project_name="zynq_test"
 
