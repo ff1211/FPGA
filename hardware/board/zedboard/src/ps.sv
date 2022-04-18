@@ -15,8 +15,12 @@
 module ps #(
 
 ) (
-    // AXI GP port.
-    
+    `ifdef USE_AXI_GP_PORT
+    axi4            s_axi_gp,
+    `endif
+    `ifdef USE_AXI_HP_PORT
+    axi4            s_axi_hp,
+    `endif
     // Fixed IO.
     inout           fixed_io_ddr_vrn,
     inout           fixed_io_ddr_vrp,
@@ -40,8 +44,6 @@ module ps #(
     inout           ddr_ras_n,
     inout           ddr_reset_n,
     inout           ddr_we_n
-
-
 );
     
 endmodule

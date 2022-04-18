@@ -31,7 +31,7 @@ fi
 # Check if have selected board.
 no_board=1
 for boards in "$BOARDS_DIR"/*; do
-    if [ "$(basename "$boards")" == $board_name ]; then
+    if [ "$(basename "$boards")" -eq $board_name ]; then
         no_board=0
     fi
 done
@@ -78,14 +78,22 @@ project_set_dir="$TEMPLATE_DIR/$project_name"
 cur_project_dir="$TEMPLATE_DIR/$project_name/${project_name}_$i"
 cur_project_name="${project_name}_$i"
 
-# Generate config.vh for configure project.
+# Source add_ip.sh to generate add_ip.tcl.
+source $SCRIPT_DIR/add_ip.sh
 
+# Generate config.vh for configure project.
+define_synx="\`define"
 touch $cur_project_dir/config.vh
 cat > $cur_project_dir/config.vh << EOF
-#****************************************************************
-# This is a auto-generated file. Do not change it!
-#****************************************************************
+//****************************************************************
+// This is a auto-generated file. Do not change it!
+//****************************************************************
+`[[ ${axi_gp_port_num} -ne 0 ]] && echo $define_synx USE_AXI_GP_PORT`
+`[[ ${axi_gp_port_num} -ne 0 ]] && echo $define_synx AXI_GP_PORT_NUM = $axi_gp_port_num`
 
+`[[ ${axi_hp_port_num} -ne 0 ]] && echo $define_synx USE_AXI_HP_PORT`
+`[[ ${axi_hp_port_num} -ne 0 ]] && echo $define_synx AXI_HP_PORT_NUM = $axi_hp_port_num`
+`[[ ${axi_hp_port_num} -ne 0 ]] && echo $define_synx AXI_HP_PORT_DW = $axi_hp_port_dw`
 EOF
 
 # Set project mode.
@@ -118,9 +126,13 @@ source ${HARDWARE_DIR}/script/add_files.tcl
 
 # Add board and project specific files.
 #****************************************************************
-add_files $BOARDS_DIR/$board_name/shell_top.sv $TEMPLATE_DIR/role.sv
+add_files \\
+    $BOARDS_DIR/$board_name/src/shell_top.sv \\
+    $TEMPLATE_DIR/role.sv \\
+    $cur_project_dir/config.vh \\
+    $BOARDS_DIR/$board_name/src/ps.sv
 EOF
 
 # Move to project directory and launch vivado.
 cd $cur_project_dir
-$VIVADO -mode ${vivado_mode} -source $project_set_dir/project.tcl
+#$VIVADO -mode ${vivado_mode} -source $project_set_dir/project.tcl

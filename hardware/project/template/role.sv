@@ -17,6 +17,8 @@
 module role #(
     
 ) (
+    input role_clk,
+    input role_rstn,
     
 );
     

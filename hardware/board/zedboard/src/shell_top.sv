@@ -13,6 +13,7 @@
 //****************************************************************
 
 `include "config.vh"
+`include "interconnect.vh"
 
 module shell_top (
     // Fixed IO.
@@ -41,18 +42,27 @@ module shell_top (
 );
 
 // Processing system AXI general slave port config.
-`ifdef USE_AXI_GP
-
+`ifdef USE_AXI_GP_PORT
+axi4 #(.CHANNEL(AXI_GP_PORT_NUM), .DATA_WIDTH(32), .ADDR_WIDTH(32), .ID_WIDTH(6)) axi_gp_if();
 `endif
 
 // Processing system AXI high profermance slave port config.
-`ifdef USE_AXI_HP
-
+`ifdef USE_AXI_HP_PORT
+axi4 #(.CHANNEL(AXI_HP_PORT_NUM), .DATA_WIDTH(AXI_HP_PORT_DW), .ADDR_WIDTH(32), .ID_WIDTH(6)) axi_hp_if();
 `endif
 
+// Processing system hard core.
 ps #(
-
+    
 ) processing_sys_inst (
+    `ifdef USE_AXI_GP_PORT
+    .s_axi_gp           (   s_axi_gp_if.slave   ),
+    `endif
+    `ifdef USE_AXI_HP_PORT
+    .s_axi_hp           (   s_axi_hp_if.slave   ),
+    `endif
+
+    .m_axi_gp           (   m_axi_gp.master     ),
     .fixed_io_ddr_vrn   (   fixed_io_ddr_vrn    ),
     .fixed_io_ddr_vrp   (   fixed_io_ddr_vrp    ),
     .fixed_io_mio       (   fixed_io_mio        ),
@@ -75,5 +85,12 @@ ps #(
     .ddr_reset_n        (   ddr_reset_n         ),
     .ddr_we_n           (   ddr_we_n            )
 );
-    
+
+// Role.
+role #(
+
+) role_inst (
+
+);
+
 endmodule
