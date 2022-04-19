@@ -1,1 +1,4 @@
 **/.DS_Store
+/hardware/project/template/*
+!/hardware/project/template/*.sh
+!/hardware/project/template/*.sv
