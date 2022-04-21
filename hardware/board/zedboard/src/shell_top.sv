@@ -43,26 +43,29 @@ module shell_top (
 
 // Processing system AXI general slave port config.
 `ifdef USE_AXI_GP_PORT
-axi4 #(.CHANNEL(AXI_GP_PORT_NUM), .DATA_WIDTH(32), .ADDR_WIDTH(32), .ID_WIDTH(6)) axi_gp_if();
+axi4 #(.CHANNEL(AXI_GP_PORT_NUM), .DATA_WIDTH(32), .ADDR_WIDTH(32), .ID_WIDTH(6)) s_axi_gp();
 `endif
 
 // Processing system AXI high profermance slave port config.
 `ifdef USE_AXI_HP_PORT
-axi4 #(.CHANNEL(AXI_HP_PORT_NUM), .DATA_WIDTH(AXI_HP_PORT_DW), .ADDR_WIDTH(32), .ID_WIDTH(6)) axi_hp_if();
+axi4 #(.CHANNEL(AXI_HP_PORT_NUM), .DATA_WIDTH(AXI_HP_PORT_DW), .ADDR_WIDTH(32), .ID_WIDTH(6)) s_axi_hp();
 `endif
 
+axi4 #(.CHANNEL(1), .DATA_WIDTH(32), .ADDR_WIDTH(32), .ID_WIDTH(12)) m_axi_gp();
+
 // Processing system hard core.
-ps #(
-    
+ps_7 #(
+
 ) processing_sys_inst (
     `ifdef USE_AXI_GP_PORT
-    .s_axi_gp           (   s_axi_gp_if.slave   ),
+    .s_axi_gp           (   s_axi_gp.slave   ),
     `endif
     `ifdef USE_AXI_HP_PORT
-    .s_axi_hp           (   s_axi_hp_if.slave   ),
+    .s_axi_hp           (   s_axi_hp.slave   ),
     `endif
 
     .m_axi_gp           (   m_axi_gp.master     ),
+    .m_axi_gp_clk       (   m_axi_gp_clk        ),
     .fixed_io_ddr_vrn   (   fixed_io_ddr_vrn    ),
     .fixed_io_ddr_vrp   (   fixed_io_ddr_vrp    ),
     .fixed_io_mio       (   fixed_io_mio        ),
@@ -87,16 +90,16 @@ ps #(
 );
 
 proc_sys_reset_0 proc_sys_reset_inst (
-    .slowest_sync_clk       (   slowest_sync_clk),        
-    .ext_reset_in           (   ext_reset_in),                
-    .aux_reset_in           (   aux_reset_in),                
-    .mb_debug_sys_rst       (   mb_debug_sys_rst),        
-    .dcm_locked             (   dcm_locked),                    
-    .mb_reset               (   mb_reset),                        
-    .bus_struct_reset       (   bus_struct_reset),        
-    .peripheral_reset       (   peripheral_reset),        
+    .slowest_sync_clk       (   slowest_sync_clk    ),
+    .ext_reset_in           (   ext_reset_in        ),
+    .aux_reset_in           (   aux_reset_in        ),
+    .mb_debug_sys_rst       (   mb_debug_sys_rst    ),
+    .dcm_locked             (   dcm_locked          ),
+    .mb_reset               (   mb_reset            ),
+    .bus_struct_reset       (   bus_struct_reset    ),
+    .peripheral_reset       (   peripheral_reset    ),
     .interconnect_aresetn   (   interconnect_aresetn),
-    .peripheral_aresetn     (   peripheral_aresetn)     
+    .peripheral_aresetn     (   peripheral_aresetn  )
 );
 
 // AXI DMA inst.

@@ -16,13 +16,28 @@
 # Vivado settings.
 #****************************************************************
 # Vivado path.
-export VIVADO="vivado"
+export vivado="vivado"
 # If use gui.
-export GUI_MODE=0
+export gui_mode=0
 # Board name.
-export board_name="ZedBoard"
+export board_name="zedboard"
 # Project name.
 export project_name="zynq_test"
+
+# Clock config.
+# Max 7 clock.
+# clock_0:          axi-mm gp port.
+# clock_1:          axi-mm hp port. (If use dma, it is also dma's axi-stream's clock.)
+# clock_2:          axi-lite.
+# clock_3~clock_6:  User define clock. Not set by default.
+#****************************************************************
+# Haven't support change clock frequence yet!!!!!!! Set clk_freq only enable corresponding clk output port!!!!! Set frequence in ip setting page!!!!!
+# Haven't support change clock frequence yet!!!!!!! Set clk_freq only enable corresponding clk output port!!!!! Set frequence in ip setting page!!!!!
+# Haven't support change clock frequence yet!!!!!!! Set clk_freq only enable corresponding clk output port!!!!! Set frequence in ip setting page!!!!!
+# Clock frequence, unit: MHz. Range [10, 400], integer.
+export clk_freq=(100 100 100 300 100)
+# If need synchronous reset.
+export clk_sync_rst_n=(1 1 1 1 1 1)
 
 # Resource config.
 #****************************************************************
@@ -45,4 +60,4 @@ export axi_dma_aw=32
 export axi_dma_mm_dw=64
 # AXI DMA stream data width, 8, 16, 32, 64, 128, 256, 512, 1024.
 # Must less or equal than $axi_dma_mm_dw !!!! Check board/your_board for more information.
-export axi_dma_s_dw=64
+export axi_dma_s_dw=32

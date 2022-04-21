@@ -20,38 +20,7 @@ echo
 
 # Check the correctness of config.sh.
 #****************************************************************
-# Check if vivado directory is correct.
-type -t $VIVADO > /dev/null
-if [ $? == 1 ]; then
-    echo "Vivado path false!"
-    echo
-    exit 1
-fi
-
-# Check if have selected board.
-no_board=1
-for boards in "$BOARDS_DIR"/*; do
-    if [ "$(basename "$boards")" == $board_name ]; then
-        no_board=0
-    fi
-done
-
-# If can not find board, print boards supported.
-if [ $no_board -eq 1 ]; then
-    echo "Haven't find this board!"
-    echo "We only support:"
-    i=0
-    for boards in "$BOARDS_DIR"/*
-    do 
-        echo -n "[`expr $i + 1`]"
-        board_list[$i]="$(basename "$boards")"
-        echo -n "$(basename "$boards") "
-        i=`expr $i + 1`
-    done
-    echo
-    echo
-    exit 1
-fi
+source $SCRIPT_DIR/check_config.sh
 
 # Start creating project
 #****************************************************************
@@ -63,11 +32,11 @@ i=0
 if [[ -d $TEMPLATE_DIR/$project_name ]]; then
 
     while [[ -d $TEMPLATE_DIR/$project_name/${project_name}_$i && $i -lt 50 ]]; do
-        i=`expr $i + 1`
+        i=$((i+1))
     done
     if [ $i -eq 49 ]; then
         echo "Too much project existed! Create project fail!"
-        exit 1
+        error
     fi
 else
     mkdir "$TEMPLATE_DIR/$project_name"
@@ -83,6 +52,24 @@ mkdir "$cur_pj_dir/script"
 cur_pj_src_dir="$cur_pj_dir/src"
 cur_pj_script_dir="$cur_pj_dir/script"
 
+# Generate add_ip.tcl for add ips.
+touch "$cur_pj_script_dir/add_ip.tcl"
+export add_ip_tcl_path=$cur_pj_script_dir/add_ip.tcl
+cat > "$cur_pj_script_dir/add_ip.tcl" << EOF
+#****************************************************************
+# This is a auto-generated file. Do not change it!
+#****************************************************************
+EOF
+
+# Generate pre_proc.vh for config ips.
+touch "$cur_pj_src_dir/pre_proc.vh"
+export pre_proc_path="$cur_pj_src_dir/pre_proc.vh"
+cat > "$cur_pj_src_dir/pre_proc.vh" << EOF
+//****************************************************************
+// This is a auto-generated file. Do not change it!
+//****************************************************************
+EOF
+
 # Source add_ip.sh to generate add_ip.tcl.
 source $SCRIPT_DIR/add_ip.sh
 
@@ -91,7 +78,7 @@ source $SCRIPT_DIR/pre_proc.sh
 
 # Set project mode.
 vivado_mode="tcl"
-[[ $GUI_MODE -eq 1 ]] && vivado_mode="gui"
+[[ $gui_mode -eq 1 ]] && vivado_mode="gui"
 
 # Generate project.tcl for creating project in vivado.
 touch $cur_pj_dir/project.tcl
@@ -125,9 +112,8 @@ add_files \\
     $BOARDS_DIR/$board_name/src/shell_top.sv \\
     $TEMPLATE_DIR/role.sv \\
     $cur_pj_src_dir/pre_proc.vh \\
-    $BOARDS_DIR/$board_name/src/ps.sv
 EOF
 
 # Move to project directory and launch vivado.
-cd $cur_pj_dir
-$VIVADO -mode ${vivado_mode} -source $cur_pj_dir/project.tcl
+cd $cur_pj_dir || (echo "cd to current project's directory fail!"; error)
+$vivado -mode ${vivado_mode} -source $cur_pj_dir/project.tcl

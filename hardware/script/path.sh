@@ -14,16 +14,26 @@
 #****************************************************************
 
 # Template directory.
-export TEMPLATE_DIR=$(pwd)
+TEMPLATE_DIR=$(pwd)
+export TEMPLATE_DIR
 # Hardware directory.
 cd ../../
-export HARDWARE_DIR=$(pwd)
-cd $TEMPLATE_DIR
+HARDWARE_DIR=$(pwd)
+export HARDWARE_DIR
+cd "$TEMPLATE_DIR" || (echo "cd fail!" exit 1)
 # Script directory.
 export SCRIPT_DIR=$HARDWARE_DIR/script
 # Board file directory.
 export BOARDS_DIR=$HARDWARE_DIR/board
+# Shell directory.
+export SHELL_DIR=$HARDWARE_DIR/shell
 # Shell common modules directory.
 export COMMON_DIR=$HARDWARE_DIR/shell/common
 # Interface directory.
 export INTERFACE_DIR=$HARDWARE_DIR/shell/interface
+
+# Error Function.
+error(){
+    echo "Error! Project creation fail!"
+    exit 1
+}
