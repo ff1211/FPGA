@@ -73,7 +73,7 @@ export ip_list=()
 # Basic config.
 #----------------------------------------------------------------
 basic_config=("vivado" "gui_mode" "board_name" "project_name")
-clock_config=("clk_freq" "clk_sync_rst_n")
+clock_config=("clk_freq")
 
 # Soft core config.
 #----------------------------------------------------------------

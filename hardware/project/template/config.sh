@@ -36,8 +36,6 @@ export project_name="zynq_test"
 # Haven't support change clock frequence yet!!!!!!! Set clk_freq only enable corresponding clk output port!!!!! Set frequence in ip setting page!!!!!
 # Clock frequence, unit: MHz. Range [10, 400], integer.
 export clk_freq=(100 100 100 300 100)
-# If need synchronous reset.
-export clk_sync_rst_n=(1 1 1 1 1 1)
 
 # Resource config.
 #****************************************************************

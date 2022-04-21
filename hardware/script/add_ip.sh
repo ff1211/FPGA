@@ -51,6 +51,9 @@ source $SCRIPT_DIR/ip/zynq_ps.sh
 # Add clock wizard.
 source $SCRIPT_DIR/ip/clock_wizard.sh
 
+# Add processing system reset.
+source $SCRIPT_DIR/ip/sys_reset.sh
+
 # Add AXI DMA.
 [[ $use_axi_dma -eq 1 ]] && source $SCRIPT_DIR/ip/axi_dma.sh
 

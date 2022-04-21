@@ -41,37 +41,69 @@ module shell_top (
     inout           ddr_we_n
 );
 
-// Processing system AXI general slave port config.
-`ifdef USE_AXI_GP_PORT
-axi4 #(.CHANNEL(AXI_GP_PORT_NUM), .DATA_WIDTH(32), .ADDR_WIDTH(32), .ID_WIDTH(6)) s_axi_gp();
-`endif
+// System clk.
+logic [SYS_CLK_NUM-1:0] sys_clk;
+sys_clock #(
+    .SYS_CLK_NUM    (   SYS_CLK_NUM )
+) sys_clock_inst (
+    .ext_clk        (   fclk        ),
+    .sys_clk        (   sys_clk     )
+);
 
-// Processing system AXI high profermance slave port config.
-`ifdef USE_AXI_HP_PORT
-axi4 #(.CHANNEL(AXI_HP_PORT_NUM), .DATA_WIDTH(AXI_HP_PORT_DW), .ADDR_WIDTH(32), .ID_WIDTH(6)) s_axi_hp();
-`endif
+// System reset.
+logic [SYS_CLK_NUM-1:0] ic_rst_n;
+logic [SYS_CLK_NUM-1:0] perif_rst_n;
+sys_reset #(
+    .SYS_CLK_NUM        (   SYS_CLK_NUM )
+) sys_reset_inst (
+    .slowest_sync_clk   (   sys_clk     ),
+    .ext_rst_n          (   fclk_rst_n  ),
+    .ic_rst_n           (   ic_rst_n    ),
+    .perif_rst_n        (   perif_rst_n )
+);
 
-axi4 #(.CHANNEL(1), .DATA_WIDTH(32), .ADDR_WIDTH(32), .ID_WIDTH(12)) m_axi_gp();
+`ifdef USE_M_AXI_GP
+// Processing system AXI general purpose master port.
+axi4 #(.CHANNEL(M_AXI_GP_NUM), .DATA_WIDTH(32), .ADDR_WIDTH(32), .ID_WIDTH(12)) ps_m_axi_gp();
+`endif
+// Processing system AXI general purpose slave port.
+`ifdef USE_S_AXI_GP
+axi4 #(.CHANNEL(S_AXI_GP_NUM), .DATA_WIDTH(32), .ADDR_WIDTH(32), .ID_WIDTH(6)) ps_s_axi_gp();
+`endif
+// Processing system AXI high profermance slave port.
+`ifdef USE_S_AXI_HP
+axi4 #(.CHANNEL(S_AXI_HP_NUM), .DATA_WIDTH(S_AXI_HP_DW), .ADDR_WIDTH(32), .ID_WIDTH(6)) ps_s_axi_hp();
+`endif
 
 // Processing system hard core.
+logic   fclk;
+logic   fclk_rst_n;
 ps_7 #(
 
 ) processing_sys_inst (
-    `ifdef USE_AXI_GP_PORT
-    .s_axi_gp           (   s_axi_gp.slave   ),
+    `ifdef USE_M_AXI_GP
+    .m_axi_gp           (   m_axi_gp.master     ),
+    .m_axi_gp_clk       (   {M_AXI_GP_NUM{sys_clk[0]}}),
     `endif
-    `ifdef USE_AXI_HP_PORT
-    .s_axi_hp           (   s_axi_hp.slave   ),
+    `ifdef USE_S_AXI_GP
+    .s_axi_gp           (   ps_s_axi_gp.slave   ),
+    .s_axi_gp_clk       (   {S_AXI_GP_NUM{sys_clk[0]}}),
+    `endif
+    `ifdef USE_S_AXI_HP
+    .s_axi_hp           (   ps_s_axi_hp.slave   ),
+    .s_axi_hp_clk       (   {M_AXI_GP_NUM{sys_clk[1]}}),
     `endif
 
-    .m_axi_gp           (   m_axi_gp.master     ),
-    .m_axi_gp_clk       (   m_axi_gp_clk        ),
+    .fclk               (   fclk                ),
+    .fclk_rst_n         (   fclk_rst_n          ),
+
     .fixed_io_ddr_vrn   (   fixed_io_ddr_vrn    ),
     .fixed_io_ddr_vrp   (   fixed_io_ddr_vrp    ),
     .fixed_io_mio       (   fixed_io_mio        ),
     .fixed_io_ps_clk    (   fixed_io_ps_clk     ),
     .fixed_io_ps_porb   (   fixed_io_ps_porb    ),
     .fixed_io_ps_srstb  (   fixed_io_ps_srstb   ),
+
     .ddr_addr           (   ddr_addr            ),
     .ddr_ba             (   ddr_ba              ),
     .ddr_cas_n          (   ddr_cas_n           ),
@@ -87,19 +119,6 @@ ps_7 #(
     .ddr_ras_n          (   ddr_ras_n           ),
     .ddr_reset_n        (   ddr_reset_n         ),
     .ddr_we_n           (   ddr_we_n            )
-);
-
-proc_sys_reset_0 proc_sys_reset_inst (
-    .slowest_sync_clk       (   slowest_sync_clk    ),
-    .ext_reset_in           (   ext_reset_in        ),
-    .aux_reset_in           (   aux_reset_in        ),
-    .mb_debug_sys_rst       (   mb_debug_sys_rst    ),
-    .dcm_locked             (   dcm_locked          ),
-    .mb_reset               (   mb_reset            ),
-    .bus_struct_reset       (   bus_struct_reset    ),
-    .peripheral_reset       (   peripheral_reset    ),
-    .interconnect_aresetn   (   interconnect_aresetn),
-    .peripheral_aresetn     (   peripheral_aresetn  )
 );
 
 // AXI DMA inst.

@@ -14,9 +14,6 @@
 # 1.0      2022.04.20  Fanfei      Initial version
 #****************************************************************
 
-# Add processing system reset.
-echo "create_ip -name proc_sys_reset -vendor xilinx.com -library ip -version 5.0 -module_name proc_sys_reset_0" >> $add_ip_tcl_path
-
 # Add processing system hardcore.
 if [[ $platform == "zynq-7000" ]];  then
     echo "create_ip -name processing_system7 -vendor xilinx.com -library ip -version 5.5 -module_name processing_system7_0" >> $add_ip_tcl_path
