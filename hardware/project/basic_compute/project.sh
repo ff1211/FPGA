@@ -28,9 +28,9 @@ echo "Creating new project..."
 
 # Creat Project folder.
 i=0
-if [[ -d $TEMPLATE_DIR/$project_name ]]; then
+if [[ -d $PROJECT_DIR/$project_name ]]; then
 
-    while [[ -d $TEMPLATE_DIR/$project_name/${project_name}_$i && $i -lt 50 ]]; do
+    while [[ -d $PROJECT_DIR/$project_name/${project_name}_$i && $i -lt 50 ]]; do
         i=$((i+1))
     done
     if [ $i -eq 49 ]; then
@@ -38,18 +38,21 @@ if [[ -d $TEMPLATE_DIR/$project_name ]]; then
         error
     fi
 else
-    mkdir "$TEMPLATE_DIR/$project_name"
+    mkdir "$PROJECT_DIR/$project_name"
 fi
-mkdir "$TEMPLATE_DIR/$project_name/${project_name}_$i"
+mkdir "$PROJECT_DIR/$project_name/${project_name}_$i"
 
-pj_set_dir="$TEMPLATE_DIR/$project_name"
-cur_pj_dir="$TEMPLATE_DIR/$project_name/${project_name}_$i"
+pj_set_dir="$PROJECT_DIR/$project_name"
+cur_pj_dir="$PROJECT_DIR/$project_name/${project_name}_$i"
 cur_pj_name="${project_name}_$i"
 
 mkdir "$cur_pj_dir/src"
 mkdir "$cur_pj_dir/script"
 cur_pj_src_dir="$cur_pj_dir/src"
 cur_pj_script_dir="$cur_pj_dir/script"
+
+# Copy shell_top.sv to current project dir.
+cp $BOARDS_DIR/$board_name/$preset_plat/shell_top.sv $cur_pj_script_dir
 
 # Generate add_ip.tcl for add ips.
 touch "$cur_pj_script_dir/add_ip.tcl"
@@ -88,7 +91,7 @@ cat > $cur_pj_dir/project.tcl << EOF
 
 # Set directorys.
 #****************************************************************
-set TEMPLATE_DIR $TEMPLATE_DIR
+set PROJECT_DIR $PROJECT_DIR
 set HARDWARE_DIR $HARDWARE_DIR
 set SCRIPT_DIR $SCRIPT_DIR
 set BOARDS_DIR $BOARDS_DIR
@@ -109,7 +112,7 @@ source ${cur_pj_script_dir}/add_ip.tcl
 #****************************************************************
 add_files \\
     $BOARDS_DIR/$board_name/$preset_plat/src/shell_top.sv \\
-    $TEMPLATE_DIR/role.sv \\
+    $PROJECT_DIR/role.sv \\
     $cur_pj_src_dir/pre_proc.vh \\
 EOF
 

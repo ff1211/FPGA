@@ -40,10 +40,12 @@ add_ip_wrapper(){
 # Zynq processing system config.
 #****************************************************************
 # Zynq AXI general purpose slave port config.
-export axi_gp_port_num=0            # AXI general purpose slave port number, range[0, 2].
+export m_axi_gp_port_num=0            # AXI general purpose master port number, range[0, 2].
+# Zynq AXI general purpose slave port config.
+export s_axi_gp_port_num=0            # AXI general purpose slave port number, range[0, 2].
 # Zynq AXI high performance slave port config.
-export axi_hp_port_num=0            # AXI high performance slave port number, range[0, 4].
-export axi_hp_port_dw=(32 32 32 32) # AXI high performance slave port data width, 32 or 64.
+export s_axi_hp_port_num=0            # AXI high performance slave port number, range[0, 4].
+export s_axi_hp_port_dw=64            # AXI high performance slave port data width, 32 or 64.
 
 # Add Zynq processing system.
 source $SCRIPT_DIR/ip/zynq_ps.sh

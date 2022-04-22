@@ -28,8 +28,3 @@ export package="clg484"
 export platform="zynq-7000"
 # Speed grade.
 export speed_grade="-1"
-
-# Board resource informations.
-#****************************************************************
-# Pmod.
-export pmod_num=4

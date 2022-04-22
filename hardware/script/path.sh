@@ -13,14 +13,13 @@
 # 1.0      2022.04.14  Fanfei      Initial version
 #****************************************************************
 
-# Template directory.
-TEMPLATE_DIR=$(pwd)
-export TEMPLATE_DIR
+# Project directory.
+export PROJECT_DIR=$(pwd)/$1
 # Hardware directory.
 cd ../../
 HARDWARE_DIR=$(pwd)
 export HARDWARE_DIR
-cd "$TEMPLATE_DIR" || (echo "cd fail!" exit 1)
+cd "$PROJECT_DIR" || (echo "cd fail!" exit 1)
 # Script directory.
 export SCRIPT_DIR=$HARDWARE_DIR/script
 # Board file directory.
@@ -32,8 +31,3 @@ export COMMON_DIR=$HARDWARE_DIR/shell/common
 # Interface directory.
 export INTERFACE_DIR=$HARDWARE_DIR/shell/interface
 
-# Error Function.
-error(){
-    echo "Error! Project creation fail!"
-    exit 1
-}
