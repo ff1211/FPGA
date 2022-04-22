@@ -14,12 +14,12 @@
 #****************************************************************
 
 # Project directory.
-export PROJECT_DIR=$(pwd)/$1
+export PROJECT_DIR=$projec_temp_dir/$project_temp_name
 # Hardware directory.
-cd ../../
+cd ../
 HARDWARE_DIR=$(pwd)
 export HARDWARE_DIR
-cd "$PROJECT_DIR" || (echo "cd fail!" exit 1)
+cd "$TEMPLATE_DIR" || (echo "cd fail!" exit 1)
 # Script directory.
 export SCRIPT_DIR=$HARDWARE_DIR/script
 # Board file directory.

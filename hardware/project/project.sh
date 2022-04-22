@@ -28,8 +28,10 @@ elif [ ! -d "./$1" ]; then
     echo "Wrong project template name! Check project directory!"
     error
 fi
-source ../script/path.sh $1
-source ./$1/config.sh
+export project_temp_name=$1
+export projec_temp_dir=$(pwd)
+source $projec_temp_dir/../script/path.sh
+source $projec_temp_dir/$1/config.sh
 
 echo
 
@@ -40,6 +42,9 @@ source $SCRIPT_DIR/check_config.sh
 # Start creating project
 #****************************************************************
 echo "Creating new project..."
+
+mkdir "$PROJECT_DIR/$project_name"
+exit 1
 
 # Creat Project folder.
 i=0
@@ -67,7 +72,7 @@ cur_pj_src_dir="$cur_pj_dir/src"
 cur_pj_script_dir="$cur_pj_dir/script"
 
 # Copy shell_top.sv to current project dir.
-cp $BOARDS_DIR/$board_name/$preset_plat/shell_top.sv $cur_pj_script_dir
+cp $BOARDS_DIR/$board_name/$preset_plat/src/shell_top.sv $cur_pj_src_dir
 
 # Generate add_ip.tcl for add ips.
 touch "$cur_pj_script_dir/add_ip.tcl"
