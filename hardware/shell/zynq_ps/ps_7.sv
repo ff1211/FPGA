@@ -59,29 +59,37 @@ module ps_7 #(
 
 `ifdef USE_M_AXI_GP_0
 axi4 #(.CHANNEL(1), .DATA_WIDTH(32), .ADDR_WIDTH(32), .ID_WIDTH(12)) m_axi_gp_0();
+`CON_AXI4_M2N(m_axi_gp_0, m_axi_gp, 0, 0);
 `endif
 `ifdef USE_M_AXI_GP_1
 axi4 #(.CHANNEL(1), .DATA_WIDTH(32), .ADDR_WIDTH(32), .ID_WIDTH(12)) m_axi_gp_1();
+`CON_AXI4_M2N(m_axi_gp_1, m_axi_gp, 0, 1);
 `endif
 
 `ifdef USE_S_AXI_GP_0
 axi4 #(.CHANNEL(1), .DATA_WIDTH(32), .ADDR_WIDTH(32), .ID_WIDTH(6)) s_axi_gp_0();
+`CON_AXI4_M2N(s_axi_gp, s_axi_gp_0, 0, 0);
 `endif
 `ifdef USE_S_AXI_GP_1
 axi4 #(.CHANNEL(1), .DATA_WIDTH(32), .ADDR_WIDTH(32), .ID_WIDTH(6)) s_axi_gp_1();
+`CON_AXI4_M2N(s_axi_gp, s_axi_gp_1, 1, 0);
 `endif
 
 `ifdef USE_S_AXI_HP_0
 axi4 #(.CHANNEL(1), .DATA_WIDTH(S_AXI_HP_DW), .ADDR_WIDTH(32), .ID_WIDTH(6)) s_axi_hp_0();
+`CON_AXI4_M2N(s_axi_hp, s_axi_hp_0, 0, 0);
 `endif
 `ifdef USE_S_AXI_HP_1
 axi4 #(.CHANNEL(1), .DATA_WIDTH(S_AXI_HP_DW), .ADDR_WIDTH(32), .ID_WIDTH(6)) s_axi_hp_1();
+`CON_AXI4_M2N(s_axi_hp, s_axi_hp_1, 1, 0);
 `endif
 `ifdef USE_S_AXI_HP_2
 axi4 #(.CHANNEL(1), .DATA_WIDTH(S_AXI_HP_DW), .ADDR_WIDTH(32), .ID_WIDTH(6)) s_axi_hp_2();
+`CON_AXI4_M2N(s_axi_hp, s_axi_hp_2, 2, 0);
 `endif
 `ifdef USE_S_AXI_HP_3
 axi4 #(.CHANNEL(1), .DATA_WIDTH(S_AXI_HP_DW), .ADDR_WIDTH(32), .ID_WIDTH(6)) s_axi_hp_3();
+`CON_AXI4_M2N(s_axi_hp, s_axi_hp_3, 3, 0);
 `endif
 
 

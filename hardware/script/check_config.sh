@@ -35,7 +35,6 @@ check_hard_core(){
 }
 
 # Function to check integrity of config.
-# 1st parameter: Config name.
 # Example: check_integrity $basic_config.
 check_config_integrity(){
     arr=("$@")
@@ -72,7 +71,7 @@ export ip_list=()
 #****************************************************************
 # Basic config.
 #----------------------------------------------------------------
-basic_config=("vivado" "gui_mode" "board_name" "project_name")
+basic_config=("vivado" "gui_mode" "board_name" "project_name" "preset_plat")
 clock_config=("clk_freq")
 
 # Soft core config.
@@ -118,19 +117,30 @@ done
 # If can not find board, print boards supported.
 if [[ $no_board -eq 1 ]]; then
     echo "Haven't find this board!"
-    echo "We only support:"
-    i=0
-    for boards in "$BOARDS_DIR"/*
-    do 
-        echo -n "[$((i + 1))]"
-        board_list[$i]="$(basename "$boards")"
-        echo -n "$(basename "$boards") "
-        i=$((i + 1))
-    done
-    echo
+    echo "Check $BOARDS_DIR for supported boards!"
     echo
     error
 fi
+
+# Check if have selected platform preset.
+no_preset=1
+for presets in "$BOARDS_DIR/$board_name"/*; do
+    if [ "$(basename "$presets")" == "$preset_plat" ]; then
+        no_preset=0
+    fi
+done
+if [[ $no_preset -eq 1 ]]; then
+    echo "Haven't find this platform preset!"
+    echo "Check $BOARDS_DIR/$board_name for supported preset!"
+    echo
+    error
+fi
+
+
+# Basic check pass. Check board and platform preset.
+#****************************************************************
+source $BOARDS_DIR/$board_name/board.sh || (echo "Can't find board.sh! Check integrity of $BOARDS_DIR/$board_name" error)
+source $BOARDS_DIR/$board_name/$preset_plat/resource.sh || (echo "Can't find resource.sh! Check integrity of $BOARDS_DIR/$board_name/$preset_plat" error)
 
 # Clock config check.
 #****************************************************************
@@ -138,11 +148,14 @@ fi
 check_config_integrity "${clock_config[@]}"
 # Advanced check.
 
-
-
 # AXI DMA config check.
 #****************************************************************
 if [[ $use_axi_dma -eq 1 ]]; then
+    # Check if platform preset support AXI DMA.
+    if [[ $have_axi_dma -ne 1 ]]; then
+        echo "$board_name's $preset_plat preset doesn't support AXI DMA!"
+        error
+    fi
     # Basic check.
     check_config_integrity "${axi_dma_config[@]}"
     check_config_legal "${axi_dma_config[@]}"

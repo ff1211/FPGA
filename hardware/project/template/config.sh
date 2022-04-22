@@ -24,6 +24,11 @@ export board_name="zedboard"
 # Project name.
 export project_name="zynq_test"
 
+# Shell config.
+#****************************************************************
+# Preset platform.
+export preset_plat="basic_plat"
+
 # Clock config.
 # Max 7 clock.
 # clock_0:          axi-mm gp port.

@@ -25,7 +25,6 @@ source $SCRIPT_DIR/check_config.sh
 # Start creating project
 #****************************************************************
 echo "Creating new project..."
-source $BOARDS_DIR/$board_name/board.sh
 
 # Creat Project folder.
 i=0
@@ -109,7 +108,7 @@ source ${cur_pj_script_dir}/add_ip.tcl
 # Add board and project specific files.
 #****************************************************************
 add_files \\
-    $BOARDS_DIR/$board_name/src/shell_top.sv \\
+    $BOARDS_DIR/$board_name/$preset_plat/src/shell_top.sv \\
     $TEMPLATE_DIR/role.sv \\
     $cur_pj_src_dir/pre_proc.vh \\
 EOF
