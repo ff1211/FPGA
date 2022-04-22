@@ -13,6 +13,7 @@
 //****************************************************************
 
 `timescale 1ns/1ps
+`include "pre_proc.vh"
 
 module sys_clock #(
     parameter   SYS_CLK_NUM
@@ -21,10 +22,10 @@ module sys_clock #(
     output  [SYS_CLK_NUM-1:0]   sys_clk
 );
 
-
 clk_wiz_0 clk_wiz_0_inst (
+    `ifdef USE_CLK_0
     .clk_out1   (   sys_clk[0]  ),
-
+    `endif
     `ifdef USE_CLK_1
     .clk_out2   (   sys_clk[1]  ),
     `endif

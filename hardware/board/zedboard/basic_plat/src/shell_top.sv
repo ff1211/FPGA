@@ -42,56 +42,56 @@ module shell_top (
 );
 
 // System clk.
-logic [SYS_CLK_NUM-1:0] sys_clk;
+logic                       fclk;
+logic [`SYS_CLK_NUM-1:0]    sys_clk;
 sys_clock #(
-    .SYS_CLK_NUM    (   SYS_CLK_NUM )
+    .SYS_CLK_NUM    (   `SYS_CLK_NUM    )
 ) sys_clock_inst (
-    .ext_clk        (   fclk        ),
-    .sys_clk        (   sys_clk     )
+    .ext_clk        (   fclk            ),
+    .sys_clk        (   sys_clk         )
 );
 
 // System reset.
-logic [SYS_CLK_NUM-1:0] ic_rst_n;
-logic [SYS_CLK_NUM-1:0] perif_rst_n;
+logic                       fclk_rst_n;
+logic [`SYS_CLK_NUM-1:0]    ic_rst_n;
+logic [`SYS_CLK_NUM-1:0]    perif_rst_n;
 sys_reset #(
-    .SYS_CLK_NUM        (   SYS_CLK_NUM )
+    .SYS_CLK_NUM        (   `SYS_CLK_NUM    )
 ) sys_reset_inst (
-    .slowest_sync_clk   (   sys_clk     ),
-    .ext_rst_n          (   fclk_rst_n  ),
-    .ic_rst_n           (   ic_rst_n    ),
-    .perif_rst_n        (   perif_rst_n )
+    .slowest_sync_clk   (   sys_clk         ),
+    .ext_rst_n          (   fclk_rst_n      ),
+    .ic_rst_n           (   ic_rst_n        ),
+    .perif_rst_n        (   perif_rst_n     )
 );
 
 `ifdef USE_M_AXI_GP
 // Processing system AXI general purpose master port.
-axi4 #(.CHANNEL(M_AXI_GP_NUM), .DATA_WIDTH(32), .ADDR_WIDTH(32), .ID_WIDTH(12)) ps_m_axi_gp();
+axi4 #(.CHANNEL(`M_AXI_GP_NUM), .DATA_WIDTH(32), .ADDR_WIDTH(32), .ID_WIDTH(12)) ps_m_axi_gp();
 `endif
 // Processing system AXI general purpose slave port.
 `ifdef USE_S_AXI_GP
-axi4 #(.CHANNEL(S_AXI_GP_NUM), .DATA_WIDTH(32), .ADDR_WIDTH(32), .ID_WIDTH(6)) ps_s_axi_gp();
+axi4 #(.CHANNEL(`S_AXI_GP_NUM), .DATA_WIDTH(32), .ADDR_WIDTH(32), .ID_WIDTH(6)) ps_s_axi_gp();
 `endif
 // Processing system AXI high profermance slave port.
 `ifdef USE_S_AXI_HP
-axi4 #(.CHANNEL(S_AXI_HP_NUM), .DATA_WIDTH(S_AXI_HP_DW), .ADDR_WIDTH(32), .ID_WIDTH(6)) ps_s_axi_hp();
+axi4 #(.CHANNEL(`S_AXI_HP_NUM), .DATA_WIDTH(`S_AXI_HP_DW), .ADDR_WIDTH(32), .ID_WIDTH(6)) ps_s_axi_hp();
 `endif
 
 // Processing system hard core.
-logic   fclk;
-logic   fclk_rst_n;
 ps_7 #(
 
 ) processing_sys_inst (
     `ifdef USE_M_AXI_GP
-    .m_axi_gp           (   m_axi_gp.master     ),
-    .m_axi_gp_clk       (   {M_AXI_GP_NUM{sys_clk[0]}}),
+    .m_axi_gp           (   ps_m_axi_gp.master  ),
+    .m_axi_gp_aclk      (   {`M_AXI_GP_NUM{sys_clk[0]}}),
     `endif
     `ifdef USE_S_AXI_GP
     .s_axi_gp           (   ps_s_axi_gp.slave   ),
-    .s_axi_gp_clk       (   {S_AXI_GP_NUM{sys_clk[0]}}),
+    .s_axi_gp_aclk      (   {`S_AXI_GP_NUM{sys_clk[0]}}),
     `endif
     `ifdef USE_S_AXI_HP
     .s_axi_hp           (   ps_s_axi_hp.slave   ),
-    .s_axi_hp_clk       (   {M_AXI_GP_NUM{sys_clk[1]}}),
+    .s_axi_hp_aclk      (   {`M_AXI_GP_NUM{sys_clk[1]}}),
     `endif
 
     .fclk               (   fclk                ),
@@ -121,30 +121,52 @@ ps_7 #(
     .ddr_we_n           (   ddr_we_n            )
 );
 
+`ifdef USE_AXI_INTERCONNECT
+// AXI interconnect.
+axi_lite #(.CHANNEL(`AXIL_NUM), .ADDR_WIDTH(32)) ps_m_axil();
+axi4 #(.CHANNEL(1), .DATA_WIDTH(32), .ADDR_WIDTH(32), .ID_WIDTH(12)) ps_m_axi_gp_0();
+`CON_AXI4_M2N(ps_m_axi_gp, ps_m_axi_gp_0, 0, 0);
+axi_int (
+    .s_axi_gp       (   ps_m_axi_gp_0   ),
+    .s_axi_gp_aclk  (   sys_clk[0]      ),
+    .s_axi_gp_rst_n (   ic_rst_n[0]     ),
+
+    .m_axil         (   ps_m_axil   ),
+    .m_axil_aclk    (   sys_clk[2]  ),
+    .m_axil_rst_n   (   ic_rst_n[2] )
+);
+`endif
+
 // AXI DMA inst.
 `ifdef USE_AXI_DMA
-axi4 #(.CHANNEL(1), .DATA_WIDTH(AXI_DMA_MM_DW), .ADDR_WIDTH(AXI_DMA_AW), .ID_WIDTH(6)) adma_axi();
-axi_lite #(.CHANNEL(1), .DATA_WIDTH(AXI_DMA_MM_DW)) adma_axil();
+axi4 #(.CHANNEL(1), .DATA_WIDTH(`AXI_DMA_MM_DW), .ADDR_WIDTH(`AXI_DMA_AW), .ID_WIDTH(6)) adma_m_axi();
+axi_lite #(.CHANNEL(1), .ADDR_WIDTH(32)) adma_s_axil();
 `ifdef USE_AXI_DMA_WRITE
-axis #(.CHANNEL(1), .DATA_WIDTH(AAXI_DMA_S_DW), .ID_WIDTH(6)) adma_axis_s2mm();
+axis #(.CHANNEL(1), .DATA_WIDTH(`AXI_DMA_S_DW), .ID_WIDTH(6)) adma_s_axis_s2mm();
 `endif
 `ifdef USE_AXI_DMA_READ
-axis #(.CHANNEL(1), .DATA_WIDTH(AXI_DMA_S_DW), .ID_WIDTH(6)) adma_axis_mm2s();
+axis #(.CHANNEL(1), .DATA_WIDTH(`AXI_DMA_S_DW), .ID_WIDTH(6)) adma_m_axis_mm2s();
 `endif
+
+`CON_AXI4_M2N(adma_m_axi, ps_s_axi_hp, 0, 0);
+`CON_AXIL_M2N(ps_m_axil, adma_s_axil, 0, 0);
+
+logic adma_s2mm_intr;
+logic adma_mm2s_intr;
 axi_dma axi_dma_inst(
-    .m_axi_clk      (   adma_axi_clk    ),
-    .m_axil_clk     (   adma_axil_clk   ),
-    .axi_rst_n      (   adma_rst_n      ),
+    .axi_rst_n      (   perif_rst_n[2]          ),
     `ifdef USE_AXI_DMA_WRITE
-    .s_axis_s2mm    (   adma_axis_s2mm.slave    ),
-    .mm2s_introut   (   adma_mm2s_intr          ),
+    .s_axis_s2mm    (   adma_s_axis_s2mm.slave  ),
+    .s2mm_introut   (   adma_s2mm_intr          ),
     `endif
     `ifdef USE_AXI_DMA_READ
-    .m_axis_mm2s    (   adma_axis_mm2s.master   ),
+    .m_axis_mm2s    (   adma_m_axis_mm2s.master ),
     .mm2s_introut   (   adma_mm2s_intr          ),
     `endif
-    .s_axil         (   adma_axil.slave         ),
-    .m_axi          (   adma_axi.master         )
+    .s_axil         (   adma_s_axil.slave       ),
+    .m_axil_aclk    (   sys_clk[2]              ),
+    .m_axi          (   adma_m_axi.master       ),
+    .m_axi_aclk     (   sys_clk[1]              )
 );
 `endif
 

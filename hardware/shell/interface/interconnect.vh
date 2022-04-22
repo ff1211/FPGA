@@ -12,48 +12,87 @@
 // 1.0      2022.04.14  Fanfei      Initial version
 //****************************************************************
 
+`ifndef INTERCONNECT
+`define INTERCONNECT
+
 // Assign AXI4.
-`define CON_AXI4_M2N(axi_s, axi_d, m, n) \
-assign axi_d.awid    [n*axi_d.ID_WIDTH+:axi_d.ID_WIDTH]     = axi_s.awid [m*axi_s.ID_WIDTH+:axi_s.ID_WIDTH] | {axi_d.ID_WIDTH{0}}; \
-assign axi_d.awaddr  [n*axi_d.ADDR_WIDTH+:axi_d.ADDR_WIDTH] = axi_s.awaddr [m*axi_s.ADDR_WIDTH+:axi_s.ADDR_WIDTH] | {axi_d.ADDR_WIDTH{0}}; \
-assign axi_d.awlen   [n*8+:8] = axi_s.awlen   [m*8+:8] | 8'b0; \
-assign axi_d.awsize  [n*3+:3] = axi_s.awsize  [m*3+:3] | 3'b0; \
-assign axi_d.awburst [n*2+:2] = axi_s.awburst [m*2+:2] | 2'b0; \
-assign axi_d.awlock  [n*2+:2] = axi_s.awlock  [m*2+:2] | 2'b0; \
-assign axi_d.awcache [n*4+:4] = axi_s.awcache [m*4+:4] | 4'b0; \
-assign axi_d.awprot  [n*3+:3] = axi_s.awprot  [m*3+:3] | 3'b0; \
-assign axi_d.awregion[n*4+:4] = axi_s.awregion[m*4+:4] | 4'b0; \
-assign axi_d.awqos   [n*4+:4] = axi_s.awqos   [m*4+:4] | 4'b0; \
-assign axi_d.awuser  [n*axi_d.USER_WIDTH+:axi_d.USER_WIDTH] = axi_s.awuser [m*axi_s.USER_WIDTH+:axi_s.USER_WIDTH] | {axi_d.USER_WIDTH{0}}; \
-assign axi_d.awvalid [n]      = axi_s.awvalid [m]; \  
-assign axi_s.awready [m]      = axi_d.awready [n]; \
-assign axi_d.arid    [n*axi_d.ID_WIDTH+:axi_d.ID_WIDTH]     = axi_s.arid [m*axi_s.ID_WIDTH+:axi_s.ID_WIDTH] | {axi_d.ID_WIDTH{0}}; \
-assign axi_d.araddr  [n*axi_d.ADDR_WIDTH+:axi_d.ADDR_WIDTH] = axi_s.araddr [m*axi_s.ADDR_WIDTH+:axi_s.ADDR_WIDTH] | {axi_d.ADDR_WIDTH{0}}; \
-assign axi_d.arlen   [n*8+:8] = axi_s.arlen   [m*8+:8] | 8'b0; \
-assign axi_d.arsize  [n*3+:3] = axi_s.arsize  [m*3+:3] | 3'b0; \
-assign axi_d.arburst [n*2+:2] = axi_s.arburst [m*2+:2] | 2'b0; \
-assign axi_d.arlock  [n*2+:2] = axi_s.arlock  [m*2+:2] | 2'b0; \
-assign axi_d.arcache [n*4+:4] = axi_s.arcache [m*4+:4] | 4'b0; \
-assign axi_d.arprot  [n*3+:3] = axi_s.arprot  [m*3+:3] | 3'b0; \
-assign axi_d.arregion[n*4+:4] = axi_s.arregion[m*4+:4] | 4'b0; \
-assign axi_d.arqos   [n*4+:4] = axi_s.arqos   [m*4+:4] | 4'b0; \
-assign axi_d.aruser  [n*axi_d.USER_WIDTH+:axi_d.USER_WIDTH] = axi_s.aruser [m*axi_s.USER_WIDTH+:axi_s.USER_WIDTH] | {axi_d.USER_WIDTH{0}}; \
-assign axi_d.arvalid [n]      = axi_s.arvalid [m]; \  
-assign axi_s.arready [m]      = axi_d.arready [n]; \
-assign axi_s.bid     [m*axi_s.ID_WIDTH+:axi_s.ID_WIDTH]     = axi_d.bid [m*axi_d.ID_WIDTH+:axi_d.ID_WIDTH] | {axi_s.ID_WIDTH{0}}; \
-assign axi_d.bready  [n]      = axi_s.bready [m]; \
-assign axi_s.bresp   [m*2+:2] = axi_d.bresp  [n*2+:2] | 2'b0; \
-assign axi_s.bvalid  [m]      = axi_d.bvalid [n]; \
-assign axi_s.buser   [m*axi_s.USER_WIDTH+:axi_s.USER_WIDTH] = axi_d.buser [m*axi_d.USER_WIDTH+:axi_d.USER_WIDTH] | {axi_s.USER_WIDTH{0}}; \
-assign axi_s.rdata   [m*axi_s.DATA_WIDTH+:axi_s.DATA_WIDTH] = axi_d.rdata [n*axi_d.DATA_WIDTH+:axi_d.DATA_WIDTH] | {axi_s.DATA_WIDTH{0}}; \
-assign axi_s.rid     [m*axi_s.ID_WIDTH+:axi_s.ID_WIDTH]     = axi_d.rid [n*axi_d.ID_WIDTH+:axi_d.ID_WIDTH] | {axi_s.ID_WIDTH{0}}; \
-assign axi_s.rlast   [m]      = axi_d.rlast  [n]; \
-assign axi_d.rready  [n]      = axi_s.rready [m]; \
-assign axi_s.rresp   [m*2+:2] = axi_d.rresp  [n*2+:2] | 2'b0; \
-assign axi_s.rvalid  [m]      = axi_d.rvalid [n]; \
-assign axi_d.wdata   [n*axi_d.DATA_WIDTH+:axi_d.DATA_WIDTH] = axi_s.wdata [m*axi_s.DATA_WIDTH+:axi_s.DATA_WIDTH] | {axi_d.DATA_WIDTH{0}}; \
-assign axi_d.wid     [n*axi_d.ID_WIDTH+:axi_d.ID_WIDTH]     = axi_s.wid [m*axi_s.ID_WIDTH+:axi_s.ID_WIDTH] | {axi_d.ID_WIDTH{0}}; \
-assign axi_d.wlast   [n]      = axi_s.wlast   [m]; \
-assign axi_s.wready  [m]      = axi_d.wready  [n]; \
-assign axi_d.wstrb   [n*axi_d.DATA_WIDTH/8+:axi_d.DATA_WIDTH/8] = axi_s.wstrb [m*axi_s.DATA_WIDTH/8+:axi_s.DATA_WIDTH/8] | {(axi_d.DATA_WIDTH/8){0}}; \
-assign axi_d.wvalid  [n]      =axi_s.wvalid   [m]
+`define CON_AXI4_M2N(s, d, m, n) \
+assign d.awid    [n*d.ID_WIDTH+:d.ID_WIDTH] = s.awid [m*s.ID_WIDTH+:s.ID_WIDTH] | {d.ID_WIDTH{0}}; \
+assign d.awaddr  [n*d.ADDR_WIDTH+:d.ADDR_WIDTH] = s.awaddr [m*s.ADDR_WIDTH+:s.ADDR_WIDTH] | {d.ADDR_WIDTH{0}}; \
+assign d.awlen   [n*8+:8] = s.awlen   [m*8+:8]; \
+assign d.awsize  [n*3+:3] = s.awsize  [m*3+:3]; \
+assign d.awburst [n*2+:2] = s.awburst [m*2+:2]; \
+assign d.awlock  [n*2+:2] = s.awlock  [m*2+:2]; \
+assign d.awcache [n*4+:4] = s.awcache [m*4+:4]; \
+assign d.awprot  [n*3+:3] = s.awprot  [m*3+:3]; \
+assign d.awregion[n*4+:4] = s.awregion[m*4+:4]; \
+assign d.awqos   [n*4+:4] = s.awqos   [m*4+:4]; \
+assign d.awuser  [n*d.USER_WIDTH+:d.USER_WIDTH] = s.awuser [m*s.USER_WIDTH+:s.USER_WIDTH] | {d.USER_WIDTH{0}}; \
+assign d.awvalid [n]      = s.awvalid [m]; \
+assign s.awready [m]      = d.awready [n]; \
+assign d.arid    [n*d.ID_WIDTH+:d.ID_WIDTH] = s.arid [m*s.ID_WIDTH+:s.ID_WIDTH] | {d.ID_WIDTH{0}}; \
+assign d.araddr  [n*d.ADDR_WIDTH+:d.ADDR_WIDTH] = s.araddr [m*s.ADDR_WIDTH+:s.ADDR_WIDTH] | {d.ADDR_WIDTH{0}}; \
+assign d.arlen   [n*8+:8] = s.arlen   [m*8+:8]; \
+assign d.arsize  [n*3+:3] = s.arsize  [m*3+:3]; \
+assign d.arburst [n*2+:2] = s.arburst [m*2+:2]; \
+assign d.arlock  [n*2+:2] = s.arlock  [m*2+:2]; \
+assign d.arcache [n*4+:4] = s.arcache [m*4+:4]; \
+assign d.arprot  [n*3+:3] = s.arprot  [m*3+:3]; \
+assign d.arregion[n*4+:4] = s.arregion[m*4+:4]; \
+assign d.arqos   [n*4+:4] = s.arqos   [m*4+:4]; \
+assign d.aruser  [n*d.USER_WIDTH+:d.USER_WIDTH] = s.aruser [m*s.USER_WIDTH+:s.USER_WIDTH] | {d.USER_WIDTH{0}}; \
+assign d.arvalid [n]      = s.arvalid [m]; \
+assign s.arready [m]      = d.arready [n]; \
+assign s.bid     [m*s.ID_WIDTH+:s.ID_WIDTH]     = d.bid [m*d.ID_WIDTH+:d.ID_WIDTH] | {s.ID_WIDTH{0}}; \
+assign d.bready  [n]      = s.bready [m]; \
+assign s.bresp   [m*2+:2] = d.bresp  [n*2+:2]; \
+assign s.bvalid  [m]      = d.bvalid [n]; \
+assign s.buser   [m*d.USER_WIDTH+:d.USER_WIDTH] = d.buser [m*d.USER_WIDTH+:d.USER_WIDTH] | {d.USER_WIDTH{0}}; \
+assign s.rdata   [m*s.DATA_WIDTH+:s.DATA_WIDTH] = d.rdata [n*d.DATA_WIDTH+:d.DATA_WIDTH] | {s.DATA_WIDTH{0}}; \
+assign s.rid     [m*s.ID_WIDTH+:s.ID_WIDTH]     = d.rid [n*d.ID_WIDTH+:d.ID_WIDTH] | {s.ID_WIDTH{0}}; \
+assign s.rlast   [m]      = d.rlast  [n]; \
+assign d.rready  [n]      = s.rready [m]; \
+assign s.rresp   [m*2+:2] = d.rresp  [n*2+:2]; \
+assign s.rvalid  [m]      = d.rvalid [n]; \
+assign d.wdata   [n*d.DATA_WIDTH+:d.DATA_WIDTH] = s.wdata [m*s.DATA_WIDTH+:s.DATA_WIDTH] | {d.DATA_WIDTH{0}}; \
+assign d.wid     [n*d.ID_WIDTH+:d.ID_WIDTH]     = s.wid [m*s.ID_WIDTH+:s.ID_WIDTH] | {d.ID_WIDTH{0}}; \
+assign d.wlast   [n]      = s.wlast   [m]; \
+assign s.wready  [m]      = d.wready  [n]; \
+assign d.wstrb   [n*d.DATA_WIDTH/8+:d.DATA_WIDTH/8] = s.wstrb [m*s.DATA_WIDTH/8+:s.DATA_WIDTH/8] | {(d.DATA_WIDTH/8){0}}; \
+assign d.wvalid  [n]      =s.wvalid   [m]
+
+// Assign axi lite.
+`define CON_AXIL_M2N(s, d, m, n) \
+assign s.awready[m] = d.awready[n]; \
+assign d.awvalid[n] = s.awvalid[m]; \
+assign d.awaddr [n*d.ADDR_WIDTH+:d.ADDR_WIDTH] = s.awaddr[m*s.ADDR_WIDTH+:s.ADDR_WIDTH] | {d.ADDR_WIDTH{0}}; \
+assign d.awprot [n*3+:3] = s.awprot[m*3+:3]; \
+assign s.wready [m] = d.wready[n]; \
+assign d.wvalid [n] = s.wvalid[m]; \
+assign d.wdata  [n*d.DATA_WIDTH+:d.DATA_WIDTH] = s.wdata[m*s.DATA_WIDTH+:s.DATA_WIDTH] | {d.DATA_WIDTH{0}}; \
+assign d.wstrb  [n*4+:4] = s.wstrb[m*4+:4]; \
+assign d.bready [n] = s.bready[m]; \
+assign s.bvalid [m] = d.bvalid[n]; \
+assign s.bresp  [m*2+:2] = d.bresp[n*2+:2]; \
+assign s.arready[m] = d.arready[n]; \
+assign d.arvalid[n] = s.arvalid[m]; \
+assign d.araddr [n*d.ADDR_WIDTH+:d.ADDR_WIDTH] = s.araddr[m*s.ADDR_WIDTH+:s.ADDR_WIDTH] | {d.ADDR_WIDTH{0}}; \
+assign d.arprot [n*3+:3] = d.arprot[m*3+:3]; \
+assign d.rready [n] = s.rready[m]; \
+assign s.rvalid [m] = d.rvalid[n]; \
+assign s.rdata  [m*s.DATA_WIDTH+:s.DATA_WIDTH] = d.rdata[n*d.DATA_WIDTH+:d.DATA_WIDTH] | {d.DATA_WIDTH{0}}; \
+assign s.rresp  [m*2+:2] = d.rresp[n*2+:2]
+
+// Assign axi stream.
+`define CON_AXIS_M2N(s, d, m, n) \
+assign d.tvalid[n] = s.tvalid[m]; \
+assign s.tready[m] = d.tready[n]; \
+assign d.tdata [n*d.DATA_WIDTH+:d.DATA_WIDTH] = s.tdata [m*s.DATA_WIDTH+:s.DATA_WIDTH] | {d.DATA_WIDTH{0}}; \
+assign d.tstrb [n*d.DATA_WIDTH/8+:d.DATA_WIDTH/8] = s.tstrb [m*d.DATA_WIDTH/8+:s.DATA_WIDTH/8] | {(d.DATA_WIDTH/8){0}}; \
+assign d.tkeep [n*d.DATA_WIDTH/8+:d.DATA_WIDTH/8] = s.tkeep [m*d.DATA_WIDTH/8+:s.DATA_WIDTH/8] |{(d.DATA_WIDTH/8){0}}; \
+assign d.tlast [n] = s.tlast [m]; \
+assign d.tid   [n*d.ID_WIDTH+:d.ID_WIDTH] = s.tid [m*s.ID_WIDTH+:s.ID_WIDTH] | {d.ID_WIDTH{0}}; \
+assign d.tdest [n*d.DEST_WIDTH+:d.DEST_WIDTH] = s.tdest [m*s.DEST_WIDTH+:s.DEST_WIDTH] | {d.DEST_WIDTH{0}}; \
+assign d.tuser [n*d.USER_WIDTH+:d.USER_WIDTH] = s.tuser [m*d.USER_WIDTH+:s.USER_WIDTH] | {d.USER_WIDTH{0}}
+
+`endif

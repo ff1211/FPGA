@@ -17,23 +17,18 @@
 # Add ip.
 #****************************************************************
 echo "create_ip -name clk_wiz -vendor xilinx.com -library ip -version 6.0 -module_name clk_wiz_0" >> "$add_ip_tcl_path"
+echo "set_property -dict [list CONFIG.USE_LOCKED {false} CONFIG.USE_RESET {false}] [get_ips clk_wiz_0]" >> "$add_ip_tcl_path"
 clk_port_en=""
 
-i=1
-while [[ i -le ${#clk_freq[@]} ]]; do
-    clk_port_en="$clk_port_en CONFIG.CLKOUT${i}_USED {true}"
+i=0
+while [[ i -ne ${#clk_freq[@]} ]]; do
+    clk_port_en="$clk_port_en CONFIG.CLKOUT$((i+1))_USED {true}"
+    add_ip_define "USE_CLK_$i"
     i=$((i+1))
 done
 echo "set_property -dict [list $clk_port_en] [get_ips clk_wiz_0]" >> "$add_ip_tcl_path"
 
-# Add define to pre_proc.vh.
-#****************************************************************
-j=1
-while [[ j -le $i ]]; do
-    add_ip_define "USE_CLK_$j"
-    j=$((j+1))
-done
-add_ip_define "SYS_CLK_NUM" "$i"
+add_ip_define "SYS_CLK_NUM" ${#clk_freq[@]}
 
 # Add hdl wrapper file.
 add_ip_wrapper "$SHELL_DIR/common/sys_clock.sv"

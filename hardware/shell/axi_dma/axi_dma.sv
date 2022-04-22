@@ -14,23 +14,23 @@
 
 `timescale 1ns/1ps
 module axi_dma(
-    input       m_axi_clk,
-    input       m_axil_clk,
-    input       axi_rst_n,
+    input           axi_rst_n,
     `ifdef USE_AXI_DMA_WRITE
-    axis        s_axis_s2mm,
-    output      mm2s_introut,
+    axis            s_axis_s2mm,
+    output          mm2s_introut,
     `endif
     `ifdef USE_AXI_DMA_READ
-    axis        m_axis_mm2s,
-    output      mm2s_introut,
+    axis            m_axis_mm2s,
+    output          mm2s_introut,
     `endif
-    axi_lite    s_axil,
-    axi4        m_axi
+    axi_lite        s_axil,
+    input           m_axil_aclk,
+    axi4            m_axi,
+    input           m_axi_aclk
 );
 axi_dma_0 axi_dma_inst (
-    .s_axi_lite_aclk        (   m_axil_clk      ),               
-    .m_axi_mm2s_aclk        (   m_axi_clk       ),               
+    .s_axi_lite_aclk        (   m_axil_aclk     ),               
+    .m_axi_mm2s_aclk        (   m_axi_aclk      ),               
     .axi_resetn             (   axi_rst_n       ),                         
     .s_axi_lite_awvalid     (   s_axil.awvalid  ),         
     .s_axi_lite_awready     (   s_axil.awready  ),         

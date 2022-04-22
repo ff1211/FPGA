@@ -18,7 +18,7 @@
 # Vivado path.
 export vivado="vivado"
 # If use gui.
-export gui_mode=0
+export gui_mode=1
 # Board name.
 export board_name="zedboard"
 # Project name.
@@ -52,11 +52,11 @@ export clk_freq=(100 100 100 300 100)
 # AXI DMA config.
 #****************************************************************
 # If use AXI DMA, 0 or 1.
-export use_axi_dma=1
+export use_axi_dma=0
 # AXI DMA mode, "block" or "scatter_gather". Only support block now.     
 export axi_dma_mode="block"
 # AXI dma direction, "read", "write" or "dual".
-export axi_dma_dir="read"
+export axi_dma_dir="dual"
 # AXI DMA addr width, 32 or 64.
 export axi_dma_aw=32
 # AXI DMA memory map data width, equal axi_hp_port_dw.          

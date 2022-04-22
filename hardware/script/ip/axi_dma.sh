@@ -47,12 +47,17 @@ fi
 add_ip_define "USE_AXI_DMA"
 if [[ ${axi_dma_dir} == "write" ]]; then
     add_ip_define "USE_AXI_DMA_WRITE"
+elif [[ ${axi_dma_dir} == "read" ]]; then
+    add_ip_define "USE_AXI_DMA_READ"
 else
+    add_ip_define "USE_AXI_DMA_WRITE"    
     add_ip_define "USE_AXI_DMA_READ"
 fi
 add_ip_define "AXI_DMA_AW" "$axi_dma_aw"
 add_ip_define "AXI_DMA_MM_DW" "$axi_dma_mm_dw"
 add_ip_define "AXI_DMA_S_DW" "$axi_dma_s_dw"
+export s_axi_hp_num=$((s_axi_hp_num + 1))
+export m_axil_num=$((m_axil_num + 1))
 
 # Add hdl wrapper file.
 #****************************************************************

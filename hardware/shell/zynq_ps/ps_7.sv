@@ -12,20 +12,24 @@
 // 1.0      2022.04.17  Fanfei      Initial version
 //****************************************************************
 
+`timescale 1ns/1ps
+`include "pre_proc.vh"
+`include "interconnect.vh"
+
 module ps_7 #(
 
 ) (
     `ifdef USE_M_AXI_GP
     axi4                        m_axi_gp,
-    input [M_AXI_GP_NUM-1:0]    m_axi_gp_aclk,
+    input [`M_AXI_GP_NUM-1:0]   m_axi_gp_aclk,
     `endif
     `ifdef USE_S_AXI_GP
     axi4                        s_axi_gp,
-    input  [S_AXI_GP_NUM-1:0]   s_axi_gp_aclk,
+    input  [`S_AXI_GP_NUM-1:0]  s_axi_gp_aclk,
     `endif
     `ifdef USE_S_AXI_HP
     axi4                        s_axi_hp,
-    input [S_AXI_HP_NUM-1:0]    s_axi_hp_aclk,
+    input [`S_AXI_HP_NUM-1:0]   s_axi_hp_aclk,
     `endif
 
     // Clock and reset.
@@ -76,22 +80,21 @@ axi4 #(.CHANNEL(1), .DATA_WIDTH(32), .ADDR_WIDTH(32), .ID_WIDTH(6)) s_axi_gp_1()
 `endif
 
 `ifdef USE_S_AXI_HP_0
-axi4 #(.CHANNEL(1), .DATA_WIDTH(S_AXI_HP_DW), .ADDR_WIDTH(32), .ID_WIDTH(6)) s_axi_hp_0();
+axi4 #(.CHANNEL(1), .DATA_WIDTH(`S_AXI_HP_DW), .ADDR_WIDTH(32), .ID_WIDTH(6)) s_axi_hp_0();
 `CON_AXI4_M2N(s_axi_hp, s_axi_hp_0, 0, 0);
 `endif
 `ifdef USE_S_AXI_HP_1
-axi4 #(.CHANNEL(1), .DATA_WIDTH(S_AXI_HP_DW), .ADDR_WIDTH(32), .ID_WIDTH(6)) s_axi_hp_1();
+axi4 #(.CHANNEL(1), .DATA_WIDTH(`S_AXI_HP_DW), .ADDR_WIDTH(32), .ID_WIDTH(6)) s_axi_hp_1();
 `CON_AXI4_M2N(s_axi_hp, s_axi_hp_1, 1, 0);
 `endif
 `ifdef USE_S_AXI_HP_2
-axi4 #(.CHANNEL(1), .DATA_WIDTH(S_AXI_HP_DW), .ADDR_WIDTH(32), .ID_WIDTH(6)) s_axi_hp_2();
+axi4 #(.CHANNEL(1), .DATA_WIDTH(`S_AXI_HP_DW), .ADDR_WIDTH(32), .ID_WIDTH(6)) s_axi_hp_2();
 `CON_AXI4_M2N(s_axi_hp, s_axi_hp_2, 2, 0);
 `endif
 `ifdef USE_S_AXI_HP_3
-axi4 #(.CHANNEL(1), .DATA_WIDTH(S_AXI_HP_DW), .ADDR_WIDTH(32), .ID_WIDTH(6)) s_axi_hp_3();
+axi4 #(.CHANNEL(1), .DATA_WIDTH(`S_AXI_HP_DW), .ADDR_WIDTH(32), .ID_WIDTH(6)) s_axi_hp_3();
 `CON_AXI4_M2N(s_axi_hp, s_axi_hp_3, 3, 0);
 `endif
-
 
 processing_system7_0 processing_system7_inst (
     .FCLK_CLK0          (   fclk                ),         // output wire FCLK_CLK0

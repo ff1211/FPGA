@@ -43,9 +43,6 @@ source $SCRIPT_DIR/check_config.sh
 #****************************************************************
 echo "Creating new project..."
 
-mkdir "$PROJECT_DIR/$project_name"
-exit 1
-
 # Creat Project folder.
 i=0
 if [[ -d $PROJECT_DIR/$project_name ]]; then
@@ -90,6 +87,8 @@ cat > "$cur_pj_src_dir/pre_proc.vh" << EOF
 //****************************************************************
 // This is a auto-generated file. Do not change it!
 //****************************************************************
+\`ifndef PRE_PROC
+\`define PRE_PROC
 EOF
 
 # Source add_ip.sh to generate add_ip.tcl.
@@ -97,10 +96,6 @@ source $SCRIPT_DIR/add_ip.sh
 
 # Source add_ip.sh to generate pre_proc.vh.
 source $SCRIPT_DIR/pre_proc.sh
-
-# Set project mode.
-vivado_mode="tcl"
-[[ $gui_mode -eq 1 ]] && vivado_mode="gui"
 
 # Generate project.tcl for creating project in vivado.
 touch $cur_pj_dir/project.tcl
@@ -133,9 +128,11 @@ source ${cur_pj_script_dir}/add_ip.tcl
 add_files \\
     $BOARDS_DIR/$board_name/$preset_plat/src/shell_top.sv \\
     $PROJECT_DIR/role.sv \\
-    $cur_pj_src_dir/pre_proc.vh \\
+    $cur_pj_src_dir/pre_proc.vh
 EOF
+#$cur_pj_src_dir/shell_top.sv \\
+[[ $gui_mode -eq 1 ]] && echo "start_gui" >> "$cur_pj_dir/project.tcl"
 
 # Move to project directory and launch vivado.
 cd $cur_pj_dir || (echo "cd to current project's directory fail!"; error)
-$vivado -mode ${vivado_mode} -source $cur_pj_dir/project.tcl
+$vivado -mode tcl -source $cur_pj_dir/project.tcl

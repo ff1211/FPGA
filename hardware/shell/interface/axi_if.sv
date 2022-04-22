@@ -14,14 +14,15 @@
 `timescale 1ns/1ps
 
 interface axi_lite #(
+    parameter ADDR_WIDTH = 32,
     parameter DATA_WIDTH = 32,
     parameter CHANNEL = 1
 ) (
 );
 logic [CHANNEL-1:0]                 awready;
 logic [CHANNEL-1:0]                 awvalid;
-logic [CHANNEL*DATA_WIDTH-1:0]      awaddr ;
-logic [CHANNEL*2-1:0]               awprot ;
+logic [CHANNEL*ADDR_WIDTH-1:0]      awaddr ;
+logic [CHANNEL*3-1:0]               awprot ;
 
 logic [CHANNEL-1:0]                 wready ;
 logic [CHANNEL-1:0]                 wvalid ;
@@ -34,7 +35,8 @@ logic [CHANNEL*2-1:0]               bresp  ;
 
 logic [CHANNEL-1:0]                 arready;
 logic [CHANNEL-1:0]                 arvalid;
-logic [CHANNEL*DATA_WIDTH-1:0]      araddr ;
+logic [CHANNEL*ADDR_WIDTH-1:0]      araddr ;
+logic [CHANNEL*3-1:0]               arprot ;
 
 logic [CHANNEL-1:0]                 rready ;
 logic [CHANNEL-1:0]                 rvalid ;
@@ -59,6 +61,7 @@ modport master (
     input   arready,
     output  arvalid,
     output  araddr,
+    output  arprot,
 
     output  rready,
     input   rvalid, 
@@ -84,6 +87,7 @@ modport slave (
     output  arready,
     input   arvalid,
     input   araddr,
+    input   arprot,
 
     input   rready,
     output  rvalid, 
