@@ -11,7 +11,7 @@
 # 
 # Revision history:
 # Version  Date        Author      Changes      
-# 1.0      2022.04.22  Fanfei      Initial version
+# 1.0      2022.04.22  fanfei      Initial version
 #****************************************************************
 
 echo "create_bd_design \"interconncet\"" >> "$add_ip_tcl_path"

@@ -11,7 +11,7 @@
 # 
 # Revision history:
 # Version  Date        Author      Changes      
-# 1.0      2022.04.20  Fanfei      Initial version
+# 1.0      2022.04.20  fanfei      Initial version
 #****************************************************************
 
 # Add processing system hardcore.

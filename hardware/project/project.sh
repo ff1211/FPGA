@@ -10,7 +10,7 @@
 # 
 # Revision history:
 # Version  Date        Author      Changes      
-# 1.0      2022.04.14  Fanfei      Initial version
+# 1.0      2022.04.14  fanfei      Initial version
 #****************************************************************
 
 # Error Function.
@@ -94,9 +94,6 @@ EOF
 # Source add_ip.sh to generate add_ip.tcl.
 source $SCRIPT_DIR/add_ip.sh
 
-# Source add_ip.sh to generate pre_proc.vh.
-source $SCRIPT_DIR/pre_proc.sh
-
 # Generate project.tcl for creating project in vivado.
 touch $cur_pj_dir/project.tcl
 cat > $cur_pj_dir/project.tcl << EOF
@@ -126,10 +123,9 @@ source ${cur_pj_script_dir}/add_ip.tcl
 #****************************************************************
 add_files \\
     $BOARDS_DIR/$board_name/$preset_plat/shell_top.sv \\
-    $PROJECT_DIR/role.sv \\
-    $cur_pj_src_dir/pre_proc.vh
+    $PROJECT_DIR/role.sv 
 EOF
-#$cur_pj_src_dir/shell_top.sv \\
+
 [[ $gui_mode -eq 1 ]] && echo "start_gui" >> "$cur_pj_dir/project.tcl"
 
 # Move to project directory and launch vivado.

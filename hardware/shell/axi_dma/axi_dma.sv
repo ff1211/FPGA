@@ -9,7 +9,7 @@
 // 
 // Revision history:
 // Version  Date        Author      Changes      
-// 1.0      2022.04.20  Fanfei      Initial version
+// 1.0      2022.04.20  fanfei      Initial version
 //****************************************************************
 
 `timescale 1ns/1ps
@@ -25,6 +25,7 @@ module axi_dma(
     `endif
     axi_lite        s_axil,
     input           m_axil_aclk,
+    
     axi4            m_axi,
     input           m_axi_aclk
 );
