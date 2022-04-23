@@ -20,10 +20,10 @@ add_files                           \
     $COMMON_DIR/fifo_sync.sv        \
     $COMMON_DIR/ram_single.sv       \
     $COMMON_DIR/ram_tdual.sv        \
-    $INTERFACE_DIR/axi_if.sv        
+    $COMMON_DIR/axi_if.sv        
 #****************************************************************
 # Add library files to Vivado project.
 add_files                           \
-    $INTERFACE_DIR/interconnect.vh 
+    $COMMON_DIR/interconnect.vh 
 # Add constrain files to Vivado project.
 # add_files -fileset constrs_1 ./path/to/constraint/constraint.xdc

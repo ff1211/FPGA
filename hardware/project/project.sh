@@ -69,7 +69,7 @@ cur_pj_src_dir="$cur_pj_dir/src"
 cur_pj_script_dir="$cur_pj_dir/script"
 
 # Copy shell_top.sv to current project dir.
-cp $BOARDS_DIR/$board_name/$preset_plat/src/shell_top.sv $cur_pj_src_dir
+cp $BOARDS_DIR/$board_name/$preset_plat/shell_top.sv $cur_pj_src_dir
 
 # Generate add_ip.tcl for add ips.
 touch "$cur_pj_script_dir/add_ip.tcl"
@@ -111,7 +111,6 @@ set HARDWARE_DIR $HARDWARE_DIR
 set SCRIPT_DIR $SCRIPT_DIR
 set BOARDS_DIR $BOARDS_DIR
 set COMMON_DIR $COMMON_DIR
-set INTERFACE_DIR $INTERFACE_DIR
 
 # Creat project.
 #****************************************************************
@@ -126,7 +125,7 @@ source ${cur_pj_script_dir}/add_ip.tcl
 # Add board and project specific files.
 #****************************************************************
 add_files \\
-    $BOARDS_DIR/$board_name/$preset_plat/src/shell_top.sv \\
+    $BOARDS_DIR/$board_name/$preset_plat/shell_top.sv \\
     $PROJECT_DIR/role.sv \\
     $cur_pj_src_dir/pre_proc.vh
 EOF

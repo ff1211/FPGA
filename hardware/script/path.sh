@@ -28,6 +28,4 @@ export BOARDS_DIR=$HARDWARE_DIR/board
 export SHELL_DIR=$HARDWARE_DIR/shell
 # Shell common modules directory.
 export COMMON_DIR=$HARDWARE_DIR/shell/common
-# Interface directory.
-export INTERFACE_DIR=$HARDWARE_DIR/shell/interface
 
