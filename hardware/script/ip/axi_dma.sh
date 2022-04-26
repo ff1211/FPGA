@@ -58,17 +58,21 @@ add_tcl "set_property CONFIG.ASSOCIATED_BUSIF {$clk1_assoc_busif} [get_bd_ports 
 # Assign memory-map channel to interconnect and zynq
 if [[ ${axi_dma_dir} == "read" ]]; then
     add_tcl "connect_bd_intf_net [get_bd_intf_pins axi_dma_0/M_AXI_MM2S] -boundary_type upper [get_bd_intf_pins axi_interconnect_adma/S00_AXI]"
+    add_tcl "set_property -dict [list CONFIG.S00_HAS_REGSLICE {3}] [get_bd_cells axi_interconnect_adma]"
     add_tcl "connect_bd_net [get_bd_pins axi_dma_0/m_axi_mm2s_aclk] [get_bd_pins clk_wiz_0/clk_out2]"
 elif [[ ${axi_dma_dir} == "write" ]]; then
     add_tcl "connect_bd_intf_net [get_bd_intf_pins axi_dma_0/M_AXI_S2MM] -boundary_type upper [get_bd_intf_pins axi_interconnect_adma/S00_AXI]"
+    add_tcl "set_property -dict [list CONFIG.S00_HAS_REGSLICE {3}] [get_bd_cells axi_interconnect_adma]"
     add_tcl "connect_bd_net [get_bd_pins axi_dma_0/m_axi_s2mm_aclk] [get_bd_pins clk_wiz_0/clk_out2]"
 else
     add_tcl "connect_bd_intf_net [get_bd_intf_pins axi_dma_0/M_AXI_MM2S] -boundary_type upper [get_bd_intf_pins axi_interconnect_adma/S00_AXI]"
     add_tcl "connect_bd_intf_net [get_bd_intf_pins axi_dma_0/M_AXI_S2MM] -boundary_type upper [get_bd_intf_pins axi_interconnect_adma/S01_AXI]"
+    add_tcl "set_property -dict [list CONFIG.S00_HAS_REGSLICE {3} CONFIG.S01_HAS_REGSLICE {3}] [get_bd_cells axi_interconnect_adma]"
     add_tcl "connect_bd_net [get_bd_pins axi_dma_0/m_axi_mm2s_aclk] [get_bd_pins clk_wiz_0/clk_out2]"
     add_tcl "connect_bd_net [get_bd_pins axi_dma_0/m_axi_s2mm_aclk] [get_bd_pins clk_wiz_0/clk_out2]"
 fi
 add_tcl "connect_bd_intf_net -boundary_type upper [get_bd_intf_pins axi_interconnect_adma/M00_AXI] [get_bd_intf_pins processing_system7_0/S_AXI_HP${s_axi_hp_assign}]"
+add_tcl "set_property -dict [list CONFIG.M00_HAS_REGSLICE {3}] [get_bd_cells axi_interconnect_adma]"
 export s_axi_hp_assign=$((s_axi_hp_assign+1))
 
 # Assign axi interconnect's clock and reset.

@@ -36,11 +36,8 @@ export preset_plat="basic_plat"
 # clock_2:          axi-lite.
 # clock_3~clock_6:  User define clock. Not set by default.
 #****************************************************************
-# Haven't support change clock frequence yet!!!!!!! Set clk_freq only enable corresponding clk output port!!!!! Set frequence in ip setting page!!!!!
-# Haven't support change clock frequence yet!!!!!!! Set clk_freq only enable corresponding clk output port!!!!! Set frequence in ip setting page!!!!!
-# Haven't support change clock frequence yet!!!!!!! Set clk_freq only enable corresponding clk output port!!!!! Set frequence in ip setting page!!!!!
 # Clock frequence, unit: MHz. Range [10, 400], integer.
-export clk_freq=(100 100 100)
+export clk_freq=(100 150 50)
 
 # Resource config.
 #****************************************************************

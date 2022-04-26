@@ -95,7 +95,7 @@ sys #(
 );
 
 axil_dummy #(
-    .MAGIC_NUM  (   32'h00114514    )
+    .MAGIC_NUM  (   'h00114514  )
 ) axil_dummy_inst (
     .s_axil     (   axil_check.slave    )
 );
