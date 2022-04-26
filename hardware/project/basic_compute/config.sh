@@ -40,7 +40,7 @@ export preset_plat="basic_plat"
 # Haven't support change clock frequence yet!!!!!!! Set clk_freq only enable corresponding clk output port!!!!! Set frequence in ip setting page!!!!!
 # Haven't support change clock frequence yet!!!!!!! Set clk_freq only enable corresponding clk output port!!!!! Set frequence in ip setting page!!!!!
 # Clock frequence, unit: MHz. Range [10, 400], integer.
-export clk_freq=(100 100 100 300 100)
+export clk_freq=(100 100 100)
 
 # Resource config.
 #****************************************************************
@@ -52,7 +52,7 @@ export clk_freq=(100 100 100 300 100)
 # AXI DMA config.
 #****************************************************************
 # If use AXI DMA, 0 or 1.
-export use_axi_dma=0
+export use_axi_dma=1
 # AXI DMA mode, "block" or "scatter_gather". Only support block now.     
 export axi_dma_mode="block"
 # AXI dma direction, "read", "write" or "dual".
@@ -64,3 +64,7 @@ export axi_dma_mm_dw=64
 # AXI DMA stream data width, 8, 16, 32, 64, 128, 256, 512, 1024.
 # Must less or equal than $axi_dma_mm_dw !!!! Check board/your_board for more information.
 export axi_dma_s_dw=32
+
+# User defined axil port. For user's ip.
+#****************************************************************
+export m_axil_user_num=1

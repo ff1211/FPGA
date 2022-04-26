@@ -74,6 +74,14 @@ export ip_list=()
 basic_config=("vivado" "gui_mode" "board_name" "project_name" "preset_plat")
 clock_config=("clk_freq")
 
+export m_axi_gp_num=1       # AXI general purpose master port number, range[0, 2].
+export s_axi_gp_num=0       # AXI general purpose slave port number, range[0, 2].
+export s_axi_hp_num=0       # AXI high performance slave port number, range[0, 4].
+export m_axil_num=1
+export axil_base_addr=0x42000000
+export axil_addr_range="64K"
+if [[ $use_add_axil -eq 1 ]]; then export m_axil_num=$((m_axil_num+$m_axil_user_num)); fi
+
 # Soft core config.
 #----------------------------------------------------------------
 # Supported soft cores list.
@@ -136,7 +144,6 @@ if [[ $no_preset -eq 1 ]]; then
     error
 fi
 
-
 # Basic check pass. Check board and platform preset.
 #****************************************************************
 source $BOARDS_DIR/$board_name/board.sh || (echo "Can't find board.sh! Check integrity of $BOARDS_DIR/$board_name" error)
@@ -147,6 +154,11 @@ source $BOARDS_DIR/$board_name/$preset_plat/resource.sh || (echo "Can't find res
 # Basic check.
 check_config_integrity "${clock_config[@]}"
 # Advanced check.
+
+# AXI lite check.
+#****************************************************************
+# Basic check.
+export m_axil_num=$(($m_axil_num+$m_axil_user_num))
 
 # AXI DMA config check.
 #****************************************************************
@@ -168,4 +180,29 @@ if [[ $use_axi_dma -eq 1 ]]; then
         echo "Error! We haven't support sg mode now!"
         error
     fi
+    export m_axil_num=$((m_axil_num+1))
+    export s_axi_hp_num=$((s_axi_hp_num+1))
+fi
+
+# AXI check.
+#****************************************************************
+# AXI lite master check.
+if [[ $m_axil_num -gt 8 ]]; then
+    echo "Too much axi lite master port! Check your config!"
+    error
+fi
+# AXI gp master check.
+if [[ $m_axi_gp_num -gt 2 ]]; then
+    echo "Too much axi gp master port! Check your config!"
+    error
+fi
+# AXI gp slave check.
+if [[ $m_axi_gp_num -gt 2 ]]; then
+    echo "Too much axi gp slave port! Check your config!"
+    error
+fi
+# AXI hp slave check.
+if [[ $m_axi_gp_num -gt 4 ]]; then
+    echo "Too much axi hp slave port! Check your config!"
+    error
 fi

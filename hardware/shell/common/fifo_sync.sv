@@ -26,13 +26,13 @@ module fifo_sync #(
 
     input       wr_en,
     input       rd_en,
-    input  [WRITE_DATA_WIDTH-1:0]   din,
-    output [WRITE_DATA_WIDTH-1:0]   dout,
+    input  [DATA_WIDTH-1:0]   din,
+    output [DATA_WIDTH-1:0]   dout,
 
     output      empty,
     output      full,
-    output      prog_empty,
-    output      prog_full,
+    output      pempty,
+    output      pfull,
     output      data_valid,
     output      rd_rst_busy,
     output      wr_rst_busy,
@@ -89,12 +89,12 @@ xpm_fifo_sync_inst (
                                     // full. Overflowing the FIFO is not destructive to the contents of the
                                     // FIFO.
 
-    .prog_empty(prog_empty),        // 1-bit output: Programmable Empty: This signal is asserted when the
+    .prog_empty(pempty),            // 1-bit output: Programmable Empty: This signal is asserted when the
                                     // number of words in the FIFO is less than or equal to the programmable
                                     // empty threshold value. It is de-asserted when the number of words in
                                     // the FIFO exceeds the programmable empty threshold value.
 
-    .prog_full(prog_full),          // 1-bit output: Programmable Full: This signal is asserted when the
+    .prog_full(pfull),              // 1-bit output: Programmable Full: This signal is asserted when the
                                     // number of words in the FIFO is greater than or equal to the
                                     // programmable full threshold value. It is de-asserted when the number of
                                     // words in the FIFO is less than the programmable full threshold value.

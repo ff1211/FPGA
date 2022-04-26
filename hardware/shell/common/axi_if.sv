@@ -148,12 +148,13 @@ interface axi4 #(
     parameter DATA_WIDTH    = 32,
     parameter ADDR_WIDTH    = 32,
     parameter ID_WIDTH      = 1,
-    parameter USER_WIDTH    = 1
+    parameter USER_WIDTH    = 1,
+    parameter LEN_WIDTH     = 8
 ) (
 );
 logic [CHANNEL*ID_WIDTH-1:0]        awid    ;
 logic [CHANNEL*ADDR_WIDTH-1:0]      awaddr  ;
-logic [CHANNEL*8-1:0]               awlen   ;
+logic [CHANNEL*LEN_WIDTH-1:0]       awlen   ;
 logic [CHANNEL*3-1:0]               awsize  ;
 logic [CHANNEL*2-1:0]               awburst ;
 logic [CHANNEL*2-1:0]               awlock  ;
@@ -167,7 +168,7 @@ logic [CHANNEL-1:0]                 awready ;
 
 logic [CHANNEL*ID_WIDTH-1:0]        arid    ;
 logic [CHANNEL*ADDR_WIDTH-1:0]      araddr  ;
-logic [CHANNEL*8-1:0]               arlen   ;
+logic [CHANNEL*LEN_WIDTH-1:0]       arlen   ;
 logic [CHANNEL*3-1:0]               arsize  ;
 logic [CHANNEL*2-1:0]               arburst ;
 logic [CHANNEL*2-1:0]               arlock  ;

@@ -20,7 +20,8 @@ add_files                           \
     $COMMON_DIR/fifo_sync.sv        \
     $COMMON_DIR/ram_single.sv       \
     $COMMON_DIR/ram_tdual.sv        \
-    $COMMON_DIR/axi_if.sv        
+    $COMMON_DIR/axi_if.sv           \
+    $COMMON_DIR/axil_dummy.sv
 #****************************************************************
 # Add library files to Vivado project.
 add_files                           \

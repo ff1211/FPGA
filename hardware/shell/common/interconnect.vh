@@ -19,7 +19,7 @@
 `define CON_AXI4_M2N(s, d, m, n) \
 assign d.awid    [n*d.ID_WIDTH+:d.ID_WIDTH] = s.awid [m*s.ID_WIDTH+:s.ID_WIDTH] | {d.ID_WIDTH{0}}; \
 assign d.awaddr  [n*d.ADDR_WIDTH+:d.ADDR_WIDTH] = s.awaddr [m*s.ADDR_WIDTH+:s.ADDR_WIDTH] | {d.ADDR_WIDTH{0}}; \
-assign d.awlen   [n*8+:8] = s.awlen   [m*8+:8]; \
+assign d.awlen   [n*d.LEN_WIDTH+:d.LEN_WIDTH] = s.awlen [m*s.LEN_WIDTH+:s.LEN_WIDTH] | {d.LEN_WIDTH{0}}; \
 assign d.awsize  [n*3+:3] = s.awsize  [m*3+:3]; \
 assign d.awburst [n*2+:2] = s.awburst [m*2+:2]; \
 assign d.awlock  [n*2+:2] = s.awlock  [m*2+:2]; \
@@ -32,7 +32,7 @@ assign d.awvalid [n]      = s.awvalid [m]; \
 assign s.awready [m]      = d.awready [n]; \
 assign d.arid    [n*d.ID_WIDTH+:d.ID_WIDTH] = s.arid [m*s.ID_WIDTH+:s.ID_WIDTH] | {d.ID_WIDTH{0}}; \
 assign d.araddr  [n*d.ADDR_WIDTH+:d.ADDR_WIDTH] = s.araddr [m*s.ADDR_WIDTH+:s.ADDR_WIDTH] | {d.ADDR_WIDTH{0}}; \
-assign d.arlen   [n*8+:8] = s.arlen   [m*8+:8]; \
+assign d.arlen   [n*d.LEN_WIDTH+:d.LEN_WIDTH] = s.arlen [m*s.LEN_WIDTH+:s.LEN_WIDTH] | {d.LEN_WIDTH{0}}; \
 assign d.arsize  [n*3+:3] = s.arsize  [m*3+:3]; \
 assign d.arburst [n*2+:2] = s.arburst [m*2+:2]; \
 assign d.arlock  [n*2+:2] = s.arlock  [m*2+:2]; \

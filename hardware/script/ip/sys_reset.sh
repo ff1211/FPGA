@@ -15,7 +15,30 @@
 #****************************************************************
 
 # Add processing system reset.
-echo "create_ip -name proc_sys_reset -vendor xilinx.com -library ip -version 5.0 -module_name proc_sys_reset_0" >> $add_ip_tcl_path
+add_tcl "create_bd_cell -type ip -vlnv xilinx.com:ip:xlconstant:1.1 xlconstant_0"
+add_tcl "create_bd_cell -type ip -vlnv xilinx.com:ip:xlconstant:1.1 xlconstant_1"
 
-# Add hdl wrapper file.
-add_ip_wrapper "$SHELL_DIR/common/sys_reset.sv"
+i=0
+while [[ $i -ne ${#clk_freq[@]} ]]; do
+    add_tcl "create_bd_cell -type ip -vlnv xilinx.com:ip:proc_sys_reset:5.0 proc_sys_reset_${i}"
+    i=$((i+1))
+done
+
+add_tcl "set_property -dict [list CONFIG.CONST_VAL {0}] [get_bd_cells xlconstant_0]"
+add_tcl "set_property -dict [list CONFIG.CONST_VAL {1}] [get_bd_cells xlconstant_1]"
+
+# Assign clock and constant to reset ip.
+i=0
+while [[ $i -ne ${#clk_freq[@]} ]]; do
+    j=$((i+1))
+    add_tcl "connect_bd_net [get_bd_pins clk_wiz_0/clk_out$j] [get_bd_pins proc_sys_reset_${i}/slowest_sync_clk]"
+    add_tcl "connect_bd_net [get_bd_pins clk_wiz_0/locked] [get_bd_pins proc_sys_reset_${i}/dcm_locked]"
+    add_tcl "connect_bd_net [get_bd_pins xlconstant_0/dout] [get_bd_pins proc_sys_reset_${i}/mb_debug_sys_rst]"
+    add_tcl "connect_bd_net [get_bd_pins xlconstant_1/dout] [get_bd_pins proc_sys_reset_${i}/aux_reset_in]"
+    add_tcl "make_bd_pins_external  [get_bd_pins proc_sys_reset_${i}/interconnect_aresetn]"
+    add_tcl "make_bd_pins_external  [get_bd_pins proc_sys_reset_${i}/peripheral_aresetn]"
+    i=$((i+1))
+done
+
+
+

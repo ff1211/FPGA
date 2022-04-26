@@ -10,7 +10,7 @@
 # 
 # Revision history:
 # Version  Date        Author      Changes      
-# 1.0      2022.04.14  fanfei      Initial version
+# 1.0      2022.04.14  Fanfei      Initial version
 #****************************************************************
 
 # Error Function.
@@ -68,8 +68,9 @@ mkdir "$cur_pj_dir/script"
 cur_pj_src_dir="$cur_pj_dir/src"
 cur_pj_script_dir="$cur_pj_dir/script"
 
-# Copy shell_top.sv to current project dir.
+# Copy shell_top.sv and role.sv to current project dir.
 cp $BOARDS_DIR/$board_name/$preset_plat/shell_top.sv $cur_pj_src_dir
+cp $PROJECT_DIR/role.sv $cur_pj_src_dir
 
 # Generate add_ip.tcl for add ips.
 touch "$cur_pj_script_dir/add_ip.tcl"
@@ -123,8 +124,13 @@ source ${cur_pj_script_dir}/add_ip.tcl
 #****************************************************************
 add_files \\
     $BOARDS_DIR/$board_name/$preset_plat/shell_top.sv \\
-    $PROJECT_DIR/role.sv 
+    $PROJECT_DIR/role.sv \\
+    $cur_pj_src_dir/pre_proc.vh
 EOF
+# $cur_pj_src_dir/shell_top.sv \\
+# $cur_pj_src_dir/role.sv \\
+# $BOARDS_DIR/$board_name/$preset_plat/shell_top.sv \\
+# $PROJECT_DIR/role.sv \\
 
 [[ $gui_mode -eq 1 ]] && echo "start_gui" >> "$cur_pj_dir/project.tcl"
 

@@ -14,15 +14,10 @@
 # 1.0      2022.04.22  fanfei      Initial version
 #****************************************************************
 
-echo "create_bd_design \"interconncet\"" >> "$add_ip_tcl_path"
-
 # Add ip
 #****************************************************************
 echo "startgroup" >> "$add_ip_tcl_path"
-echo "create_bd_cell -type ip -vlnv xilinx.com:ip:axi_clock_converter:2.1 axi_clock_converter_0" >> "$add_ip_tcl_path"
-echo "create_bd_cell -type ip -vlnv xilinx.com:ip:axi_protocol_converter:2.1 axi_protocol_convert_0" >> "$add_ip_tcl_path"
 echo "create_bd_cell -type ip -vlnv xilinx.com:ip:axi_interconnect:2.1 axi_interconnect_0" >> "$add_ip_tcl_path"
-echo "set_property -dict [list CONFIG.NUM_MI {$m_axil_num}] [get_bd_cells axi_interconnect_0]" >> "$add_ip_tcl_path"
 echo "endgroup" >> "$add_ip_tcl_path"
 
 # Set AXI clock convert.
@@ -82,11 +77,11 @@ echo "save_bd_design" >> "$add_ip_tcl_path"
 # Add define.
 i=0
 while [[ i -ne $m_axil_num ]]; do
-    add_ip_define "USE_AXIL_${i}"
+    add_define "USE_M_AXIL_${i}"
     i=$((i+1))
 done
-add_ip_define "AXIL_NUM" $m_axil_num
-add_ip_define "USE_AXI_INTERCONNECT"
+add_define "M_AXIL_NUM" $m_axil_num
+add_define "USE_AXIL_IC"
 
 # Add hdl wrapper file.
-add_ip_wrapper "$SHELL_DIR/common/axi_int.sv"
+add_ip_wrapper "$SHELL_DIR/common/axil_ic.sv"
