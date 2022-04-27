@@ -189,6 +189,19 @@ if [[ $use_axi_dma -eq 1 ]]; then
     export s_axi_hp_num=$((s_axi_hp_num+1))
 fi
 
+# Soft ip check pass. Check hard ip.
+#****************************************************************
+# AD4225 config check.
+#----------------------------------------------------------------
+if [[ $use_ad4225 -eq 1 ]]; then
+    # Basic check.
+    # Check if platform preset support AXI DMA.
+    if [[ $have_ad4225 -ne 1 ]]; then
+        echo "$board_name's $preset_plat preset doesn't support AD4225!"
+        error
+    fi
+fi
+
 # AXI check.
 #****************************************************************
 # AXI lite master check.

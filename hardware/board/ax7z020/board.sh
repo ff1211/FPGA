@@ -10,19 +10,19 @@
 # Used for project creation.
 # 
 # Revision history:
-# Version  Date        Author      Changes      
-# 1.0      2022.04.14  fanfei      Initial version
-#****************************************************************
+#  Version  Date        Author      Changes      
+#  1.0      2022.04.27  yjt         Initial version
+# ****************************************************************
 
 # Board basic informations.
 #****************************************************************
 # Board name.
-export board="zedboard"
+export board="ax7z020"
 # Chip name.
 export chip="xc7z020"
 # Package.
-export package="clg484"
+export package="clg400"
 # Platform
 export platform="zynq-7000"
 # Speed grade.
-export speed_grade="-1"
+export speed_grade="-2"

@@ -18,14 +18,14 @@
 # Vivado path.
 export vivado="vivado"
 # If use gui.
-export gui_mode=0
+export gui_mode=1
 # Project name.
 export project_name="zynq_test"
 
 # Shell config.
 #****************************************************************
 # Board name.
-export board_name="zedboard"
+export board_name="ax7z020"
 # Preset platform.
 export preset_plat="basic_plat"
 
@@ -65,3 +65,5 @@ export axi_dma_s_dw=32
 # User defined axil port. For user's ip.
 #****************************************************************
 export m_axil_user_num=1
+
+export use_ad4225=1

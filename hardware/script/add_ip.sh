@@ -80,6 +80,10 @@ source $SCRIPT_DIR/ip/zynq_ps.sh
 add_tcl "save_bd_design"
 #****************************************************************
 
+if [[ $use_ad4225 -eq 1 ]]; then
+    add_ip_wrapper "$BOARDS_DIR/$board_name/$preset_plat/ad4225.xdc"
+    add_define "USE_AD4225"
+fi
 
 # Add defines and files.
 #****************************************************************
