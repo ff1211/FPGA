@@ -14,7 +14,7 @@
 #****************************************************************
 
 # Project directory.
-export PROJECT_DIR=$projec_temp_dir/$project_temp_name
+export PROJECT_DIR=$projec_dir
 # Hardware directory.
 cd ../
 HARDWARE_DIR=$(pwd)

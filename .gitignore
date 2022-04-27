@@ -1,8 +1,4 @@
 **/.DS_Store
-/hardware/project/basic_compute/*
-!/hardware/project/basic_compute/*.sh
-!/hardware/project/basic_compute/*.sv
-
-/hardware/project/image_proc/*
-!/hardware/project/image_proc/*.sh
-!/hardware/project/image_proc/*.sv
+/hardware/project/*
+!/hardware/project/*.sh
+!/hardware/project/*.sv
