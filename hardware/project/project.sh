@@ -20,12 +20,6 @@ error(){
     exit 1
 }
 
-# Check if set project template.
-if [[ $1 == "" ]]; then
-    echo "Haven't set project template name!"
-    error
-fi
-export preset_name=$1
 export projec_dir=$(pwd)
 source $projec_dir/../script/path.sh
 source $projec_dir/config.sh

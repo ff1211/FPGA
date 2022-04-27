@@ -64,9 +64,6 @@ check_config_legal(){
     done
 }
 
-# Export IP list. Used by add_ip.sh to add ip and ip wrappers to project.
-export ip_list=()
-
 # Configs and setting lists.
 #****************************************************************
 # Basic config.
@@ -74,15 +71,17 @@ export ip_list=()
 basic_config=("vivado" "gui_mode" "board_name" "project_name" "preset_plat")
 clock_config=("clk_freq")
 
-export m_axi_gp_num=1       # AXI general purpose master port number, range[0, 2].
-export s_axi_gp_num=0       # AXI general purpose slave port number, range[0, 2].
-export s_axi_hp_num=0       # AXI high performance slave port number, range[0, 4].
-export m_axil_num=1
-export axil_base_addr=0x42000000
-export axil_addr_range="64K"
-if [[ $use_add_axil -eq 1 ]]; then export m_axil_num=$((m_axil_num+$m_axil_user_num)); fi
+# Variables for calculating resource useage.
+#----------------------------------------------------------------
+export ip_list=()                           # IP list. Used by add_ip.sh to add ip and ip wrappers to project.
+export m_axi_gp_num=1                       # AXI general purpose master port number, range[0, 2].
+export s_axi_gp_num=0                       # AXI general purpose slave port number, range[0, 2].
+export s_axi_hp_num=0                       # AXI high performance slave port number, range[0, 4].
+export m_axil_num=$((1+$m_axil_user_num))   # AXI lite master port number, can't larger than 8.
+export axil_base_addr=0x42000000            # AXI lite base address.
+export axil_addr_range="64K"                # AXI lite address range.
 
-# Soft core config.
+# Soft ip config.
 #----------------------------------------------------------------
 # Supported soft cores list.
 # AXI DMA config.
@@ -94,14 +93,13 @@ axi_dma_aw_l=(32 64)
 axi_dma_mm_dw_l=(32 64)
 axi_dma_s_dw_l=(8 16 32 64 128 256 512 1024)
 
-# Hard core config.
+# Hard ip config.
 # Supported hard cores list.
 #----------------------------------------------------------------
 
 
 # Basic config check.
 #****************************************************************
-
 # Basic check.
 check_config_integrity "${basic_config[@]}"
 
@@ -144,33 +142,40 @@ if [[ $no_preset -eq 1 ]]; then
     error
 fi
 
-# Basic check pass. Check board and platform preset.
+# Basic check pass. Check board and platform preset's integrity.
 #****************************************************************
 source $BOARDS_DIR/$board_name/board.sh || (echo "Can't find board.sh! Check integrity of $BOARDS_DIR/$board_name" error)
 source $BOARDS_DIR/$board_name/$preset_plat/resource.sh || (echo "Can't find resource.sh! Check integrity of $BOARDS_DIR/$board_name/$preset_plat" error)
 
-# Clock config check.
+# Board and platform preset's integrity check pass. Check clock and axi lite config.
 #****************************************************************
+# Clock config check.
+#----------------------------------------------------------------
 # Basic check.
 check_config_integrity "${clock_config[@]}"
 # Advanced check.
 
+
 # AXI lite check.
-#****************************************************************
+#----------------------------------------------------------------
 # Basic check.
 export m_axil_num=$(($m_axil_num+$m_axil_user_num))
+# Advanced check.
 
-# AXI DMA config check.
+# Clock and axi lite check pass. Check soft ip.
 #****************************************************************
+# AXI DMA config check.
+#----------------------------------------------------------------
 if [[ $use_axi_dma -eq 1 ]]; then
+    # Basic check.
     # Check if platform preset support AXI DMA.
     if [[ $have_axi_dma -ne 1 ]]; then
         echo "$board_name's $preset_plat preset doesn't support AXI DMA!"
         error
     fi
-    # Basic check.
     check_config_integrity "${axi_dma_config[@]}"
     check_config_legal "${axi_dma_config[@]}"
+    
     # Advanced check.
     if [[ $axi_dma_s_dw -gt $axi_dma_mm_dw ]]; then
         echo "AXI DMA axi-stream data width must no larger than AXI DMA axi-memory-map data width!!!!"

@@ -18,8 +18,8 @@ export PROJECT_DIR=$projec_dir
 # Hardware directory.
 cd ../
 HARDWARE_DIR=$(pwd)
+cd $PROJECT_DIR
 export HARDWARE_DIR
-cd "$TEMPLATE_DIR" || (echo "cd fail!" exit 1)
 # Script directory.
 export SCRIPT_DIR=$HARDWARE_DIR/script
 # Board file directory.

@@ -18,14 +18,14 @@
 # Vivado path.
 export vivado="vivado"
 # If use gui.
-export gui_mode=1
-# Board name.
-export board_name="zedboard"
+export gui_mode=0
 # Project name.
 export project_name="zynq_test"
 
 # Shell config.
 #****************************************************************
+# Board name.
+export board_name="zedboard"
 # Preset platform.
 export preset_plat="basic_plat"
 
