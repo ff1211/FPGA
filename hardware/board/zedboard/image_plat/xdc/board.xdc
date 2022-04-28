@@ -13,8 +13,8 @@
 #****************************************************************
 
 # Clock Source - Bank 13
-set_property PACKAGE_PIN Y9 [get_ports {pl_clk}];
-create_clock -name pl_clk -period 10 [get_ports pl_clk]
+# set_property PACKAGE_PIN Y9 [get_ports {pl_clk}];
+# create_clock -name pl_clk -period 10 [get_ports pl_clk]
 
 # Set the bank voltage for IO Bank 34 to 1.8V by default.
 #****************************************************************

@@ -14,3 +14,6 @@
 #****************************************************************
 
 export have_vdma=1
+export have_hdmi=1
+export have_vga=1
+export have_pl_btn=1
