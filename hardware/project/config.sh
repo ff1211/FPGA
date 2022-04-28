@@ -18,7 +18,7 @@
 # Vivado path.
 export vivado="vivado"
 # If use gui.
-export gui_mode=0
+export gui_mode=1
 # Project name.
 export project_name="zynq_test"
 
@@ -27,7 +27,7 @@ export project_name="zynq_test"
 # Board name.
 export board_name="zedboard"
 # Preset platform.
-export preset_plat="basic_plat"
+export preset_plat="image_plat"
 
 # Clock config.
 # Max 7 clock.
@@ -36,8 +36,8 @@ export preset_plat="basic_plat"
 # clock_2:          axi-lite.
 # clock_3~clock_6:  User define clock. Not set by default.
 #****************************************************************
-# Clock frequence, unit: MHz. Range [10, 400], integer.
-export clk_freq=(100 150 50)
+# Clock frequence, unit: MHz. Range [10, 400].
+export clk_freq=(100 150 50 25.175)
 
 # Resource config.
 #****************************************************************
@@ -46,22 +46,11 @@ export clk_freq=(100 150 50)
 #****************************************************************
 # !!! Very first Version! Haven't support lots of functions !!! #
 
-# AXI DMA config.
-#****************************************************************
-# If use AXI DMA, 0 or 1.
-export use_axi_dma=1
-# AXI DMA mode, "block" or "scatter_gather". Only support block now.     
-export axi_dma_mode="block"
-# AXI dma direction, "read", "write" or "dual".
-export axi_dma_dir="dual"
-# AXI DMA addr width, 32 or 64.
-export axi_dma_aw=32
-# AXI DMA memory map data width, equal axi_hp_port_dw.          
-export axi_dma_mm_dw=64
-# AXI DMA stream data width, 8, 16, 32, 64, 128, 256, 512, 1024.
-# Must less or equal than $axi_dma_mm_dw !!!! Check board/your_board for more information.
-export axi_dma_s_dw=32
-
 # User defined axil port. For user's ip.
 #****************************************************************
-export m_axil_user_num=1
+export m_axil_user_num=0
+
+# PL push button.
+export use_pl_btn=1
+# vga
+export use_vga=1

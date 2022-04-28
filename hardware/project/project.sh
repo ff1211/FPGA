@@ -21,8 +21,8 @@ error(){
 }
 
 export projec_dir=$(pwd)
-source $projec_dir/../script/path.sh
 source $projec_dir/config.sh
+source $projec_dir/../script/path.sh
 
 echo
 
@@ -60,8 +60,8 @@ cur_pj_src_dir="$cur_pj_dir/src"
 cur_pj_script_dir="$cur_pj_dir/script"
 
 # Copy shell_top.sv and role.sv to current project dir.
-cp $BOARDS_DIR/$board_name/$preset_plat/shell_top.sv $cur_pj_src_dir
-cp $BOARDS_DIR/$board_name/$preset_plat/role.sv $cur_pj_src_dir
+cp $PRESET_DIR/shell_top.sv $cur_pj_src_dir
+cp $PRESET_DIR/role.sv $cur_pj_src_dir
 
 # Generate add_ip.tcl for add ips.
 touch "$cur_pj_script_dir/add_ip.tcl"
@@ -100,6 +100,7 @@ set HARDWARE_DIR $HARDWARE_DIR
 set SCRIPT_DIR $SCRIPT_DIR
 set BOARDS_DIR $BOARDS_DIR
 set COMMON_DIR $COMMON_DIR
+set PRESET_DIR $PRESET_DIR
 
 # Creat project.
 #****************************************************************
@@ -116,7 +117,8 @@ source ${cur_pj_script_dir}/add_ip.tcl
 add_files \\
     $BOARDS_DIR/$board_name/$preset_plat/shell_top.sv \\
     $BOARDS_DIR/$board_name/$preset_plat/role.sv \\
-    $cur_pj_src_dir/pre_proc.vh
+    $cur_pj_src_dir/pre_proc.vh \\
+    $PRESET_DIR/xdc/board.xdc
 EOF
 # $cur_pj_src_dir/shell_top.sv \\
 # $cur_pj_src_dir/role.sv \\

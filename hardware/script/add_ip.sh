@@ -79,7 +79,16 @@ source $SCRIPT_DIR/ip/zynq_ps.sh
 # Save board design.
 add_tcl "save_bd_design"
 #****************************************************************
-
+# Add pl btn
+if [[ $use_pl_btn -eq 1 ]]; then 
+    add_define "USE_PL_BTN"
+    add_ip_wrapper "$BOARDS_DIR/$board_name/$preset_plat/xdc/btn.xdc"
+fi
+# Add vga
+if [[ $use_vga -eq 1 ]]; then
+    add_define "USE_VGA" 
+    add_ip_wrapper "$BOARDS_DIR/$board_name/$preset_plat/xdc/vga.xdc"
+fi
 
 # Add defines and files.
 #****************************************************************

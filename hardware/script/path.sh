@@ -28,4 +28,5 @@ export BOARDS_DIR=$HARDWARE_DIR/board
 export SHELL_DIR=$HARDWARE_DIR/shell
 # Shell common modules directory.
 export COMMON_DIR=$HARDWARE_DIR/shell/common
-
+# Board preset directory.
+export PRESET_DIR=$BOARDS_DIR/$board_name/$preset_plat

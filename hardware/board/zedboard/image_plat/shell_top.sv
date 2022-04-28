@@ -30,6 +30,7 @@ module shell_top (
     input           btn_r,
     input           btn_u,
     `endif
+    input           pl_clk,
     // Fixed IO.
     inout           fixed_io_ddr_vrn,
     inout           fixed_io_ddr_vrp,
@@ -120,6 +121,7 @@ role #(
     `ifdef USE_M_AXIL_USER
     .s_axil_user    (   axil_user.slave     ),
     `endif    
+    .pl_clk         (   pl_clk      ),
     .sys_clk        (   sys_clk     ),
     .ic_rst_n       (   ic_rst_n    ),
     .perif_rst_n    (   perif_rst_n )

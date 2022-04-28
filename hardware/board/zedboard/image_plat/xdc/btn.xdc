@@ -12,8 +12,11 @@
 # 1.0      2022.04.28  fanfei      Initial version
 #****************************************************************
 
-set_property PACKAGE_PIN P16 [get_ports {btn_c}];  # "BTNC"
-set_property PACKAGE_PIN R16 [get_ports {btn_d}];  # "BTND"
-set_property PACKAGE_PIN N15 [get_ports {btn_l}];  # "BTNL"
-set_property PACKAGE_PIN R18 [get_ports {btn_r}];  # "BTNR"
-set_property PACKAGE_PIN T18 [get_ports {btn_u}];  # "BTNU"
+#****************************************************************
+# User Push Buttons - Bank 34
+#****************************************************************
+set_property PACKAGE_PIN P16 [get_ports {btn_c}];
+set_property PACKAGE_PIN R16 [get_ports {btn_d}];
+set_property PACKAGE_PIN N15 [get_ports {btn_l}];
+set_property PACKAGE_PIN R18 [get_ports {btn_r}];
+set_property PACKAGE_PIN T18 [get_ports {btn_u}];
