@@ -33,6 +33,7 @@ for clk in ${clk_freq[@]}; do
     add_tcl "set_property -dict [list CONFIG.CLKOUT${j}_REQUESTED_OUT_FREQ {${clk}}] [get_bd_cells clk_wiz_0]"
     add_tcl "make_bd_pins_external  [get_bd_pins clk_wiz_0/clk_out$j]"
     add_tcl "set_property name clk_out$j [get_bd_ports clk_out${j}_0]"
+    add_define "CLK_${i}_FREQ" ${clk}
     j=$((j+1))
 done
 
