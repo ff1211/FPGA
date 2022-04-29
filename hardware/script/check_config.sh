@@ -97,7 +97,7 @@ axi_dma_s_dw_l=(8 16 32 64 128 256 512 1024)
 # Supported hard cores list.
 #----------------------------------------------------------------
 # ov5640 config.
-axi_dma_config=("use_ov5640")
+axi_dma_config=("use_ov5640", "ov5640_res")
 use_ov5640_l=(0 1)
 
 # Basic config check.

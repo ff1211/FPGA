@@ -34,6 +34,17 @@ module ov5640 #(
     output          cam_sda_t,
 );
 
+ov5640_rst ov5640_rst_inst(
+    .clk        (   s_axil_aclk     ),  
+    .rst_n      (   s_axil_arst_n   ),
+    .cam_rst_n  (   cam_rst_n       ),
+    .cam_pwdn   (   cam_pwdn        )
+);
+
+logic img_cap_rst_n;
+cdc_rst ( .rst_s(cam_rst_n), .clk_d(cam_pclk), .rst_d(img_cap_rst_n));
+
+
 // Axi lite to iic convert. For configuring ov5640.
 axi_iic_ov5640 axi_iic_ov5640_inst (
     .s_axi_aclk     (   s_axil_aclk     ),      // input wire s_axi_aclk
@@ -64,6 +75,5 @@ axi_iic_ov5640 axi_iic_ov5640_inst (
     .scl_t          (                       ),  // output wire scl_t
     .gpo            (                       )   // output wire [0 : 0] gpo
 );
-
 
 endmodule
