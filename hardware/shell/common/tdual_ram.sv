@@ -2,7 +2,7 @@
 // Copyright 2022 Tianjin University 305 Lab. All Rights Reserved.
 //
 // File:
-// ram_tdual.sv
+// tdual_ram.sv
 // 
 // Description:
 // True dual port ram.
@@ -14,7 +14,7 @@
 
 `timescale 1ns/1ps
 
-module ram_tdual #(
+module tdual_ram #(
     parameter ADDR_WIDTH_A          = 6,
     parameter DATA_WIDTH_A          = 32,
     parameter READ_LATENCY_A        = 2,
