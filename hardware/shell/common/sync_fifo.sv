@@ -2,7 +2,7 @@
 // Copyright 2022 Tianjin University 305 Lab. All Rights Reserved.
 //
 // File:
-// fifo_sync.sv
+// sync_fifo.sv
 // 
 // Description:
 // Sync fifo.
@@ -14,8 +14,8 @@
 
 `timescale 1ns/1ps
 
-module fifo_sync #(
-    parameter   FIFO_WRITE_DEPTH    = 512,
+module sync_fifo #(
+    parameter   FIFO_DEPTH          = 512,
     parameter   PROG_EMPTY_THRESH   = 10,
     parameter   PROG_FULL_THRESH    = 10,
     parameter   DATA_WIDTH          = 32,
@@ -46,7 +46,7 @@ xpm_fifo_sync #(
     .ECC_MODE               (   "no_ecc"    ),          // String
     .FIFO_MEMORY_TYPE       (   "auto"      ),          // String
     .FIFO_READ_LATENCY      (   1           ),          // DECIMAL
-    .FIFO_WRITE_DEPTH       (   FIFO_WRITE_DEPTH    ),  // DECIMAL
+    .FIFO_WRITE_DEPTH       (   FIFO_DEPTH  ),          // DECIMAL
     .FULL_RESET_VALUE       (   0                   ),  // DECIMAL
     .PROG_EMPTY_THRESH      (   PROG_EMPTY_THRESH   ),  // DECIMAL
     .PROG_FULL_THRESH       (   PROG_FULL_THRESH    ),  // DECIMAL

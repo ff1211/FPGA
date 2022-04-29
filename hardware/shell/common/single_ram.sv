@@ -2,7 +2,7 @@
 // Copyright 2022 Tianjin University 305 Lab. All Rights Reserved.
 //
 // File:
-// ram_singl.sv
+// singl_ram.sv
 // 
 // Description:
 // Single port ram.
@@ -14,7 +14,7 @@
 
 `timescale 1ns/1ps
 
-module ram_single #(
+module single_ram #(
     parameter DATA_WIDTH        = 32,
     parameter BYTE_WRITE_WIDTH  = 32,
     parameter ADDR_WIDTH        = 6,
