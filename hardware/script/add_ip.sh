@@ -59,7 +59,6 @@ export m_axil_addr_assign=0
 
 # Block design IP
 #****************************************************************
-
 echo "create_bd_design \"sys_bd\"" >> "$add_ip_tcl_path"
 
 # Add clock wizard.
@@ -79,16 +78,29 @@ source $SCRIPT_DIR/ip/zynq_ps.sh
 # Save board design.
 add_tcl "save_bd_design"
 #****************************************************************
+
+
+# Other IP.
+#****************************************************************
+# Add ov5640 camera.
+[[ $use_ov5640 -eq 1 ]] && source $SCRIPT_DIR/ip/ov5640.sh
 # Add pl btn
 if [[ $use_pl_btn -eq 1 ]]; then 
     add_define "USE_PL_BTN"
-    add_ip_wrapper "$BOARDS_DIR/$board_name/$preset_plat/xdc/btn.xdc"
+    add_ip_wrapper "$PRESET_DIR/xdc/btn.xdc"
 fi
 # Add vga
 if [[ $use_vga -eq 1 ]]; then
     add_define "USE_VGA" 
-    add_ip_wrapper "$BOARDS_DIR/$board_name/$preset_plat/xdc/vga.xdc"
+    add_ip_wrapper "$PRESET_DIR/xdc/vga.xdc"
 fi
+# Add pl clk.
+if [[ $use_pl_clk -eq 1 ]]; then
+    add_define "USE_PL_CLK"
+    add_ip_wrapper "$PRESET_DIR/xdc/pl_clk.xdc"
+fi
+#****************************************************************
+
 
 # Add defines and files.
 #****************************************************************

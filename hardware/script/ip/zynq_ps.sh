@@ -3,7 +3,7 @@
 # Copyright 2022 Tianjin University 305 Lab. All Rights Reserved.
 #
 # File:
-# zynqs_ps.sh
+# zynq_ps.sh
 # 
 # Description:
 # Bash shell for add Zynq processing system ip.

@@ -1,21 +1,17 @@
-#!/bin/bash
 #****************************************************************
 # Copyright 2022 Tianjin University 305 Lab. All Rights Reserved.
 #
 # File:
-# resource.sh
+# pl_clk.xdc
 # 
 # Description:
-# Define platform's resource.
+# Constrain file for zedboard pl clock.
 # 
 # Revision history:
 # Version  Date        Author      Changes      
-# 1.0      2022.04.22  fanfei      Initial version
+# 1.0      2022.04.28  fanfei      Initial version
 #****************************************************************
 
-export have_vdma=1
-export have_hdmi=1
-export have_vga=1
-export have_pl_btn=1
-export have_ov5640=1
-export have_pl_clk=1
+# Clock Source - Bank 13
+set_property PACKAGE_PIN Y9 [get_ports {pl_clk}];
+create_clock -name pl_clk -period 10 [get_ports pl_clk]

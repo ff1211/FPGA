@@ -30,7 +30,11 @@ module shell_top (
     input           btn_r,
     input           btn_u,
     `endif
+    `ifdef USE_OV5640
+    `endif
+    `ifdef USE_PL_CLK
     input           pl_clk,
+    `endif
     // Fixed IO.
     inout           fixed_io_ddr_vrn,
     inout           fixed_io_ddr_vrp,

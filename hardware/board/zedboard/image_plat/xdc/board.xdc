@@ -12,10 +12,6 @@
 # 1.0      2022.04.14  fanfei      Initial version
 #****************************************************************
 
-# Clock Source - Bank 13
-set_property PACKAGE_PIN Y9 [get_ports {pl_clk}];
-create_clock -name pl_clk -period 10 [get_ports pl_clk]
-
 # Set the bank voltage for IO Bank 34 to 1.8V by default.
 #****************************************************************
 set_property IOSTANDARD LVCMOS18 [get_ports -of_objects [get_iobanks 34]];

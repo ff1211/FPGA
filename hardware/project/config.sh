@@ -54,3 +54,5 @@ export m_axil_user_num=0
 export use_pl_btn=1
 # vga
 export use_vga=1
+# PL clock
+export use_pl_clk=0
