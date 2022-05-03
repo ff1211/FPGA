@@ -82,8 +82,6 @@ add_tcl "save_bd_design"
 
 # Other IP.
 #****************************************************************
-# Add ov5640 camera.
-[[ $use_ov5640 -eq 1 ]] && source $SCRIPT_DIR/ip/ov5640.sh
 # Add pl btn
 if [[ $use_pl_btn -eq 1 ]]; then 
     add_define "USE_PL_BTN"

@@ -30,8 +30,6 @@ module shell_top (
     input           btn_r,
     input           btn_u,
     `endif
-    `ifdef USE_OV5640
-    `endif
     `ifdef USE_PL_CLK
     input           pl_clk,
     `endif
@@ -108,6 +106,9 @@ axil_dummy #(
 role #(
 
 ) role_inst (
+    `ifdef USE_PL_CLK
+    .pl_clk         (   pl_clk      ),
+    `endif
     `ifdef USE_VGA
     .vga_r          (   vga_r       ),
     .vga_g          (   vga_g       ),
