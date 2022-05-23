@@ -10,7 +10,7 @@
 # 
 # Revision history:
 # Version  Date        Author      Changes      
-# 1.0      2022.04.14  fanfei      Initial version
+# 1.0      2022.04.14  ff          Initial version
 #****************************************************************
 
 # Vivado settings.
@@ -37,7 +37,7 @@ export preset_plat="image_plat"
 # clock_3~clock_6:  User define clock. Not set by default.
 #****************************************************************
 # Clock frequence, unit: MHz. Range [10, 400], integer.
-export clk_freq=(100 150 50 25.175)
+export clk_freq=(100 150 50 25)
 
 # Resource config.
 #****************************************************************
@@ -56,8 +56,3 @@ export use_pl_btn=1
 export use_vga=1
 # PL clock
 export use_pl_clk=0
-
-# OV5640
-export use_ov5640=1
-# Set resolution of ov5640, "1080p", "720p", "vga"
-export ov5640_res="720p"

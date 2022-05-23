@@ -9,7 +9,7 @@
 # 
 # Revision history:
 # Version  Date        Author      Changes      
-# 1.0      2022.04.28  fanfei      Initial version
+# 1.0      2022.04.28  ff          Initial version
 #****************************************************************
 
 # Clock Source - Bank 13

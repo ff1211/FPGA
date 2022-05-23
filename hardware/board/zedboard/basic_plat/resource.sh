@@ -10,7 +10,7 @@
 # 
 # Revision history:
 # Version  Date        Author      Changes      
-# 1.0      2022.04.22  fanfei      Initial version
+# 1.0      2022.04.22  ff          Initial version
 #****************************************************************
 
 export have_axi_dma=1

@@ -9,7 +9,7 @@
 # 
 # Revision history:
 # Version  Date        Author      Changes      
-# 1.0      2022.04.14  fanfei      Initial version
+# 1.0      2022.04.14  ff          Initial version
 #****************************************************************
 
 # Set the bank voltage for IO Bank 34 to 1.8V by default.
