@@ -93,23 +93,17 @@ add_tcl "save_bd_design"
 
 # Other IP.
 #****************************************************************
-# Add pl btn
-if [[ $use_pl_btn -eq 1 ]]; then 
-    add_define "USE_PL_BTN"
-    add_ip_wrapper "$PRESET_DIR/xdc/btn.xdc"
+type -t "$PRESET_DIR/other_ip.sh" > /dev/null
+if [[ $? -ne 1 ]]; then
+    source "$PRESET_DIR/other_ip.sh"
 fi
-# Add vga
-if [[ $use_vga -eq 1 ]]; then
-    add_define "USE_VGA" 
-    add_ip_wrapper "$PRESET_DIR/xdc/vga.xdc"
-fi
+
 # Add pl clk.
 if [[ $use_pl_clk -eq 1 ]]; then
     add_define "USE_PL_CLK"
     add_ip_wrapper "$PRESET_DIR/xdc/pl_clk.xdc"
 fi
 #****************************************************************
-
 
 # Add defines and files.
 #****************************************************************
