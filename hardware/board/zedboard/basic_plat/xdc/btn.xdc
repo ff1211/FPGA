@@ -20,3 +20,9 @@ set_property PACKAGE_PIN R16 [get_ports {btn_d}];
 set_property PACKAGE_PIN N15 [get_ports {btn_l}];
 set_property PACKAGE_PIN R18 [get_ports {btn_r}];
 set_property PACKAGE_PIN T18 [get_ports {btn_u}];
+
+# Set the bank voltage for IO Bank 34 to 1.8V by default.
+#****************************************************************
+set_property IOSTANDARD LVCMOS18 [get_ports -of_objects [get_iobanks 34]];
+# set_property IOSTANDARD LVCMOS25 [get_ports -of_objects [get_iobanks 34]];
+# set_property IOSTANDARD LVCMOS33 [get_ports -of_objects [get_iobanks 34]];

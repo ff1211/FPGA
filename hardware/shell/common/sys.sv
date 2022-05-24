@@ -197,8 +197,8 @@ sys_bd sys_bd_inst
     `endif
 
     .USBIND_port_indctl     (),
-    .USBIND_vbus_pwrfault   (),
-    .USBIND_vbus_pwrselect  (1'b0),
+    .USBIND_vbus_pwrfault   (1'b0),
+    .USBIND_vbus_pwrselect  (),
 
     `ifdef USE_CLK_0
     .clk_out1               (   sys_clk[0]      ),

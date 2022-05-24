@@ -47,7 +47,7 @@ export clk_freq=(100 150 50)
 # !!! Very first Version! Haven't support lots of functions !!! #
 
 # If use AXI DMA, 0 or 1.
-export use_adma=1
+export use_adma=0
 export adma_ps_port="hp0"
 # AXI DMA mode, "block" or "scatter_gather". Only support block now.     
 export adma_mode="block"
@@ -63,7 +63,7 @@ export adma_s_dw=32
 
 # User defined axil port. For user's ip.
 #****************************************************************
-export m_axil_user_num=3
+export m_axil_user_num=0
 
 # PL push button.
 export use_pl_btn=0

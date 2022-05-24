@@ -117,8 +117,7 @@ source "${cur_pj_script_dir}/add_ip.tcl"
 add_files \\
     $BOARDS_DIR/$board_name/$preset_plat/shell_top.sv \\
     $BOARDS_DIR/$board_name/$preset_plat/role.sv \\
-    $cur_pj_src_dir/pre_proc.vh \\
-    $PRESET_DIR/xdc/board.xdc
+    $cur_pj_src_dir/pre_proc.vh
 EOF
 # $cur_pj_src_dir/shell_top.sv \\
 # $cur_pj_src_dir/role.sv \\
