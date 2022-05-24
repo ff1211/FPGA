@@ -21,14 +21,14 @@ error(){
 }
 
 export projec_dir=$(pwd)
-source $projec_dir/config.sh
-source $projec_dir/../script/path.sh
+source "$projec_dir/config.sh"
+source "$projec_dir/../script/path.sh"
 
 echo
 
 # Check the correctness of config.sh.
 #****************************************************************
-source $SCRIPT_DIR/check_config.sh
+source "$SCRIPT_DIR/check_config.sh"
 
 # Start creating project
 #****************************************************************
@@ -84,7 +84,7 @@ cat > "$cur_pj_src_dir/pre_proc.vh" << EOF
 EOF
 
 # Source add_ip.sh to generate add_ip.tcl.
-source $SCRIPT_DIR/add_ip.sh
+source "$SCRIPT_DIR/add_ip.sh"
 
 # Generate project.tcl for creating project in vivado.
 touch $cur_pj_dir/project.tcl
@@ -107,10 +107,10 @@ set PRESET_DIR $PRESET_DIR
 create_project -part ${chip}${package}${speed_grade} ${cur_pj_name} ${cur_pj_dir}
 
 # Add common files.
-source ${HARDWARE_DIR}/script/add_files.tcl
+source "${HARDWARE_DIR}/script/add_files.tcl"
 
 # Add ips.
-source ${cur_pj_script_dir}/add_ip.tcl
+source "${cur_pj_script_dir}/add_ip.tcl"
 
 # Add board and project specific files.
 #****************************************************************

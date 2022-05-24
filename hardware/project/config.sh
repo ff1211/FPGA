@@ -27,7 +27,7 @@ export project_name="zynq_test"
 # Board name.
 export board_name="zedboard"
 # Preset platform.
-export preset_plat="image_plat"
+export preset_plat="basic_plat"
 
 # Clock config.
 # Max 7 clock.
@@ -37,7 +37,7 @@ export preset_plat="image_plat"
 # clock_3~clock_6:  User define clock. Not set by default.
 #****************************************************************
 # Clock frequence, unit: MHz. Range [10, 400], integer.
-export clk_freq=(100 150 50 25)
+export clk_freq=(100 150 50)
 
 # Resource config.
 #****************************************************************
@@ -46,13 +46,31 @@ export clk_freq=(100 150 50 25)
 #****************************************************************
 # !!! Very first Version! Haven't support lots of functions !!! #
 
+# If use AXI DMA, 0 or 1.
+export use_adma=1
+export adma_ps_port="hp0"
+# AXI DMA mode, "block" or "scatter_gather". Only support block now.     
+export adma_mode="block"
+# AXI dma direction, "read", "write" or "dual".
+export adma_dir="dual"
+# AXI DMA addr width, 32 or 64.
+export adma_aw=32
+# AXI DMA memory map data width, equal axi_hp_port_dw.          
+export adma_mm_dw=64
+# AXI DMA stream data width, 8, 16, 32, 64, 128, 256, 512, 1024.
+# Must less or equal than $axi_dma_mm_dw !!!! Check board/your_board for more information.
+export adma_s_dw=32
+
 # User defined axil port. For user's ip.
 #****************************************************************
-export m_axil_user_num=0
+export m_axil_user_num=3
 
 # PL push button.
-export use_pl_btn=1
+export use_pl_btn=0
 # vga
-export use_vga=1
+export use_vga=0
 # PL clock
 export use_pl_clk=0
+# vdma
+export use_vdma=0
+

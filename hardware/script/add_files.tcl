@@ -17,9 +17,9 @@
 
 # Common modules.
 add_files                           \
-    $COMMON_DIR/fifo_sync.sv        \
-    $COMMON_DIR/ram_single.sv       \
-    $COMMON_DIR/ram_tdual.sv        \
+    $COMMON_DIR/sync_fifo.sv        \
+    $COMMON_DIR/single_ram.sv       \
+    $COMMON_DIR/tdual_ram.sv        \
     $COMMON_DIR/axi_if.sv           \
     $COMMON_DIR/axil_dummy.sv       
 #****************************************************************

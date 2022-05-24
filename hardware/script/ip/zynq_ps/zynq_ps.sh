@@ -16,33 +16,11 @@
 
 # Add processing system hardcore.
 if [[ $platform == "zynq-7000" ]];  then
-    # Add ip.
-    add_tcl "create_bd_cell -type ip -vlnv xilinx.com:ip:processing_system7:5.5 processing_system7_0"
-    # Source preset.
-    add_tcl "source $BOARDS_DIR/$board_name/ps_preset.tcl"
-    add_tcl "set_property -dict [apply_preset processing_system7_0] [get_bd_cells processing_system7_0]"
-    # Config AXI port.
-    i=0
-    axi_config_list=""
-
-    while [[ $i -ne $m_axi_gp_num ]]; do axi_config_list="$axi_config_list CONFIG.PCW_USE_M_AXI_GP${i} {1}"; i=$((i+1)); done; i=0
-    while [[ $i -ne $s_axi_gp_num ]]; do axi_config_list="$axi_config_list CONFIG.PCW_USE_S_AXI_GP${i} {1}"; i=$((i+1)); done; i=0
-    while [[ $i -ne $s_axi_hp_num ]]; do axi_config_list="$axi_config_list CONFIG.PCW_USE_S_AXI_HP${i} {1}"; i=$((i+1)); done; i=0
-
-    add_tcl "set_property -dict [list $axi_config_list] [get_bd_cells processing_system7_0]"
-    while [[ $i -ne $m_axi_gp_num ]]; do add_tcl "connect_bd_net [get_bd_pins processing_system7_0/M_AXI_GP${i}_ACLK] [get_bd_pins clk_wiz_0/clk_out1]"; i=$((i+1)); done; i=0
-    while [[ $i -ne $s_axi_gp_num ]]; do add_tcl "connect_bd_net [get_bd_pins processing_system7_0/S_AXI_GP${i}_ACLK] [get_bd_pins clk_wiz_0/clk_out1]"; i=$((i+1)); done; i=0
-    while [[ $i -ne $s_axi_hp_num ]]; do add_tcl "connect_bd_net [get_bd_pins processing_system7_0/S_AXI_HP${i}_ACLK] [get_bd_pins clk_wiz_0/clk_out2]"; i=$((i+1)); done; i=0
-    # Make external.
-    add_tcl "make_bd_intf_pins_external  [get_bd_intf_pins processing_system7_0/DDR]"
-    add_tcl "set_property name DDR [get_bd_intf_ports DDR_0]"
-    add_tcl "make_bd_intf_pins_external  [get_bd_intf_pins processing_system7_0/FIXED_IO]"
-    add_tcl "set_property name FIXED_IO [get_bd_intf_ports FIXED_IO_0]"
-    add_tcl "make_bd_intf_pins_external  [get_bd_intf_pins processing_system7_0/USBIND_0]"
-    add_tcl "set_property name USBIND [get_bd_intf_ports USBIND_0_0]"
-elif [[ $platform == "ultrascale" ]]; then
+    source "$SCRIPT_DIR/ip/zynq_ps/z7.sh"
+elif [[ $platform == "zynq-ultrascale" ]]; then
     echo "Error! Haven't support Zynq-UltraScale now!"
     error
+    source "$SCRIPT_DIR/ip/zynq_ps/zu.sh"
 fi
 
 # Add axi lite interconnect.
@@ -67,9 +45,9 @@ export clk2_assoc_busif="M_AXIL_CHECK"
 
 # Assign address space.
 add_tcl "assign_bd_address -target_address_space /processing_system7_0/Data [get_bd_addr_segs M_AXIL_CHECK/Reg] -force"
-add_tcl "set_property offset 0x4${m_axil_addr_assign}000000 [get_bd_addr_segs {processing_system7_0/Data/SEG_M_AXIL_CHECK_Reg}]"
+add_tcl "set_property offset 0x4${m_axi_gp0_addr_assign}000000 [get_bd_addr_segs {processing_system7_0/Data/SEG_M_AXIL_CHECK_Reg}]"
 add_tcl "set_property range $axil_addr_range [get_bd_addr_segs {processing_system7_0/Data/SEG_M_AXIL_CHECK_Reg}]"
-export m_axil_addr_assign=$((m_axil_addr_assign+1))
+export m_axi_gp0_addr_assign=$((m_axi_gp0_addr_assign+1))
 
 # Make user defined axi lite external, for exteranl user's ip;
 i=0
@@ -84,9 +62,9 @@ while [[ $i -ne $m_axil_user_num ]]; do
 
     # Assign address space.
     add_tcl "assign_bd_address -target_address_space /processing_system7_0/Data [get_bd_addr_segs M_AXIL_USER${i}/Reg] -force"
-    add_tcl "set_property offset 0x4${m_axil_addr_assign}000000 [get_bd_addr_segs {processing_system7_0/Data/SEG_M_AXIL_USER${i}_Reg}]"
+    add_tcl "set_property offset 0x4${m_axi_gp0_addr_assign}000000 [get_bd_addr_segs {processing_system7_0/Data/SEG_M_AXIL_USER${i}_Reg}]"
     add_tcl "set_property range $axil_addr_range [get_bd_addr_segs {processing_system7_0/Data/SEG_M_AXIL_USER${i}_Reg}]"
-    export m_axil_addr_assign=$((m_axil_addr_assign+1))
+    export m_axi_gp0_addr_assign=$((m_axi_gp0_addr_assign+1))
 
     i=$((i+1))
 done

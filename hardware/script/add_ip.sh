@@ -51,27 +51,38 @@ export clk5_assoc_busif=""
 export clk6_assoc_busif=""
 export clk7_assoc_busif=""
 
-export m_axil_assign=$((1+$m_axil_user_num))
-export m_axi_gp_assign=1
-export s_axi_gp_assign=0
-export s_axi_hp_assign=0
-export m_axil_addr_assign=0
+export m_axi_gp0_assign=$((1+$m_axil_user_num))
+export m_axi_gp1_assign=00
+export s_axi_gp0_assign=00
+export s_axi_gp1_assign=00
+export s_axi_hp0_assign=00
+export s_axi_hp1_assign=00
+export s_axi_hp2_assign=00
+export s_axi_hp3_assign=00
+export m_axi_gp0_addr_assign=0
+export m_axi_gp1_addr_assign=0
 
 # Block design IP
 #****************************************************************
 echo "create_bd_design \"sys_bd\"" >> "$add_ip_tcl_path"
 
 # Add clock wizard.
-source $SCRIPT_DIR/ip/clock_wizard.sh
+source "$SCRIPT_DIR/ip/clock_wizard.sh"
 
 # Add processing system reset.
-source $SCRIPT_DIR/ip/sys_reset.sh
+source "$SCRIPT_DIR/ip/sys_reset.sh"
 
 # Add Zynq processing system.
-source $SCRIPT_DIR/ip/zynq_ps.sh
+if [[ $platform == "zynq-7000" ]];  then
+    source "$SCRIPT_DIR/ip/zynq_ps/z7.sh"
+elif [[ $platform == "zynq-ultrascale" ]]; then
+    echo "Error! Haven't support Zynq-UltraScale now!"
+    error
+    # source "$SCRIPT_DIR/ip/zynq_ps/zu.sh"
+fi
 
 # Add AXI DMA.
-[[ $use_axi_dma -eq 1 ]] && source $SCRIPT_DIR/ip/axi_dma.sh
+[[ $use_adma -eq 1 ]] && source "$SCRIPT_DIR/ip/adma.sh"
 
 # Add Video DMA.
 
