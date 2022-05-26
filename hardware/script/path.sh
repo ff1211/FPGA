@@ -14,19 +14,18 @@
 #****************************************************************
 
 # Project directory.
-export PROJECT_DIR=$projec_dir
+PROJECT_DIR=$projec_dir
 # Hardware directory.
 cd ../
 HARDWARE_DIR=$(pwd)
 cd $PROJECT_DIR
-export HARDWARE_DIR
 # Script directory.
-export SCRIPT_DIR=$HARDWARE_DIR/script
+SCRIPT_DIR=$HARDWARE_DIR/script
 # Board file directory.
-export BOARDS_DIR=$HARDWARE_DIR/board
+BOARDS_DIR=$HARDWARE_DIR/board
 # Shell directory.
-export SHELL_DIR=$HARDWARE_DIR/shell
+SHELL_DIR=$HARDWARE_DIR/shell
 # Shell common modules directory.
-export COMMON_DIR=$HARDWARE_DIR/shell/common
+COMMON_DIR=$HARDWARE_DIR/shell/common
 # Board preset directory.
-export PRESET_DIR=$BOARDS_DIR/$board_name/$preset_plat
+PRESET_DIR=$BOARDS_DIR/$board_name/$preset_plat

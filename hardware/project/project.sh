@@ -20,7 +20,7 @@ error(){
     exit 1
 }
 
-export projec_dir=$(pwd)
+projec_dir=$(pwd)
 source "$projec_dir/config.sh"
 source "$projec_dir/../script/path.sh"
 
@@ -65,7 +65,7 @@ cp $PRESET_DIR/role.sv $cur_pj_src_dir
 
 # Generate add_ip.tcl for add ips.
 touch "$cur_pj_script_dir/add_ip.tcl"
-export add_ip_tcl_path=$cur_pj_script_dir/add_ip.tcl
+add_ip_tcl_path=$cur_pj_script_dir/add_ip.tcl
 cat > "$cur_pj_script_dir/add_ip.tcl" << EOF
 #****************************************************************
 # This is a auto-generated file. Do not change it!
@@ -74,7 +74,7 @@ EOF
 
 # Generate pre_proc.vh for config ips.
 touch "$cur_pj_src_dir/pre_proc.vh"
-export pre_proc_path="$cur_pj_src_dir/pre_proc.vh"
+pre_proc_path="$cur_pj_src_dir/pre_proc.vh"
 cat > "$cur_pj_src_dir/pre_proc.vh" << EOF
 //****************************************************************
 // This is a auto-generated file. Do not change it!

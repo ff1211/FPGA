@@ -20,11 +20,29 @@ module sys #(
     axi_lite.master m_axil_check,
 
     // axi dma
-    `ifdef USE_AXI_DMA_WRITE
-    axis.slave      s_axis_adma_s2mm,
+    `ifdef USE_AXI_DMA_WRITE_0
+    axis.slave      s_axis_adma_s2mm_0,
     `endif
-    `ifdef USE_AXI_DMA_READ
-    axis.master     m_axis_adma_mm2s,
+    `ifdef USE_AXI_DMA_READ_0
+    axis.master     m_axis_adma_mm2s_0,
+    `endif
+    `ifdef USE_AXI_DMA_WRITE_1
+    axis.slave      s_axis_adma_s2mm_1,
+    `endif
+    `ifdef USE_AXI_DMA_READ_1
+    axis.master     m_axis_adma_mm2s_1,
+    `endif
+    `ifdef USE_AXI_DMA_WRITE_2
+    axis.slave      s_axis_adma_s2mm_2,
+    `endif
+    `ifdef USE_AXI_DMA_READ_2
+    axis.master     m_axis_adma_mm2s_2,
+    `endif
+    `ifdef USE_AXI_DMA_WRITE_3
+    axis.slave      s_axis_adma_s2mm_3,
+    `endif
+    `ifdef USE_AXI_DMA_READ_3
+    axis.master     m_axis_adma_mm2s_3,
     `endif
 
     `ifdef USE_M_AXIL_USER
@@ -181,19 +199,64 @@ sys_bd sys_bd_inst
     .M_AXIL_USER3_wvalid        (   m_axil_user3.wvalid     ),
     `endif
     
-    `ifdef USE_AXI_DMA_WRITE
-    .S_AXIS_ADMA_S2MM_tdata     (   s_axis_adma_s2mm.tdata  ),
-    .S_AXIS_ADMA_S2MM_tkeep     (   s_axis_adma_s2mm.tkeep  ),
-    .S_AXIS_ADMA_S2MM_tlast     (   s_axis_adma_s2mm.tlast  ),
-    .S_AXIS_ADMA_S2MM_tready    (   s_axis_adma_s2mm.tready ),
-    .S_AXIS_ADMA_S2MM_tvalid    (   s_axis_adma_s2mm.tvalid ),
+    `ifdef USE_AXI_DMA_WRITE_0
+    .S_AXIS_ADMA_S2MM0_tdata    (   s_axis_adma_s2mm_0.tdata    ),
+    .S_AXIS_ADMA_S2MM0_tkeep    (   s_axis_adma_s2mm_0.tkeep    ),
+    .S_AXIS_ADMA_S2MM0_tlast    (   s_axis_adma_s2mm_0.tlast    ),
+    .S_AXIS_ADMA_S2MM0_tready   (   s_axis_adma_s2mm_0.tready   ),
+    .S_AXIS_ADMA_S2MM0_tvalid   (   s_axis_adma_s2mm_0.tvalid   ),
     `endif
-    `ifdef USE_AXI_DMA_READ
-    .M_AXIS_ADMA_MM2S_tdata     (   m_axis_adma_mm2s.tdata  ),
-    .M_AXIS_ADMA_MM2S_tkeep     (   m_axis_adma_mm2s.tkeep  ),
-    .M_AXIS_ADMA_MM2S_tlast     (   m_axis_adma_mm2s.tlast  ),
-    .M_AXIS_ADMA_MM2S_tready    (   m_axis_adma_mm2s.tready ),
-    .M_AXIS_ADMA_MM2S_tvalid    (   m_axis_adma_mm2s.tvalid ),
+    `ifdef USE_AXI_DMA_READ_0
+    .M_AXIS_ADMA_MM2S0_tdata    (   m_axis_adma_mm2s_0.tdata    ),
+    .M_AXIS_ADMA_MM2S0_tkeep    (   m_axis_adma_mm2s_0.tkeep    ),
+    .M_AXIS_ADMA_MM2S0_tlast    (   m_axis_adma_mm2s_0.tlast    ),
+    .M_AXIS_ADMA_MM2S0_tready   (   m_axis_adma_mm2s_0.tready   ),
+    .M_AXIS_ADMA_MM2S0_tvalid   (   m_axis_adma_mm2s_0.tvalid   ),
+    `endif
+
+    `ifdef USE_AXI_DMA_WRITE_1
+    .S_AXIS_ADMA_S2MM1_tdata    (   s_axis_adma_s2mm_1.tdata    ),
+    .S_AXIS_ADMA_S2MM1_tkeep    (   s_axis_adma_s2mm_1.tkeep    ),
+    .S_AXIS_ADMA_S2MM1_tlast    (   s_axis_adma_s2mm_1.tlast    ),
+    .S_AXIS_ADMA_S2MM1_tready   (   s_axis_adma_s2mm_1.tready   ),
+    .S_AXIS_ADMA_S2MM1_tvalid   (   s_axis_adma_s2mm_1.tvalid   ),
+    `endif
+    `ifdef USE_AXI_DMA_READ_1
+    .M_AXIS_ADMA_MM2S1_tdata    (   m_axis_adma_mm2s_1.tdata    ),
+    .M_AXIS_ADMA_MM2S1_tkeep    (   m_axis_adma_mm2s_1.tkeep    ),
+    .M_AXIS_ADMA_MM2S1_tlast    (   m_axis_adma_mm2s_1.tlast    ),
+    .M_AXIS_ADMA_MM2S1_tready   (   m_axis_adma_mm2s_1.tready   ),
+    .M_AXIS_ADMA_MM2S1_tvalid   (   m_axis_adma_mm2s_1.tvalid   ),
+    `endif
+
+    `ifdef USE_AXI_DMA_WRITE_2
+    .S_AXIS_ADMA_S2MM2_tdata    (   s_axis_adma_s2mm_2.tdata    ),
+    .S_AXIS_ADMA_S2MM2_tkeep    (   s_axis_adma_s2mm_2.tkeep    ),
+    .S_AXIS_ADMA_S2MM2_tlast    (   s_axis_adma_s2mm_2.tlast    ),
+    .S_AXIS_ADMA_S2MM2_tready   (   s_axis_adma_s2mm_2.tready   ),
+    .S_AXIS_ADMA_S2MM2_tvalid   (   s_axis_adma_s2mm_2.tvalid   ),
+    `endif
+    `ifdef USE_AXI_DMA_READ_2
+    .M_AXIS_ADMA_MM2S2_tdata    (   m_axis_adma_mm2s_2.tdata    ),
+    .M_AXIS_ADMA_MM2S2_tkeep    (   m_axis_adma_mm2s_2.tkeep    ),
+    .M_AXIS_ADMA_MM2S2_tlast    (   m_axis_adma_mm2s_2.tlast    ),
+    .M_AXIS_ADMA_MM2S2_tready   (   m_axis_adma_mm2s_2.tready   ),
+    .M_AXIS_ADMA_MM2S2_tvalid   (   m_axis_adma_mm2s_2.tvalid   ),
+    `endif
+
+    `ifdef USE_AXI_DMA_WRITE_3
+    .S_AXIS_ADMA_S2MM3_tdata    (   s_axis_adma_s2mm_3.tdata    ),
+    .S_AXIS_ADMA_S2MM3_tkeep    (   s_axis_adma_s2mm_3.tkeep    ),
+    .S_AXIS_ADMA_S2MM3_tlast    (   s_axis_adma_s2mm_3.tlast    ),
+    .S_AXIS_ADMA_S2MM3_tready   (   s_axis_adma_s2mm_3.tready   ),
+    .S_AXIS_ADMA_S2MM3_tvalid   (   s_axis_adma_s2mm_3.tvalid   ),
+    `endif
+    `ifdef USE_AXI_DMA_READ_3
+    .M_AXIS_ADMA_MM2S3_tdata    (   m_axis_adma_mm2s_3.tdata    ),
+    .M_AXIS_ADMA_MM2S3_tkeep    (   m_axis_adma_mm2s_3.tkeep    ),
+    .M_AXIS_ADMA_MM2S3_tlast    (   m_axis_adma_mm2s_3.tlast    ),
+    .M_AXIS_ADMA_MM2S3_tready   (   m_axis_adma_mm2s_3.tready   ),
+    .M_AXIS_ADMA_MM2S3_tvalid   (   m_axis_adma_mm2s_3.tvalid   ),
     `endif
 
     .USBIND_port_indctl     (),
@@ -252,6 +315,34 @@ sys_bd sys_bd_inst
     .DDR_reset_n            (   ddr_reset_n     ),
     .DDR_we_n               (   ddr_we_n        )
 );
+
+`ifdef USE_AXI_DMA_READ_0
+assign m_axis_adma_mm2s_0.tid   = 0;
+assign m_axis_adma_mm2s_0.tstrb = m_axis_adma_mm2s_0.tkeep;
+assign m_axis_adma_mm2s_0.tdest = 0;
+assign m_axis_adma_mm2s_0.tuser = 0;
+`endif
+
+`ifdef USE_AXI_DMA_READ_1
+assign m_axis_adma_mm2s_1.tid   = 0;
+assign m_axis_adma_mm2s_1.tstrb = m_axis_adma_mm2s_1.tkeep;
+assign m_axis_adma_mm2s_1.tdest = 0;
+assign m_axis_adma_mm2s_1.tuser = 0;
+`endif
+
+`ifdef USE_AXI_DMA_READ_2
+assign m_axis_adma_mm2s_2.tid   = 0;
+assign m_axis_adma_mm2s_2.tstrb = m_axis_adma_mm2s_2.tkeep;
+assign m_axis_adma_mm2s_2.tdest = 0;
+assign m_axis_adma_mm2s_2.tuser = 0;
+`endif
+
+`ifdef USE_AXI_DMA_READ_3
+assign m_axis_adma_mm2s_3.tid   = 0;
+assign m_axis_adma_mm2s_3.tstrb = m_axis_adma_mm2s_3.tkeep;
+assign m_axis_adma_mm2s_3.tdest = 0;
+assign m_axis_adma_mm2s_3.tuser = 0;
+`endif
     
 endmodule
 

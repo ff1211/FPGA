@@ -13,8 +13,8 @@
 # 1.0      2022.04.22  ff          Initial version
 #****************************************************************
 
-export have_vdma=1
-export have_hdmi=1
-export have_vga=1
-export have_pl_btn=1
-export have_pl_clk=1
+have_vdma=1
+have_hdmi=1
+have_vga=1
+have_pl_btn=1
+have_pl_clk=1

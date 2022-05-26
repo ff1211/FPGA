@@ -17,14 +17,14 @@
 # Board basic informations.
 #****************************************************************
 # Board name.
-export board="zedboard"
+board="zedboard"
 # Board preset name.
-export board_preset="ZedBoard"
+board_preset="ZedBoard"
 # Chip name.
-export chip="xc7z020"
+chip="xc7z020"
 # Package.
-export package="clg484"
+package="clg484"
 # Platform
-export platform="zynq-7000"
+platform="zynq-7000"
 # Speed grade.
-export speed_grade="-1"
+speed_grade="-1"

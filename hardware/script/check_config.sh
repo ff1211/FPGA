@@ -35,13 +35,9 @@ check_hard_core(){
 }
 
 # Function to check integrity of config.
-# 1st parameter: Config number. For using multiple identical core. If doesn't have multiple configration, use "".
-# Such as using three vdma and each has its own configration.
-# Other parameter: Config list.
+# Parameters: Config list
 # Example:  
-# check_integrity "" "$basic_config"
-# check_integrity 0 "$vdma_config"
-# check_integrity 1 "$vdma_config"
+# check_integrity "$adma_config"
 check_config_integrity(){
     num=$1
     shift
@@ -54,20 +50,35 @@ check_config_integrity(){
         fi
     done
 }
+# Multi-instantiation.
+# 1st parameter: Config number
+# Other parameters: Config list
+# Example: 
+# Check vdma_1's config.
+# check_integrity_m 1 "$vdma_config"
+check_config_integrity_m(){
+    num=$1
+    shift
+    arr=("$@")
+    for item in "${arr[@]}"; do
+        name="${item}[${num}]"
+        if [[ ${!name} == "" ]]; then
+            echo "Basic config incomplete! Missing: $name!"
+            error
+        fi
+    done
+}
+
 # Function to check if config's items legal.
-# 1st parameter: Config number. For using multiple identical core. If doesn't have multiple configration, use "".
-# Such as using three vdma and each has its own configration.
-# Other parameter: Config list.
+# Parameters: Config list
 # Example:  
-# check_integrity_legal "" "$basic_config"
-# check_integrity_legal 0 "$vdma_config"
-# check_integrity_legal 1 "$vdma_config"
+# check_integrity_legal "$adma_config"
 check_config_legal(){
     num=$1
     shift
     arr=("$@")
     for config in "${arr[@]}"; do
-        name="${config}${num}"
+        name="${config}"
         if_match=0
         sl_name="${config}_l[@]"
         arr2=("${!sl_name}")
@@ -80,40 +91,45 @@ check_config_legal(){
         fi
     done
 }
-# # Function to assign ps slave ports.
-# # 1st parameter: Port's name. ("hp0" "hp1" "hp2" "hp3" "acp" "ace" "hpc0" "hpc1")
-# # 2st parameter: Number.
-# # Example:  
-# # assign_ps_slave "hp0" 4
-# # assign_ps_slave "gp0" 4
-# assign_ps_slave(){
-#     if [[ $1 == "hp0" ]]; then
-#         export s_axi_hp0_num=$((s_axi_hp0_num+$2))
-#     elif [[ $1 == "hp1" ]]; then
-#         export s_axi_hp1_num=$((s_axi_hp1_num+$2))
-#     elif [[ $1 == "hp2" ]]; then
-#         export s_axi_hp2_num=$((s_axi_hp2_num+$2))
-#     elif [[ $1 == "hp3" ]]; then
-#         export s_axi_hp3_num=$((s_axi_hp3_num+$2))
-#     elif [[ $1 == "acp" ]]; then
-#         export s_axi_acp_num=$((s_axi_acp_num+$2))
-#     elif [[ $1 == "ace" ]]; then
-#         export s_axi_ace_num=$((s_axi_ace_num+$2))
-#     elif [[ $1 == "hpc0" ]]; then
-#         export s_axi_hpc0_num=$((s_axi_hpc0_num+$2))
-#     elif [[ $1 == "hpc1" ]]; then
-#         export s_axi_hpc1_num=$((s_axi_hpc1_num+$2))
-#     fi
-# }
-
-add_num_2sn() {
-    sum=$(($2+$3))
-    if [[ $sum -lt 10 ]]; then
-        export $1="0$sum"
-    else
-        export $1="$sum"
-    fi
+# Multi-instantiation.
+# 1st parameter: Config number
+# Other parameters: Config list
+# Example: 
+# Check vdma_1's config.
+# check_config_legal_m 1 "$vdma_config"
+check_config_legal_m(){
+    num=$1
+    shift
+    arr=("$@")
+    for config in "${arr[@]}"; do
+        name="${config}[${num}]"
+        if_match=0
+        sl_name="${config}_l[@]"
+        arr2=("${!sl_name}")
+        for item in "${arr2[@]}"; do
+            if [[ ${!name} == "$item" ]]; then if_match=1; fi
+        done
+        if [[ $if_match -ne 1 ]]; then
+            echo " $name's setting is illegal!"
+            exit 1
+        fi
+    done
 }
+
+# Function to add assigned bus number, which reserves tens place and exports result.
+# 1st parameter: Bus name
+# 2st parameter: Addend
+# Example:
+# add_bus_port "s_axi_gp0_num" 1
+add_bus_port() {
+    declare -n foo=$1
+    sum=$(($1 + $2))
+    if [[ $sum -lt 10 ]]; then
+        sum="0$sum"
+    fi
+    foo=$sum
+}
+#****************************************************************
 
 # Configs and setting lists.
 #****************************************************************
@@ -124,25 +140,25 @@ clock_config=("clk_freq")
 
 # Variables for calculating resource useage.
 #----------------------------------------------------------------
-export ip_list=()                           # IP list. Used by add_ip.sh to add ip and ip wrappers to project.
-export m_axi_gp0_num=$((1+m_axil_user_num)) # AXI general purpose master port 0 slave number.
-export m_axi_gp1_num=0                      # AXI general purpose master port 1 slave number.
-export s_axi_gp0_num=0                      # AXI general purpose slave port 0 master number.
-export s_axi_gp0_num=0                      # AXI general purpose slave port 1 master number.
-export s_axi_hp0_num=0                      # AXI high performance slave port 0 master number.
-export s_axi_hp1_num=0                      # AXI high performance slave port 1 master number.
-export s_axi_hp2_num=0                      # AXI high performance slave port 2 master number.
-export s_axi_hp3_num=0                      # AXI high performance slave port 3 master number.
-export m_axi_gp0_base_addr=0x42000000       # AXI general purpose master port 0 base address.
-export m_axi_gp0_addr_range="64K"           # AXI general purpose master port 0 address range.
+ip_list=()                           # IP list. Used by add_ip.sh to add ip and ip wrappers to project.
+m_axi_gp0_num=$((1+m_axil_user_num)) # AXI general purpose master port 0 slave number.
+m_axi_gp1_num=0                      # AXI general purpose master port 1 slave number.
+s_axi_gp0_num=0                      # AXI general purpose slave port 0 master number.
+s_axi_gp1_num=0                      # AXI general purpose slave port 1 master number.
+s_axi_hp0_num=0                      # AXI high performance slave port 0 master number.
+s_axi_hp1_num=0                      # AXI high performance slave port 1 master number.
+s_axi_hp2_num=0                      # AXI high performance slave port 2 master number.
+s_axi_hp3_num=0                      # AXI high performance slave port 3 master number.
+m_axi_gp0_base_addr=0x42000000       # AXI general purpose master port 0 base address.
+m_axi_gp0_addr_range="64K"           # AXI general purpose master port 0 address range.
 
 # Soft ip config.
 #----------------------------------------------------------------
 # Supported soft cores list.
 # AXI DMA config.
-adma_config=("use_adma" "adma_ps_port" "adma_mode" "adma_dir" "adma_aw" "adma_mm_dw" "adma_s_dw")
+adma_config=("use_adma" "adma_data_port" "adma_mode" "adma_dir" "adma_aw" "adma_mm_dw" "adma_s_dw")
 use_adma_l=(0 1)
-adma_ps_port_l=("hp0" "hp1" "hp2" "hp3" "acp" "ace" "hpc0" "hpc1")
+adma_data_port_l=("hp0" "hp1" "hp2" "hp3" "acp" "ace" "hpc0" "hpc1")
 adma_mode_l=("block" "scatter_gather")
 adma_dir_l=("read" "write" "dual")
 adma_aw_l=(32 64)
@@ -152,7 +168,6 @@ adma_s_dw_l=(8 16 32 64 128 256 512 1024)
 vdma_config=("use_vdma" "zynq_slave_port" "vdma_num" "vdma_dir" "vdma_w_fsync" "vdma_r_fsync" "vdma_aw" "vdma_mm_dw" "vdma_s_dw" "vdma_w_buffer_dep" "vdma_r_buffer_dep")
 use_vdma_l=(0 1)
 vdma_ps_port_l=("hp0" "hp1" "hp2" "hp3" "acp" "ace" "hpc0" "hpc1")
-vdma_num_l=(1 2 3 4)
 vdma_dir_l=("read" "write" "dual")
 vdma_w_fsync_l=("none" "fsync" "tuser")
 vdma_r_fsync_l=("none" "fsync")
@@ -220,6 +235,11 @@ fi
 source "$BOARDS_DIR/$board_name/board.sh" || (echo "Can't find board.sh! Check integrity of $BOARDS_DIR/$board_name" error)
 source "$BOARDS_DIR/$board_name/$preset_plat/resource.sh" || (echo "Can't find resource.sh! Check integrity of $BOARDS_DIR/$board_name/$preset_plat" error)
 
+# Set AXI lite port and sg port.
+if [[ $platform == "zynq-7000" ]]; then
+    declare -n axil_port_num_r="m_axi_gp0_num"
+fi
+
 # Board and platform preset's integrity check pass. Check clock and axi lite config.
 #****************************************************************
 # Clock config check.
@@ -228,82 +248,64 @@ source "$BOARDS_DIR/$board_name/$preset_plat/resource.sh" || (echo "Can't find r
 check_config_integrity "" "${clock_config[@]}"
 # Advanced check.
 
-
-# AXI lite check.
-#----------------------------------------------------------------
-# Basic check.
-export m_axil_num=$(($m_axil_num+$m_axil_user_num))
-# Advanced check.
-
-# Clock and axi lite check pass. Check soft ip.
+# Clock check pass. Check soft ip.
 #****************************************************************
 # AXI DMA config check.
 #----------------------------------------------------------------
-if [[ $use_adma -eq 1 ]]; then
+i=0
+while [[ ${use_adma[i]} -ne 0 ]]; do
     # Basic check.
     # Check if platform preset support AXI DMA.
     if [[ $have_adma -ne 1 ]]; then
         echo "$board_name's $preset_plat preset doesn't support AXI DMA!"
         error
     fi
-    check_config_integrity "" "${adma_config[@]}"
-    check_config_legal "" "${adma_config[@]}"
+    check_config_integrity_m $i "${adma_config[@]}"
+    check_config_legal_m $i "${adma_config[@]}"
     
     # Advanced check.
-    if [[ $adma_s_dw -gt $adma_mm_dw ]]; then
+    if [[ ${adma_s_dw[i]} -gt ${adma_mm_dw[i]} ]]; then
         echo "AXI DMA axi-stream data width must no larger than AXI DMA axi-memory-map data width!!!!"
         error
     fi
-    if [[ $adma_mode == "scatter_gather" ]]; then
-        echo "Error! We haven't support sg mode now!"
-        error
+    adma_data_port_use=0
+    if [[ ${adma_mode[i]} == "scatter_gather" ]]; then
+        adma_data_port_use=$((adma_data_port_use+1))
     fi
-    # Export port useage.
-    export m_axi_gp0_num=$((m_axi_gp0_num+1))
-    if [[ $adma_dir == "dual" ]]; then
-        adma_ps_port_use=2
+    # port useage.
+    axil_port_num_r=$((axil_port_num_r+1))
+    if [[ ${adma_dir[i]} == "dual" ]]; then
+        adma_data_port_use=$((adma_data_port_use+2))
     else
-        adma_ps_port_use=1
+        adma_data_port_use=$((adma_data_port_use+1))
     fi
-    port="s_axi_${adma_ps_port}_num"
-    export $port=$((${!port}+$adma_ps_port_use))
-fi
+    declare -n port="s_axi_${adma_data_port[i]}_num"
+    port=$((port+adma_data_port_use))
+    i=$((i+1))
+done
 # VDMA config check.
 #----------------------------------------------------------------
 # Basic check.
-if [[ $use_vdma -eq 1 ]]; then
+i=0
+while [[ ${use_vdma[i]} -ne 0 ]]; do
     # Basic check.
     # Check if platform preset support Video DMA.
     if [[ $have_vdma -ne 1 ]]; then
         echo "$board_name's $preset_plat preset doesn't support Video DMA!"
         error
     fi
-    i=0
-    while [[ $i -ne $vdma_num ]]; do
-        check_config_integrity $i "${vdma_config[@]}"
-        check_config_legal $i "${vdma_config[@]}"
-        i=$((i+1))
-    done
-fi
+    check_config_integrity $i "${vdma_config[@]}"
+    check_config_legal $i "${vdma_config[@]}"
+    # port useage.
+    axil_port_num_r=$((axil_port_num_r+1))
+    if [[ ${vdma_dir[i]} == "dual" ]]; then
+        vdma_ps_port_use=2
+    else
+        vdma_ps_port_use=1
+    fi
+    declare -n port="s_axi_${vdma_ps_port[i]}_num"
+    port=$((port+vdma_ps_port_use))
+    i=$((i+1))
+done
 # AXI check.
 #****************************************************************
-# AXI lite master check.
-if [[ $m_axil_num -gt 8 ]]; then
-    echo "Too much axi lite master port! Check your config!"
-    error
-fi
-# AXI gp master check.
-if [[ $m_axi_gp_num -gt 2 ]]; then
-    echo "Too much axi gp master port! Check your config!"
-    error
-fi
-# AXI gp slave check.
-if [[ $m_axi_gp_num -gt 2 ]]; then
-    echo "Too much axi gp slave port! Check your config!"
-    error
-fi
-# AXI hp slave check.
-if [[ $m_axi_gp_num -gt 4 ]]; then
-    echo "Too much axi hp slave port! Check your config!"
-    error
-fi
