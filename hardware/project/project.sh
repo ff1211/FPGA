@@ -20,15 +20,15 @@ error(){
     exit 1
 }
 
-export projec_dir=$(pwd)
-source $projec_dir/../script/path.sh
-source $projec_dir/config.sh
+projec_dir=$(pwd)
+source "$projec_dir/config.sh"
+source "$projec_dir/../script/path.sh"
 
 echo
 
 # Check the correctness of config.sh.
 #****************************************************************
-source $SCRIPT_DIR/check_config.sh
+source "$SCRIPT_DIR/check_config.sh"
 
 # Start creating project
 #****************************************************************
@@ -60,12 +60,12 @@ cur_pj_src_dir="$cur_pj_dir/src"
 cur_pj_script_dir="$cur_pj_dir/script"
 
 # Copy shell_top.sv and role.sv to current project dir.
-cp $BOARDS_DIR/$board_name/$preset_plat/shell_top.sv $cur_pj_src_dir
-cp $BOARDS_DIR/$board_name/$preset_plat/role.sv $cur_pj_src_dir
+cp $PRESET_DIR/shell_top.sv $cur_pj_src_dir
+cp $PRESET_DIR/role.sv $cur_pj_src_dir
 
 # Generate add_ip.tcl for add ips.
 touch "$cur_pj_script_dir/add_ip.tcl"
-export add_ip_tcl_path=$cur_pj_script_dir/add_ip.tcl
+add_ip_tcl_path=$cur_pj_script_dir/add_ip.tcl
 cat > "$cur_pj_script_dir/add_ip.tcl" << EOF
 #****************************************************************
 # This is a auto-generated file. Do not change it!
@@ -74,7 +74,7 @@ EOF
 
 # Generate pre_proc.vh for config ips.
 touch "$cur_pj_src_dir/pre_proc.vh"
-export pre_proc_path="$cur_pj_src_dir/pre_proc.vh"
+pre_proc_path="$cur_pj_src_dir/pre_proc.vh"
 cat > "$cur_pj_src_dir/pre_proc.vh" << EOF
 //****************************************************************
 // This is a auto-generated file. Do not change it!
@@ -84,7 +84,7 @@ cat > "$cur_pj_src_dir/pre_proc.vh" << EOF
 EOF
 
 # Source add_ip.sh to generate add_ip.tcl.
-source $SCRIPT_DIR/add_ip.sh
+source "$SCRIPT_DIR/add_ip.sh"
 
 # Generate project.tcl for creating project in vivado.
 touch $cur_pj_dir/project.tcl
@@ -100,16 +100,17 @@ set HARDWARE_DIR $HARDWARE_DIR
 set SCRIPT_DIR $SCRIPT_DIR
 set BOARDS_DIR $BOARDS_DIR
 set COMMON_DIR $COMMON_DIR
+set PRESET_DIR $PRESET_DIR
 
 # Creat project.
 #****************************************************************
 create_project -part ${chip}${package}${speed_grade} ${cur_pj_name} ${cur_pj_dir}
 
 # Add common files.
-source ${HARDWARE_DIR}/script/add_files.tcl
+source "${HARDWARE_DIR}/script/add_files.tcl"
 
 # Add ips.
-source ${cur_pj_script_dir}/add_ip.tcl
+source "${cur_pj_script_dir}/add_ip.tcl"
 
 # Add board and project specific files.
 #****************************************************************

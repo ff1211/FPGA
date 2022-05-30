@@ -3,18 +3,13 @@
 # Copyright 2022 Tianjin University 305 Lab. All Rights Reserved.
 #
 # File:
-# resource.sh
+# zu.sh
 # 
 # Description:
-# Define platform's resource.
+# Bash shell for add Zynq-UltraScale processing system ip.
+# Sourced by zynq_ps.sh.
 # 
 # Revision history:
 # Version  Date        Author      Changes      
-# 1.0      2022.04.22  ff          Initial version
+# 1.0      2022.05.23  ff          Initial version
 #****************************************************************
-
-have_vdma=1
-have_hdmi=1
-have_vga=1
-have_pl_btn=1
-have_pl_clk=1

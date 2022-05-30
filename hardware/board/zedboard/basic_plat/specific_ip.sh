@@ -3,18 +3,18 @@
 # Copyright 2022 Tianjin University 305 Lab. All Rights Reserved.
 #
 # File:
-# resource.sh
+# specific_ip.sh
 # 
 # Description:
-# Define platform's resource.
+# Board preset specific ips.
 # 
 # Revision history:
 # Version  Date        Author      Changes      
-# 1.0      2022.04.22  ff          Initial version
+# 1.0      2022.05.24  ff          Initial version
 #****************************************************************
 
-have_vdma=1
-have_hdmi=1
-have_vga=1
-have_pl_btn=1
-have_pl_clk=1
+# Add pl btn
+if [[ $use_pl_btn -eq 1 ]]; then 
+    add_define "USE_PL_BTN"
+    add_file "$PRESET_DIR/xdc/btn.xdc"
+fi

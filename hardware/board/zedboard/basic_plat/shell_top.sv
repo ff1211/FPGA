@@ -9,7 +9,7 @@
 // 
 // Revision history:
 // Version  Date        Author      Changes      
-// 1.0      2022.04.14  fanfei      Initial version
+// 1.0      2022.04.14  ff          Initial version
 //****************************************************************
 `timescale 1ns/1ps
 `include "pre_proc.vh"
@@ -47,8 +47,15 @@ logic [`SYS_CLK_NUM-1:0]    perif_rst_n;
 
 axi_lite #(.CHANNEL(1), .DATA_WIDTH(32)) axil_check();
 `ifdef USE_M_AXIL_USER axi_lite #(.CHANNEL(`M_AXIL_USER_NUM), .DATA_WIDTH(32)) axil_user(); `endif
-`ifdef USE_AXI_DMA_WRITE axis #(.CHANNEL(1), .DATA_WIDTH(`AXI_DMA_S_DW), .ID_WIDTH(6)) axis_adma_s2mm(); `endif
-`ifdef USE_AXI_DMA_READ axis #(.CHANNEL(1), .DATA_WIDTH(`AXI_DMA_S_DW), .ID_WIDTH(6)) axis_adma_mm2s(); `endif
+
+`ifdef USE_AXI_DMA_WRITE_0 axis #(.CHANNEL(1), .DATA_WIDTH(`AXI_DMA_S_DW_0), .ID_WIDTH(6)) axis_adma_s2mm_0(); `endif
+`ifdef USE_AXI_DMA_READ_0 axis #(.CHANNEL(1), .DATA_WIDTH(`AXI_DMA_S_DW_0), .ID_WIDTH(6)) axis_adma_mm2s_0(); `endif
+`ifdef USE_AXI_DMA_WRITE_1 axis #(.CHANNEL(1), .DATA_WIDTH(`AXI_DMA_S_DW_1), .ID_WIDTH(6)) axis_adma_s2mm_1(); `endif
+`ifdef USE_AXI_DMA_READ_1 axis #(.CHANNEL(1), .DATA_WIDTH(`AXI_DMA_S_DW_1), .ID_WIDTH(6)) axis_adma_mm2s_1(); `endif
+`ifdef USE_AXI_DMA_WRITE_2 axis #(.CHANNEL(1), .DATA_WIDTH(`AXI_DMA_S_DW_2), .ID_WIDTH(6)) axis_adma_s2mm_2(); `endif
+`ifdef USE_AXI_DMA_READ_2 axis #(.CHANNEL(1), .DATA_WIDTH(`AXI_DMA_S_DW_2), .ID_WIDTH(6)) axis_adma_mm2s_2(); `endif
+`ifdef USE_AXI_DMA_WRITE_3 axis #(.CHANNEL(1), .DATA_WIDTH(`AXI_DMA_S_DW_3), .ID_WIDTH(6)) axis_adma_s2mm_3(); `endif
+`ifdef USE_AXI_DMA_READ_3 axis #(.CHANNEL(1), .DATA_WIDTH(`AXI_DMA_S_DW_3), .ID_WIDTH(6)) axis_adma_mm2s_3(); `endif
 
 sys #(
 ) sys_inst (
@@ -65,13 +72,34 @@ sys #(
 
     .m_axil_check       (   axil_check.master   ),
 
-    // axi dma
-    `ifdef USE_AXI_DMA_WRITE
-    .s_axis_adma_s2mm   (   axis_adma_s2mm.slave    ),
+    // adma0
+    `ifdef USE_AXI_DMA_WRITE_0
+    .s_axis_adma_s2mm_0 (   axis_adma_s2mm_0.slave  ),
     `endif
-    `ifdef USE_AXI_DMA_READ
-    .m_axis_adma_mm2s   (   axis_adma_mm2s.master   ),
+    `ifdef USE_AXI_DMA_READ_0
+    .m_axis_adma_mm2s_0 (   axis_adma_mm2s_0.master ),
     `endif
+    // adma1
+    `ifdef USE_AXI_DMA_WRITE_1
+    .s_axis_adma_s2mm_1 (   axis_adma_s2mm_1.slave  ),
+    `endif
+    `ifdef USE_AXI_DMA_READ_1
+    .m_axis_adma_mm2s_1 (   axis_adma_mm2s_1.master ),
+    `endif
+    // adma2
+    `ifdef USE_AXI_DMA_WRITE_2
+    .s_axis_adma_s2mm_2 (   axis_adma_s2mm_2.slave  ),
+    `endif
+    `ifdef USE_AXI_DMA_READ_2
+    .m_axis_adma_mm2s_2 (   axis_adma_mm2s_2.master ),
+    `endif
+    // adma3
+    `ifdef USE_AXI_DMA_WRITE_3
+    .s_axis_adma_s2mm_3 (   axis_adma_s2mm_3.slave  ),
+    `endif
+    `ifdef USE_AXI_DMA_READ_3
+    .m_axis_adma_mm2s_3 (   axis_adma_mm2s_3.master ),
+    `endif    
 
     `ifdef USE_M_AXIL_USER
     .m_axil_user        (   axil_user.master        ),
@@ -102,11 +130,29 @@ axil_dummy #(
 
 role #(
 ) role_inst (
-    `ifdef USE_AXI_DMA_WRITE
-    .m_axis_s2mm    (   axis_adma_s2mm.master   ),
+    `ifdef USE_AXI_DMA_WRITE_0
+    .m_axis_s2mm_0  (   axis_adma_s2mm_0.master   ),
     `endif
-    `ifdef USE_AXI_DMA_READ
-    .s_axis_mm2s    (   axis_adma_mm2s.slave    ),
+    `ifdef USE_AXI_DMA_READ_0
+    .s_axis_mm2s_0  (   axis_adma_mm2s_0.slave    ),
+    `endif
+    `ifdef USE_AXI_DMA_WRITE_1
+    .m_axis_s2mm_1  (   axis_adma_s2mm_1.master   ),
+    `endif
+    `ifdef USE_AXI_DMA_READ_1
+    .s_axis_mm2s_1  (   axis_adma_mm2s_1.slave    ),
+    `endif
+    `ifdef USE_AXI_DMA_WRITE_2
+    .m_axis_s2mm_2  (   axis_adma_s2mm_2.master   ),
+    `endif
+    `ifdef USE_AXI_DMA_READ_2
+    .s_axis_mm2s_2  (   axis_adma_mm2s_2.slave    ),
+    `endif
+    `ifdef USE_AXI_DMA_WRITE_3
+    .m_axis_s2mm_3  (   axis_adma_s2mm_3.master   ),
+    `endif
+    `ifdef USE_AXI_DMA_READ_3
+    .s_axis_mm2s_3  (   axis_adma_mm2s_3.slave    ),
     `endif
     `ifdef USE_M_AXIL_USER
     .s_axil_user    (   axil_user.slave     ),

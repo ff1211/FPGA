@@ -11,16 +11,17 @@
 # 
 # Revision history:
 # Version  Date        Author      Changes      
-# 1.0      2022.04.14  fanfei      Initial version
+# 1.0      2022.04.14  ff          Initial version
 #****************************************************************
 
 # Gloable varibles and functions.
 #****************************************************************
-export ip_wrapper_files=""
+# Files to be added to project.
+files=""
 
 # Function to add ip define to pre_proc.vh
-# 1st parameter: Define name.
-# 2st parameter: Define value.
+# 1st parameter: Define name
+# 2st parameter: Define value
 # Example: add_define "USE_AXI_GP"
 # Example: add_define "M_AXI_GP_PORT_NUM" 1
 add_define(){
@@ -31,102 +32,103 @@ add_define(){
     echo "$define" >> "$pre_proc_path"
 }
 
+# Function to add tcl command.
+# 1st parameter: Tcl command
 add_tcl(){
     echo "$1" >> "$add_ip_tcl_path"
 }
 
-# Function to add ip wrappers's path to ip_wrapper_files.
-# 1st parameter: Ip wrappers's path.
-add_ip_wrapper(){
-    ip_wrapper_files="$ip_wrapper_files $1"
+# Function to add file's path to files.
+# 1st parameter: File's path.
+add_file(){
+    files="$files $1"
 }
 
-# clock associated busif
-export clk0_assoc_busif=""
-export clk1_assoc_busif=""
-export clk2_assoc_busif=""
-export clk3_assoc_busif=""
-export clk4_assoc_busif=""
-export clk5_assoc_busif=""
-export clk6_assoc_busif=""
-export clk7_assoc_busif=""
+# Clock associated busif.
+clk0_assoc_busif=""
+clk1_assoc_busif=""
+clk2_assoc_busif=""
+clk3_assoc_busif=""
+clk4_assoc_busif=""
+clk5_assoc_busif=""
+clk6_assoc_busif=""
+clk7_assoc_busif=""
 
-export m_axil_assign=$((1+$m_axil_user_num))
-export m_axi_gp_assign=1
-export s_axi_gp_assign=0
-export s_axi_hp_assign=0
-export m_axil_addr_assign=0
+# Record which axi port has been assigned.
+m_axi_gp0_assign=$((1+$m_axil_user_num))
+m_axi_gp1_assign=00
+s_axi_gp0_assign=00
+s_axi_gp1_assign=00
+s_axi_hp0_assign=00
+s_axi_hp1_assign=00
+s_axi_hp2_assign=00
+s_axi_hp3_assign=00
+m_axi_gp0_addr_assign=0
+m_axi_gp1_addr_assign=0
 
-# Block design IP
+# Set AXI lite port and sg port.
+if [[ $platform == "zynq-7000" ]]; then
+    declare -n axil_assign_r="s_axi_gp0_assign"
+fi
+
 #****************************************************************
 
+# Create block design.
+#****************************************************************
 echo "create_bd_design \"sys_bd\"" >> "$add_ip_tcl_path"
 
 # Add clock wizard.
-source $SCRIPT_DIR/ip/clock_wizard.sh
+source "$SCRIPT_DIR/ip/clock_wizard.sh"
 
 # Add processing system reset.
-source $SCRIPT_DIR/ip/sys_reset.sh
+source "$SCRIPT_DIR/ip/sys_reset.sh"
 
 # Add Zynq processing system.
-source $SCRIPT_DIR/ip/zynq_ps.sh
+if [[ $platform == "zynq-7000" ]];  then
+    source "$SCRIPT_DIR/ip/zynq_ps/z7.sh"
+elif [[ $platform == "zynq-ultrascale" ]]; then
+    echo "Error! Haven't support Zynq-UltraScale now!"
+    error
+    # source "$SCRIPT_DIR/ip/zynq_ps/zu.sh"
+fi
 
 # Add AXI DMA.
-[[ $use_axi_dma -eq 1 ]] && source $SCRIPT_DIR/ip/axi_dma.sh
+i=0
+while [[ ${use_adma[i]} -eq 1 ]]; do 
+    source "$SCRIPT_DIR/ip/adma.sh" $i
+    i=$((i+1))
+done
 
 # Add Video DMA.
+i=0
+while [[ ${use_vdma[i]} -eq 1 ]]; do 
+    source "$SCRIPT_DIR/ip/vdma.sh" $i
+    i=$((i+1))
+done
+
+# Automatically assign addresses to unmapped IP.
+add_tcl "assign_bd_address"
 
 # Save board design.
 add_tcl "save_bd_design"
 #****************************************************************
 
+# Other IP.
+#****************************************************************
+type -t "$PRESET_DIR/other_ip.sh" > /dev/null
+if [[ $? -ne 1 ]]; then
+    source "$PRESET_DIR/other_ip.sh"
+fi
+
+# Add pl clk.
+if [[ $use_pl_clk -eq 1 ]]; then
+    add_define "USE_PL_CLK"
+    add_file "$PRESET_DIR/xdc/pl_clk.xdc"
+fi
+#****************************************************************
 
 # Add defines and files.
 #****************************************************************
-# If use axi general purpose master port.
-if [[ $m_axi_gp_num -ne 0 ]]; then
-    add_define "USE_M_AXI_GP"
-    add_define "M_AXI_GP_NUM" $m_axi_gp_num
-    i=0
-    while [[ $i -ne $m_axi_gp_num ]]; do
-        add_define "USE_M_AXI_GP_${i}"
-        i=$((i+1))
-    done
-fi
-
-# If use axi general purpose slave port.
-if [[ $s_axi_gp_num -ne 0 ]]; then
-    add_define "USE_S_AXI_GP"
-    add_define "S_AXI_GP_NUM" $s_axi_gp_num
-    i=0
-    while [[ $i -ne $s_axi_gp_num ]]; do
-        add_define "USE_S_AXI_GP_${i}"
-        i=$((i+1))
-    done
-fi
-
-# If use axi high performance slave port.
-if [[ $s_axi_hp_num -ne 0 ]]; then
-    add_define "USE_S_AXI_HP"
-    add_define "S_AXI_HP_NUM" $s_axi_hp_num
-    i=0
-    while [[ $i -ne $s_axi_hp_num ]]; do
-        add_define "USE_S_AXI_HP_${i}"
-        i=$((i+1))
-    done
-fi
-
-# If use axi lite port.
-if [[ $m_axil_num -ne 0 ]]; then
-    add_define "USE_M_AXIL"
-    add_define "M_AXIL_NUM" $m_axil_num
-    i=0
-    while [[ $i -ne $m_axil_num ]]; do
-        add_define "USE_M_AXIL_${i}"
-        i=$((i+1))
-    done
-fi
-
 # If user axi lite port != 0.
 if [[ $m_axil_user_num -ne 0 ]]; then
     add_define "USE_M_AXIL_USER"
@@ -141,4 +143,4 @@ fi
 echo "\`endif" >> "$pre_proc_path"
 
 # Add IP wrapper files.
-[[ $ip_wrapper_files != "" ]] && add_tcl "add_files $ip_wrapper_files"
+[[ $files != "" ]] && add_tcl "add_files $files"

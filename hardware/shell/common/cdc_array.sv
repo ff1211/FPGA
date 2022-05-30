@@ -9,7 +9,7 @@
 // 
 // Revision history:
 // Version  Date        Author      Changes      
-// 1.0      2022.04.29  fanfei      Initial version
+// 1.0      2022.04.29  ff          Initial version
 //****************************************************************
 
 `timescale 1ns/1ps

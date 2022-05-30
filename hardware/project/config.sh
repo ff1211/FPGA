@@ -10,24 +10,24 @@
 # 
 # Revision history:
 # Version  Date        Author      Changes      
-# 1.0      2022.04.14  fanfei      Initial version
+# 1.0      2022.04.14  ff          Initial version
 #****************************************************************
 
 # Vivado settings.
 #****************************************************************
 # Vivado path.
-export vivado="vivado"
+vivado="vivado"
 # If use gui.
-export gui_mode=0
+gui_mode=1
 # Project name.
-export project_name="zynq_test"
+project_name="zynq_test"
 
 # Shell config.
 #****************************************************************
 # Board name.
-export board_name="zedboard"
+board_name="zedboard"
 # Preset platform.
-export preset_plat="basic_plat"
+preset_plat="basic_plat"
 
 # Clock config.
 # Max 7 clock.
@@ -37,31 +37,35 @@ export preset_plat="basic_plat"
 # clock_3~clock_6:  User define clock. Not set by default.
 #****************************************************************
 # Clock frequence, unit: MHz. Range [10, 400], integer.
-export clk_freq=(100 150 50)
+clk_freq=(100 150 50)
 
 # Resource config.
 #****************************************************************
 
 # DMA config.
 #****************************************************************
-# !!! Very first Version! Haven't support lots of functions !!! #
-
-# AXI DMA config.
-#****************************************************************
 # If use AXI DMA, 0 or 1.
-export use_axi_dma=1
-# AXI DMA mode, "block" or "scatter_gather". Only support block now.     
-export axi_dma_mode="block"
+use_adma=(1 1 1 1)
+# Which PS slave port will adma use.
+adma_data_port=("hp0" "hp1" "hp2" "hp3")
+# AXI DMA mode, "block" or "scatter_gather".    
+adma_mode=("scatter_gather" "scatter_gather" "scatter_gather" "scatter_gather")
 # AXI dma direction, "read", "write" or "dual".
-export axi_dma_dir="dual"
+adma_dir=("dual" "dual" "dual" "dual")
 # AXI DMA addr width, 32 or 64.
-export axi_dma_aw=32
+adma_aw=(32 32 32 32)
 # AXI DMA memory map data width, equal axi_hp_port_dw.          
-export axi_dma_mm_dw=64
+adma_mm_dw=(64 64 64 64)
 # AXI DMA stream data width, 8, 16, 32, 64, 128, 256, 512, 1024.
 # Must less or equal than $axi_dma_mm_dw !!!! Check board/your_board for more information.
-export axi_dma_s_dw=32
+adma_s_dw=(32 32 32 32)
 
 # User defined axil port. For user's ip.
 #****************************************************************
-export m_axil_user_num=1
+m_axil_user_num=0
+
+# PL push button.
+use_pl_btn=0
+# PL clock
+use_pl_clk=0
+

@@ -9,7 +9,7 @@
 # 
 # Revision history:
 # Version  Date        Author      Changes      
-# 1.0      2022.04.14  fanfei      Initial version
+# 1.0      2022.04.14  ff          Initial version
 #****************************************************************
 
 # Add source files to Vivado project.
@@ -17,11 +17,11 @@
 
 # Common modules.
 add_files                           \
-    $COMMON_DIR/fifo_sync.sv        \
-    $COMMON_DIR/ram_single.sv       \
-    $COMMON_DIR/ram_tdual.sv        \
+    $COMMON_DIR/sync_fifo.sv        \
+    $COMMON_DIR/single_ram.sv       \
+    $COMMON_DIR/tdual_ram.sv        \
     $COMMON_DIR/axi_if.sv           \
-    $COMMON_DIR/axil_dummy.sv
+    $COMMON_DIR/axil_dummy.sv       
 #****************************************************************
 # Add library files to Vivado project.
 add_files                           \

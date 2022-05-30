@@ -10,22 +10,22 @@
 # 
 # Revision history:
 # Version  Date        Author      Changes      
-# 1.0      2022.04.14  fanfei      Initial version
+# 1.0      2022.04.14  ff          Initial version
 #****************************************************************
 
 # Project directory.
-export PROJECT_DIR=$projec_dir
+PROJECT_DIR=$projec_dir
 # Hardware directory.
 cd ../
 HARDWARE_DIR=$(pwd)
 cd $PROJECT_DIR
-export HARDWARE_DIR
 # Script directory.
-export SCRIPT_DIR=$HARDWARE_DIR/script
+SCRIPT_DIR=$HARDWARE_DIR/script
 # Board file directory.
-export BOARDS_DIR=$HARDWARE_DIR/board
+BOARDS_DIR=$HARDWARE_DIR/board
 # Shell directory.
-export SHELL_DIR=$HARDWARE_DIR/shell
+SHELL_DIR=$HARDWARE_DIR/shell
 # Shell common modules directory.
-export COMMON_DIR=$HARDWARE_DIR/shell/common
-
+COMMON_DIR=$HARDWARE_DIR/shell/common
+# Board preset directory.
+PRESET_DIR=$BOARDS_DIR/$board_name/$preset_plat
