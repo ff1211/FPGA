@@ -40,3 +40,6 @@ set_property PACKAGE_PIN U15  [get_ports {hdmi_spdif}];
 set_property PACKAGE_PIN Y18  [get_ports {hdmi_spdifo}];
 set_property PACKAGE_PIN W17  [get_ports {hdmi_vsync}];
 set_property PACKAGE_PIN V17  [get_ports {hdmi_hsync}];
+
+# Note that the bank voltage for IO Bank 33 is fixed to 3.3V on ZedBoard. 
+set_property IOSTANDARD LVCMOS33 [get_ports -of_objects [get_iobanks 33]];

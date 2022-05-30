@@ -29,3 +29,6 @@ set_property PACKAGE_PIN AB20 [get_ports {vga_b[2]}];
 set_property PACKAGE_PIN AB19 [get_ports {vga_b[3]}];
 set_property PACKAGE_PIN AA19 [get_ports {vga_hsync}];
 set_property PACKAGE_PIN Y19  [get_ports {vga_vsync}];
+
+# Note that the bank voltage for IO Bank 33 is fixed to 3.3V on ZedBoard. 
+set_property IOSTANDARD LVCMOS33 [get_ports -of_objects [get_iobanks 33]];
