@@ -17,11 +17,11 @@
 # Board basic informations.
 #****************************************************************
 # Board name.
-board="zedboard"
+board="pynq_z2"
 # Chip name.
 chip="xc7z020"
 # Package.
-package="clg484"
+package="clg400"
 # Platform
 platform="zynq-7000"
 # Speed grade.
